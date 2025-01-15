@@ -1,0 +1,49 @@
+{
+    "chip_list": [
+        {
+            "chip_family": "tofino",
+            "sds_fw_path": "share/tofino_sds_fw/avago/firmware",
+            "instance": 0
+        }
+    ],
+    "p4_devices": [
+        {
+            "device-id": 0,
+            "agent0": "lib/libpltfm_mgr.so",
+            "p4_programs": [
+                {
+                    "program-name": "switch",
+                    "bfrt-config": "share/switch/bf-rt.json",
+                    "p4_pipelines": [
+                        {
+                            "p4_pipeline_name": "pipe",
+                            "config": "share/switch/pipe/tofino.bin",
+                            "context": "share/switch/pipe/context.json",
+                            "pipe_scope": [
+                                0,
+                                2
+                            ]
+                        },
+                        {
+                            "p4_pipeline_name": "lb",
+                            "config": "share/switch/lb/tofino.bin",
+                            "context": "share/switch/lb/context.json",
+                            "pipe_scope": [
+                                1,
+                                3
+                            ]
+                        }
+                    ],
+                    "switchapi": "lib/libbf_switch.so"
+                }
+            ]
+        }
+    ],
+    "switch_options": [
+        {
+            "device-id": 0,
+            "model_json_path": "share/switch/aug_model.json",
+            "cpu_port": "veth251"
+        }
+    ]
+}

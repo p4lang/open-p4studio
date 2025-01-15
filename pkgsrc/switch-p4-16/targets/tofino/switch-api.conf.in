@@ -1,0 +1,27 @@
+{
+    "chip_list": [
+        {
+            "chip_family": "Tofino",
+            "sds_fw_path": "share/tofino_sds_fw/avago/firmware",
+            "instance": 0
+        }
+    ],
+    "p4_program_list": [
+        {
+            "instance": 0,
+            "path": "switch",
+            "program-name": "switch",
+            "table-config": "share/switch/pipe/context.json",
+            "tofino-bin": "share/switch/pipe/tofino.bin",
+            "switchapi": "lib/libswitchapi.so",
+            "agent0": "lib/libpltfm_mgr.so",
+            "bfrt-config" : "share/switch/bf-rt.json"
+        }
+    ],
+    "switch_options": [
+        {
+            "device-id": 0,
+            "model_json_path": "share/switch/aug_model.json"
+        }
+    ]
+}

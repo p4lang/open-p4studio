@@ -1,0 +1,18 @@
+{
+    "port1_0": {        "lane_list": [0,1,2,3],
+                        "speed":100000,
+                        "fec": "RS"
+                },
+    "port2_0": {        "lane_list":[4,5,6,7],
+                        "speed":100000,
+                        "fec": "RS"
+                },
+    "port3_0": {        "lane_list":[8],
+                        "speed":10000,
+                        "fec": "NONE"
+                },
+    "port4_0": {        "lane_list":[16],
+                        "speed":10000,
+                        "fec": "NONE"
+                }
+}

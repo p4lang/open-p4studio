@@ -1,7 +1,7 @@
-bf
-p4
-ptf
-switch-p4
-target
-tofino
+./bf
+./p4
+./ptf
+./switch-p4
+./target
+./tofino
 *.pyc

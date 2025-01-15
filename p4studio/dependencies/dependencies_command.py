@@ -238,16 +238,16 @@ def install_command(
     try:
         run_subprocess("sudo true").communicate()
 
-        if 'os' in dependencies:
-            installer.update_list_of_packages()
-            installer.install_os_dependencies(names(dependencies['os']))
-        if 'pip' in dependencies:
-            installer.install_pip3_dependencies(names(dependencies['pip']))
-        if 'source' in dependencies:
-            if install_dir == "/usr/local":
-                installer.install_source_dependencies(names(dependencies['source']))
-            else:
-                installer.install_source_dependencies_with_manifest_record(names(dependencies['source']))
+        # if 'os' in dependencies:
+        #     installer.update_list_of_packages()
+        #     installer.install_os_dependencies(names(dependencies['os']))
+        # if 'pip' in dependencies:
+        #     installer.install_pip3_dependencies(names(dependencies['pip']))
+        # if 'source' in dependencies:
+        #     if install_dir == "/usr/local":
+        #         installer.install_source_dependencies(names(dependencies['source']))
+        #     else:
+        #         installer.install_source_dependencies_with_manifest_record(names(dependencies['source']))
 
         installer.remove_temporary_files()
     except ApplicationException:

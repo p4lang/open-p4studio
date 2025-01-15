@@ -1,0 +1,57 @@
+{
+    "chip_list": [
+        {
+            "id": "asic-0",
+            "chip_family": "Tofino",
+            "instance": 0,
+            "pcie_sysfs_prefix": "/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0",
+            "pcie_domain": 0,
+            "pcie_bus": 1,
+            "pcie_fn": 0,
+            "pcie_dev": 0,
+            "pcie_int_mode": 1,
+            "sds_fw_path": "share/tofino_sds_fw/avago/firmware"
+        },
+        {
+            "id": "asic-1",
+            "chip_family": "Tofino",
+            "instance": 1,
+            "pcie_sysfs_prefix": "/sys/devices/pci0000:00/0000:00:03.0/0000:06:00.0",
+            "pcie_domain": 0,
+            "pcie_bus": 4,
+            "pcie_fn": 0,
+            "pcie_dev": 0,
+            "pcie_int_mode": 1,
+            "sds_fw_path": "share/tofino_sds_fw/avago/firmware"
+        }
+    ], 
+    "instance": 0, 
+    "p4_program_list": [
+        {
+            "id": "pgm-0",
+            "instance": 0,
+            "path": "diag",
+            "program-name": "diag",
+            "pd": "lib/tofinopd/diag/libpd.so",
+            "pd-thrift": "lib/tofinopd/diag/libpdthrift.so",
+            "table-packing": "lib/tofinopd/diag/libtbl_packing.so",
+            "table-config": "share/tofinopd/diag/pipeline_profile/context.json",
+            "tofino-bin": "share/tofinopd/diag/pipeline_profile/tofino.bin",
+            "diag": "lib/libbfdiags.so",
+            "board-port-map": "share/bf_switchd/accton_wedge_32x_port_map.json"
+        },
+        {
+            "id": "pgm-0",
+            "instance": 1,
+            "path": "diag",
+            "program-name": "diag",
+            "pd": "lib/tofinopd/diag/libpd.so",
+            "pd-thrift": "lib/tofinopd/diag/libpdthrift.so",
+            "table-packing": "lib/tofinopd/diag/libtbl_packing.so",
+            "table-config": "share/tofinopd/diag/pipeline_profile/context.json",
+            "tofino-bin": "share/tofinopd/diag/pipeline_profile/tofino.bin",
+            "diag": "lib/libbfdiags.so",
+            "board-port-map": "share/bf_switchd/accton_wedge_32x_port_map.json"
+        }
+    ]
+}
