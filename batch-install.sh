@@ -101,8 +101,21 @@ echo "Memory on this system from /proc/meminfo:      ${memtotal_MBytes} MBytes -
 
 if [ "${abort_script}" == 1 ]
 then
-    echo ""
-    echo "Aborting script because system has too little RAM"
+    1>&2 echo ""
+    1>&2 echo "Aborting script because system has too little RAM."
+    1>&2 echo ""
+    1>&2 echo "If you are running this system in a VM, and can:"
+    1>&2 echo ""
+    1>&2 echo "+ reduce the number of virtual CPUs allocated to the VM
+    1>&2 echo "+ increase the RAM available to the VM
+    1>&2 echo ""
+    1>&2 echo "or some combination of those two that gives you 4 GBytes"
+    1>&2 echo "of RAM per CPU core, then you should be able to run"
+    1>&2 echo "the installation."
+    1>&2 echo ""
+    1>&2 echo "If you are interested in reducing the RAM required to"
+    1>&2 echo "install this software, consider helping with this issue:"
+    1>&2 echo "+ https://github.com/p4lang/open-p4studio/issues/17"
     exit 1
 fi
 
