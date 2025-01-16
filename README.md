@@ -37,7 +37,7 @@ Some things not included, that one must get from Intel:
     can be released as open source soon.
 + BSPs (Board Support Packages) that enable the SDE to access and
   configure hardware on a physical board, e.g. configuring physical
-  Ethernet ports .
+  Ethernet ports.
 + Drivers for Serdes on the ASICs.  These are not necessary for running
   the simulation model.
 
