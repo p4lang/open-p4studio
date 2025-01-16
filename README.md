@@ -2,6 +2,32 @@
 
 Intel® P4 Studio Software Development Environment (SDE) is a set of packages for programming Intel’s line of programmable Ethernet Switches. The package also contains scripts for building and installing SDE. The fully automated script (`install.sh`) introduced in this release internally invokes the existing command line interface tool (`p4studio`) to ease the build and installation process. The following sections describe how to build, install, and run the Intel P4 Studio SDE.
 
+# What is included
+
+The following things are included in this repository:
+
++ Driver software
++ bfrt runtime API implementation
++ An x86_64 binary of the simulation model
+  + Note: Source code for the simulation model is in the process of
+    being released to open source, but that is not yet complete.
++ Example P4_16 programs and PTF tests
++ Git submodule referring to the latest version of the P4 compiler
+  in the repository https://github.com/p4lang/p4c tested with this code.
++ bfrt_python code is included, but the build process needs some fixes
+  before this is available for use.
+
+This supports developing and compiling P4 programs for Tofino 1 and 2
+ASICs, developing control plane software, and simulating its execution
+on the model.
+
+Some things not included, that one must get from Intel:
+
++ BSPs (Board Support Packages) for booting hardware boards containing
+  Tofino ASICs.
++ Drivers for Serdes on the ASICs.  These are not necessary for running
+  the simulation model.
+
 # Setup
 
 ```bash
