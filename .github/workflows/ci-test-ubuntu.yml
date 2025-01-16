@@ -16,7 +16,7 @@ concurrency:
 jobs:
   # Build with GCC and test P4C on different Ubuntu distributions.
   test-ubuntu:
-    name: test-${{ matrix.os }})
+    name: test-${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
