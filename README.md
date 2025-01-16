@@ -21,8 +21,6 @@ The following things are included in this repository:
 + Example P4_16 programs and PTF tests
 + Git submodule referring to the latest version of the P4 compiler
   in the repository https://github.com/p4lang/p4c tested with this code.
-+ bfrt_python code is included, but the build process needs some fixes
-  before this is available for use.
 
 This supports developing and compiling P4 programs for Tofino 1 and 2,
 developing control plane software that runs with the simulation model
@@ -32,14 +30,20 @@ and simulating its execution on the model.
 Some things not included, that one must get from Intel:
 
 + P4Insight GUI for visualizing the hardware resources used by P4 programs
-  after they have been successfully compiled.
+  after they have been compiled.
   + Note: P4.org personnel are in communication with Intel to see if this
     can be released as open source soon.
++ Some bfrt_python code is included, but it is not yet clear if all of
+  the pieces required to use it are included yet.  Follow this issue
+  if you are interested:
+  https://github.com/p4lang/open-p4studio/issues/23
 + BSPs (Board Support Packages) that enable the SDE to access and
   configure hardware on a physical board, e.g. configuring physical
-  Ethernet ports.
-+ Drivers for Serdes on the ASICs.  These are not necessary for running
-  the simulation model.
+  Ethernet ports and manage related components, such as repeaters,
+  retimers, SFPs, QSFPs, etc.
++ ASIC-specific Serdes drivers.  These are not necessary for running
+  the simulation model, but essential for running the code on the real
+  ASICs.
 
 # Setup
 
