@@ -23,6 +23,10 @@ on the model.
 
 Some things not included, that one must get from Intel:
 
++ P4Insight GUI for visualizing the hardware resources used by P4 programs
+  after they have been successfully compiled.
+  + Note: P4.org personnel are in communication with Intel to see if this
+    can be released as open source soon.
 + BSPs (Board Support Packages) for booting hardware boards containing
   Tofino ASICs.
 + Drivers for Serdes on the ASICs.  These are not necessary for running
