@@ -7,7 +7,14 @@ Intel® P4 Studio Software Development Environment (SDE) is a set of packages fo
 The following things are included in this repository:
 
 + Driver software
-+ bfrt runtime API implementation
++ The Barefoot Runtime Interface (BRI), which consists of:
+  + The locally callable BfRt API, with bindings in C and C++.
+  + The gRPC-based protocol, called BF Runtime, together with the
+    server implementation in C++ and both C++ and Python client
+    bindings (others can be generated using the provided proto files).
+    + The additional bfrt_grpc.client Python module provides
+      easier-to-use, simplified interface to BF Runtime (used for most
+      PTF tests).
 + An x86_64 binary of the simulation model
   + Note: Source code for the simulation model is in the process of
     being released to open source, but that is not yet complete.
@@ -17,9 +24,10 @@ The following things are included in this repository:
 + bfrt_python code is included, but the build process needs some fixes
   before this is available for use.
 
-This supports developing and compiling P4 programs for Tofino 1 and 2
-ASICs, developing control plane software, and simulating its execution
-on the model.
+This supports developing and compiling P4 programs for Tofino 1 and 2,
+developing control plane software that runs with the simulation model
+(but not a real hardware board with Tofino switch ASICs - see below),
+and simulating its execution on the model.
 
 Some things not included, that one must get from Intel:
 
@@ -27,8 +35,9 @@ Some things not included, that one must get from Intel:
   after they have been successfully compiled.
   + Note: P4.org personnel are in communication with Intel to see if this
     can be released as open source soon.
-+ BSPs (Board Support Packages) for booting hardware boards containing
-  Tofino ASICs.
++ BSPs (Board Support Packages) that enable the SDE to access and
+  configure hardware on a physical board, e.g. configuring physical
+  Ethernet ports .
 + Drivers for Serdes on the ASICs.  These are not necessary for running
   the simulation model.
 
