@@ -2,6 +2,49 @@
 
 Intel® P4 Studio Software Development Environment (SDE) is a set of packages for programming Intel’s line of programmable Ethernet Switches. The package also contains scripts for building and installing SDE. The fully automated script (`install.sh`) introduced in this release internally invokes the existing command line interface tool (`p4studio`) to ease the build and installation process. The following sections describe how to build, install, and run the Intel P4 Studio SDE.
 
+# What is included
+
+The following things are included in this repository:
+
++ Driver software
++ The Barefoot Runtime Interface (BRI), which consists of:
+  + The locally callable BfRt API, with bindings in C and C++.
+  + The gRPC-based protocol, called BF Runtime, together with the
+    server implementation in C++ and both C++ and Python client
+    bindings (others can be generated using the provided proto files).
+    + The additional bfrt_grpc.client Python module provides
+      easier-to-use, simplified interface to BF Runtime (used for most
+      PTF tests).
++ An x86_64 binary of the simulation model
+  + Note: Source code for the simulation model is in the process of
+    being released to open source, but that is not yet complete.
++ Example P4_16 programs and PTF tests
++ Git submodule referring to the latest version of the P4 compiler
+  in the repository https://github.com/p4lang/p4c tested with this code.
+
+This supports developing and compiling P4 programs for Tofino 1 and 2,
+developing control plane software that runs with the simulation model
+(but not a real hardware board with Tofino switch ASICs - see below),
+and simulating its execution on the model.
+
+Some things not included, that one must get from Intel:
+
++ P4Insight GUI for visualizing the hardware resources used by P4 programs
+  after they have been compiled.
+  + Note: P4.org personnel are in communication with Intel to see if this
+    can be released as open source soon.
++ Some bfrt_python code is included, but it is not yet clear if all of
+  the pieces required to use it are included yet.  Follow this issue
+  if you are interested:
+  https://github.com/p4lang/open-p4studio/issues/23
++ BSPs (Board Support Packages) that enable the SDE to access and
+  configure hardware on a physical board, e.g. configuring physical
+  Ethernet ports and manage related components, such as repeaters,
+  retimers, SFPs, QSFPs, etc.
++ ASIC-specific Serdes drivers.  These are not necessary for running
+  the simulation model, but essential for running the code on the real
+  ASICs.
+
 # Setup
 
 ```bash
