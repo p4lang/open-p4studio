@@ -79,7 +79,7 @@ option(PROFILER      "Build with CPU profiler" OFF)
 option(ASAN          "Build with ASAN" OFF)
 option(LTO           "Build with LinkTimeOptimization" OFF)
 option(FORCE32       "Force a 32bit compile on 64bit" OFF)
-option(BF-PYTHON     "Build and enable bf-python CLI" OFF)
+option(BF-PYTHON     "Build and enable bf-python CLI" ON)
 
 # global
 option(ASIC          "Build for ASIC" OFF)
