@@ -6,7 +6,7 @@ Intel® P4 Studio Software Development Environment (SDE) is a set of packages fo
 
 The following things are included in this repository:
 
-+ Driver software
++ Driver software sufficient for running with the simulation model.
 + The Barefoot Runtime Interface (BRI), which consists of:
   + The locally callable BfRt API, with bindings in C and C++.
   + The gRPC-based protocol, called BF Runtime, together with the
@@ -43,7 +43,9 @@ Some things not included, that one must get from Intel:
   retimers, SFPs, QSFPs, etc.
 + ASIC-specific Serdes drivers.  These are not necessary for running
   the simulation model, but essential for running the code on the real
-  ASICs.
+  ASICs.  See instructions in the directory `hw`.  The necessary code
+  is available from Intel RDC (Resource & Documentation Center) for
+  those with authorization to access it.
 
 # Setup
 
