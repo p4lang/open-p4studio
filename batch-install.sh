@@ -79,46 +79,108 @@ else
     exit 1
 fi
 
-# Minimum recommended system memory is 4 GBytes times the number of
-# CPU cores, i.e. the output of the command `nproc`, because many
-# build commands in open-p4studio use `nproc` to decide how many
-# parallel build processes to run.  In at least one of those, the peak
-# memory usage of some C++ compiler runs is over 3 GBytes.
+available_mem_MBytes() {
+    local memtotal_KBytes=`head -n 1 /proc/meminfo | awk '{print $2;}'`
+    local memtotal_MBytes=`expr ${memtotal_KBytes} / 1024`
+    echo ${memtotal_MBytes}
+}
 
-num_procs=`nproc`
-min_mem_MBytes=`expr ${num_procs} \* \( 4096 - 256 \)`
-memtotal_KBytes=`head -n 1 /proc/meminfo | awk '{print $2;}'`
-memtotal_MBytes=`expr ${memtotal_KBytes} / 1024`
+available_processors() {
+    local n=`grep -c '^processor' /proc/cpuinfo`
+    echo $n
+}
 
-if [ "${memtotal_MBytes}" -lt "${min_mem_MBytes}" ]
+# When p4c is built with the unity option, at least one individual
+# process uses 4.5 GBytes of RAM, and there are others that use
+# 2-3 GBytes of RAM that might run in parallel with that one.
+#
+# To be safe, overestimate slightly using this formula for
+# p4c unity builds, where N is the number of parallel jobs:
+#
+# expected_max_mem_usage(N) = 2 GBytes + N * (4 GBytes)
+#
+# If later we decide to disable unity build for p4c, I suspect
+# we could use this formula instead, but I have not tested this:
+#
+# expected_max_mem_usage(N) = 2 GBytes + N * (2 GBytes)
+
+expected_max_mem_usage_MBytes() {
+    local num_jobs=$1
+    # expected base memory required
+    local a=2048
+    # additional memory required for each parallel job (including 1)
+    local b=4096
+    local total=`expr ${a} + ${b} \* ${num_jobs}`
+    echo $total
+}
+
+# max_parallel_jobs calculates a number of parallel jobs N to run for
+# a command like `make -j<N>`
+#
+# Often this does not actually help finish the command earlier if N is
+# larger than the number of CPU cores on the system, so calculate a
+# value of N no more than that number.
+#
+# Also, if N is so large that the processes started in parallel exceed
+# the available memory on the system, it can cause the system to copy
+# memory to and from swap space, which dramatically reduces
+# performance.  Alternately, it can cause the kernel to kill
+# processes, to reduce system memory usage, which causes the overall
+# job to fail.  Thus we would like to calculate a value of N such
+# that this is true:
+#
+# expected_max_mem_usage(N) <= currently free mem
+
+max_parallel_jobs() {
+    local avail_mem_MBytes=$1
+    local max_jobs_for_processors=`available_processors`
+    local num_jobs=0
+    local next_num_jobs
+    local required_mem
+    local continue=1
+    while [ ${continue} -eq 1 ]
+    do
+        next_num_jobs=`expr ${num_jobs} + 1`
+        required_mem=`expected_max_mem_usage_MBytes ${next_num_jobs}`
+        if [ ${avail_mem_MBytes} -lt ${required_mem} ]
+        then
+            continue=0
+        else
+            num_jobs=${next_num_jobs}
+        fi
+    done
+    local max_jobs_for_mem=${num_jobs}
+
+    1>&2 echo "Available memory (MBytes): ${avail_mem_MBytes}"
+    1>&2 echo "Max number of parallel jobs for available mem: ${max_jobs_for_mem}"
+    1>&2 echo "Max number of parallel jobs for processors: ${max_jobs_for_processors}"
+    if [ ${max_jobs_for_processors} -lt ${max_jobs_for_mem} ]
+    then
+	echo ${max_jobs_for_processors}
+    else
+	echo ${max_jobs_for_mem}
+    fi
+}
+
+abort_script=0
+min_mem_MBytes=`expected_max_mem_usage_MBytes 1`
+avail_mem_MBytes=`available_mem_MBytes`
+num_jobs=`max_parallel_jobs ${avail_mem_MBytes}`
+if [ ${num_jobs} -lt 1 ]
 then
-    memtotal_comment="too low"
+    mem_comment="too low"
     abort_script=1
 else
-    memtotal_comment="enough"
+    mem_comment="enough for ${num_jobs} parallel jobs"
 fi
 
-echo "Number of processor cores detected:            ${num_procs}"
 echo "Minimum recommended memory to run this script: ${min_mem_MBytes} MBytes"
-echo "Memory on this system from /proc/meminfo:      ${memtotal_MBytes} MBytes -> $memtotal_comment"
+echo "Memory on this system from /proc/meminfo:      ${avail_mem_MBytes} MBytes -> $mem_comment"
 
 if [ "${abort_script}" == 1 ]
 then
     1>&2 echo ""
     1>&2 echo "Aborting script because system has too little RAM."
-    1>&2 echo ""
-    1>&2 echo "If you are running this system in a VM, and can:"
-    1>&2 echo ""
-    1>&2 echo "+ reduce the number of virtual CPUs allocated to the VM
-    1>&2 echo "+ increase the RAM available to the VM
-    1>&2 echo ""
-    1>&2 echo "or some combination of those two that gives you 4 GBytes"
-    1>&2 echo "of RAM per CPU core, then you should be able to run"
-    1>&2 echo "the installation."
-    1>&2 echo ""
-    1>&2 echo "If you are interested in reducing the RAM required to"
-    1>&2 echo "install this software, consider helping with this issue:"
-    1>&2 echo "+ https://github.com/p4lang/open-p4studio/issues/17"
     exit 1
 fi
 
@@ -150,7 +212,7 @@ set -x
 git log -n 1 | head -n 3
 cd "${THIS_SCRIPT_DIR_ABSOLUTE}"
 
-sudo -E ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+sudo -E ./p4studio/p4studio profile apply --jobs ${num_jobs} ./p4studio/profiles/testing.yaml
 
 set +x
 echo "------------------------------------------------------------"
