@@ -1,0 +1,70 @@
+Completed as of Sep2014
+-----------------------
+1. ExactMatch, ProgrammableHash, InputXbar, MultiWay, WideMatch
+2. TcamMatch, WideTcamMatch, MultiRangeMatch with all DirtCAM modes
+   - NB TCAM MultiRangeMatch - was supposed to be later phase - DONE in Phase2
+3. Gateway Tables
+4. Immediate actions within match overhead fields
+
+Completed as of Dec2014
+-----------------------
+1. Immediate data into Action HV Bus config
+2. Hacktion RAMS/Poor Man's Selection Tables
+
+Completed as of Jan2015
+-----------------------
+1. TCAMs with no tind - single actionbit payload
+
+
+
+Waiting for registers
+---------------------
+1. Config register versioning 
+3. Logical table fan out config - what used to be match_to_logical_table_icxbar
+
+
+
+Not yet implemented - this phase
+--------------------------------
+2. Deparser2
+3. Connecting action addresses to action rams
+   using overflow bus (RAM SwitchBox I) 
+4. Other programming RAM Data Bus HV SwitchBox
+5. Config register versioning
+6. Stashes
+
+Software features
+-----------------
+1. PHV/Table name lookup to enhance model debug
+
+Not yet implemented - later phases
+----------------------------------
+1. MAP RAMs + read/write mems
+2. Statistics/Meters
+3. Stats/Meter ALU
+4. Stateful tables, Stateful ALU
+5. EndOfPacket BUS
+6. Virtual addressing
+7. Selection tables - resilient hashing
+8. LR(t)
+9. DMA
+10. Learn filter (partially done)
+11. Smart Engines
+12. ECC
+
+
+
+Will never be implemented?
+--------------------------
+1. Ternary match within SRAM!?
+
+
+Other discrepancies from H/W
+----------------------------
+1. Zero-time - everything happens in zero-time
+   No attempt at moment to model timing
+   No attempt to model intra-MAU stage pipeline
+2. Ingress/Egress packet pairs processed by MAUs get executed 
+   by each MAU stage simultaneously irrespective of whether 
+   the ingress and egress pipe have differing dependencies
+   and hence different delay characteristics
