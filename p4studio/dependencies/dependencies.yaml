@@ -342,7 +342,7 @@ packages:
         dependencies: [boost]
         type: source
     libcli:
-        attributes: {version: 1.10.4}
+        attributes: {url: 'https://github.com/dparrish/libcli.git', version: 1.10.4}
         tags: [default, source]
         type: source
     pi:
@@ -353,4 +353,9 @@ packages:
         attributes: {flags: -DWITH_CPP=ON -DWITH_QT5=OFF -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_CL=OFF -DWITH_JAVA=OFF -DWITH_JAVASCRIPT=OFF -DWITH_KOTLIN=OFF -DWITH_RUBY=OFF -DWITH_HASKELL=OFF -DWITH_HAXE=OFF -DWITH_NETSTD=OFF -DWITH_PERL=OFF -DWITH_PHP=OFF -DWITH_PHP_EXTENSION=OFF -DWITH_DART=OFF -DWITH_ERLANG=OFF -DWITH_GO=OFF -DWITH_D=OFF -DWITH_NODEJS=OFF -DWITH_NODETS=OFF -DWITH_LUA=OFF -DWITH_RS=OFF -DWITH_SWIFT=OFF -DBUILD_TESTING=OFF, url: 'https://archive.apache.org/dist/thrift/0.21.0/thrift-0.21.0.tar.gz', version: 0.21.0}
         tags: [default, source]
         dependencies: [boost]
+        type: source
+    libcrafter:
+        attributes: {url: 'https://github.com/pellegre/libcrafter.git', version: master}
+        tags: [default, source]
+        dependencies: [libcli]
         type: source
