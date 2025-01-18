@@ -12,7 +12,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_BUILD_TYPE "RelWithDebInfo")
 
-include(ConfigureChecks)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureChecks.cmake)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=unused-parameter")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=unused-parameter")

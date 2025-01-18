@@ -37,7 +37,7 @@ if (STANDALONE)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo")
 
-  include(ConfigureChecks)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureChecks.cmake)
 
   set(C_CXX_FLAGS "-Wall -Wextra -Werror -Wshadow -Wpedantic -Wno-missing-field-initializers -Wno-misleading-indentation -DBF_SYS_LOG_FORMAT_CHECK")
   if(COVERAGE)

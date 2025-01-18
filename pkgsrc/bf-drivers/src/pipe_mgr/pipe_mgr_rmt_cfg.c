@@ -26,7 +26,7 @@
  */
 
 /* Standard header includes */
-#include <config.h>
+#include "p4studio_config.h"
 #include <math.h>
 #include <unistd.h>
 #include <dlfcn.h>

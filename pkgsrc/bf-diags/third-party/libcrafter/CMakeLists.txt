@@ -1,5 +1,5 @@
 if (STANDALONE)
-  include(ConfigureChecks)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureChecks.cmake)
   include_directories(${CMAKE_CURRENT_BINARY_DIR})
 endif() # STANDALONE
 set(CMAKE_CXX_FLAGS "-ansi -pedantic -Wall -DHAVE_CONFIG_H")
