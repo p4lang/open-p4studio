@@ -53,6 +53,7 @@ jobs:
           ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
 
       - name: Show build logs
+        if: success() || failure()
         run: |
           ./show-build-logs.sh
 
