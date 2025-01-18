@@ -107,6 +107,7 @@ sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
     
       * bridge
       * libcli
+      * libcrafter
       * thrift
       * grpc
 

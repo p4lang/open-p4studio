@@ -233,7 +233,7 @@ class Profile:
         nested_set(self.raw, path, value)
 
     def _calculate_source_packages(self) -> List[str]:
-        result = ['bridge', 'libcli']
+        result = ['bridge', 'libcli', 'libcrafter']
 
         if any([
             self.config_options().get('thrift-driver', True),
