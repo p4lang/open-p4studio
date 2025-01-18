@@ -1,0 +1,77 @@
+// ********** begin extracted from log
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_const_regfile[0], 0x5463663e); /* a=0x2010900   <<salu_const_regfile[31:0]=32'h5463663e>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_const_regfile[1], 0xaa007bd4); /* a=0x2010904   <<salu_const_regfile[31:0]=32'haa007bd4>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_const_regfile[2], 0x40933826); /* a=0x2010908   <<salu_const_regfile[31:0]=32'h40933826>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_const_regfile[3], 0x573df685); /* a=0x201090c   <<salu_const_regfile[31:0]=32'h573df685>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_mathtable[0], 0x5dceaec6); /* a=0x2010910   <<salu_mathtable[31:0]=32'h5dceaec6>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_mathtable[1], 0x481971bd); /* a=0x2010914   <<salu_mathtable[31:0]=32'h481971bd>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_mathtable[2], 0x8fd618fe); /* a=0x2010918   <<salu_mathtable[31:0]=32'h8fd618fe>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_mathtable[3], 0x82e65016); /* a=0x201091c   <<salu_mathtable[31:0]=32'h82e65016>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_mathunit_ctl, 0x1e5); /* a=0x20109c8   <<salu_mathunit_output_scale[5:0]=6'h25>> <<salu_mathunit_exponent_invert[6:6]=1'h1>> <<salu_mathunit_exponent_shift[8:7]=2'h3>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.stateful_ctl, 0x1); /* a=0x20109cc   <<salu_enable[0:0]=1'h1>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[0][0], 0x1109e); /* a=0x2010980   <<salu_const_src[3:0]=4'he>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h8>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'h4>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[0][1], 0x32caf); /* a=0x2010984   <<salu_const_src[3:0]=4'hf>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h6>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'hc>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[0][2], 0x169ce); /* a=0x2010988   <<salu_const_src[3:0]=4'he>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h4>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'h5>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[0][3], 0x262d6); /* a=0x201098c   <<salu_const_src[3:0]=4'h6>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h1>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'h9>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[1][0], 0x4805); /* a=0x2010990   <<salu_const_src[3:0]=4'h5>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h4>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'h1>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[1][1], 0x156ab); /* a=0x2010994   <<salu_const_src[3:0]=4'hb>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'hb>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'h5>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[1][2], 0x2c1a5); /* a=0x2010998   <<salu_const_src[3:0]=4'h5>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h0>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'hb>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[1][3], 0x301ba); /* a=0x201099c   <<salu_const_src[3:0]=4'ha>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h0>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'hc>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[2][0], 0x276c9); /* a=0x20109a0   <<salu_const_src[3:0]=4'h9>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'hb>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'h9>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[2][1], 0x3817a); /* a=0x20109a4   <<salu_const_src[3:0]=4'ha>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h0>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'he>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[2][2], 0x1a0ce); /* a=0x20109a8   <<salu_const_src[3:0]=4'he>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h0>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'h6>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[2][3], 0x2c445); /* a=0x20109ac   <<salu_const_src[3:0]=4'h5>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h0>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h2>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'hb>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[3][0], 0x1d57e); /* a=0x20109b0   <<salu_const_src[3:0]=4'he>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'ha>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'h7>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[3][1], 0x32b74); /* a=0x20109b4   <<salu_const_src[3:0]=4'h4>> <<salu_regfile_const[4:4]=1'h1>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h5>> <<salu_arith[13:13]=1'h1>> <<salu_pred[17:14]=4'hc>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[3][2], 0x38562); /* a=0x20109b8   <<salu_const_src[3:0]=4'h2>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h1>> <<salu_asrc_memory_index[7:7]=1'h0>> <<salu_asrc_memory[8:8]=1'h1>> <<salu_op[12:9]=4'h2>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'he>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_state_alu[3][3], 0x88a5); /* a=0x20109bc   <<salu_const_src[3:0]=4'h5>> <<salu_regfile_const[4:4]=1'h0>> <<salu_bsrc_phv_index[5:5]=1'h1>> <<salu_bsrc_phv[6:6]=1'h0>> <<salu_asrc_memory_index[7:7]=1'h1>> <<salu_asrc_memory[8:8]=1'h0>> <<salu_op[12:9]=4'h4>> <<salu_arith[13:13]=1'h0>> <<salu_pred[17:14]=4'h2>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[0][0], 0x4eba); /* a=0x20109e0   <<salu_cmp_const_src[3:0]=4'ha>> <<salu_cmp_regfile_const[4:4]=1'h1>> <<salu_cmp_bsrc_input[5:5]=1'h1>> <<salu_cmp_bsrc_sign[6:6]=1'h0>> <<salu_cmp_bsrc_enable[7:7]=1'h1>> <<salu_cmp_asrc_input[8:8]=1'h0>> <<salu_cmp_asrc_sign[9:9]=1'h1>> <<salu_cmp_asrc_enable[10:10]=1'h1>> <<salu_cmp_opcode[14:11]=4'h9>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[0][1], 0x3934); /* a=0x20109e4   <<salu_cmp_const_src[3:0]=4'h4>> <<salu_cmp_regfile_const[4:4]=1'h1>> <<salu_cmp_bsrc_input[5:5]=1'h1>> <<salu_cmp_bsrc_sign[6:6]=1'h0>> <<salu_cmp_bsrc_enable[7:7]=1'h0>> <<salu_cmp_asrc_input[8:8]=1'h1>> <<salu_cmp_asrc_sign[9:9]=1'h0>> <<salu_cmp_asrc_enable[10:10]=1'h0>> <<salu_cmp_opcode[14:11]=4'h7>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[1][0], 0x5a8d); /* a=0x20109e8   <<salu_cmp_const_src[3:0]=4'hd>> <<salu_cmp_regfile_const[4:4]=1'h0>> <<salu_cmp_bsrc_input[5:5]=1'h0>> <<salu_cmp_bsrc_sign[6:6]=1'h0>> <<salu_cmp_bsrc_enable[7:7]=1'h1>> <<salu_cmp_asrc_input[8:8]=1'h0>> <<salu_cmp_asrc_sign[9:9]=1'h1>> <<salu_cmp_asrc_enable[10:10]=1'h0>> <<salu_cmp_opcode[14:11]=4'hb>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[1][1], 0x7219); /* a=0x20109ec   <<salu_cmp_const_src[3:0]=4'h9>> <<salu_cmp_regfile_const[4:4]=1'h1>> <<salu_cmp_bsrc_input[5:5]=1'h0>> <<salu_cmp_bsrc_sign[6:6]=1'h0>> <<salu_cmp_bsrc_enable[7:7]=1'h0>> <<salu_cmp_asrc_input[8:8]=1'h0>> <<salu_cmp_asrc_sign[9:9]=1'h1>> <<salu_cmp_asrc_enable[10:10]=1'h0>> <<salu_cmp_opcode[14:11]=4'he>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[2][0], 0x2f7d); /* a=0x20109f0   <<salu_cmp_const_src[3:0]=4'hd>> <<salu_cmp_regfile_const[4:4]=1'h1>> <<salu_cmp_bsrc_input[5:5]=1'h1>> <<salu_cmp_bsrc_sign[6:6]=1'h1>> <<salu_cmp_bsrc_enable[7:7]=1'h0>> <<salu_cmp_asrc_input[8:8]=1'h1>> <<salu_cmp_asrc_sign[9:9]=1'h1>> <<salu_cmp_asrc_enable[10:10]=1'h1>> <<salu_cmp_opcode[14:11]=4'h5>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[2][1], 0x3bd9); /* a=0x20109f4   <<salu_cmp_const_src[3:0]=4'h9>> <<salu_cmp_regfile_const[4:4]=1'h1>> <<salu_cmp_bsrc_input[5:5]=1'h0>> <<salu_cmp_bsrc_sign[6:6]=1'h1>> <<salu_cmp_bsrc_enable[7:7]=1'h1>> <<salu_cmp_asrc_input[8:8]=1'h1>> <<salu_cmp_asrc_sign[9:9]=1'h1>> <<salu_cmp_asrc_enable[10:10]=1'h0>> <<salu_cmp_opcode[14:11]=4'h7>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[3][0], 0x3d4c); /* a=0x20109f8   <<salu_cmp_const_src[3:0]=4'hc>> <<salu_cmp_regfile_const[4:4]=1'h0>> <<salu_cmp_bsrc_input[5:5]=1'h0>> <<salu_cmp_bsrc_sign[6:6]=1'h1>> <<salu_cmp_bsrc_enable[7:7]=1'h0>> <<salu_cmp_asrc_input[8:8]=1'h1>> <<salu_cmp_asrc_sign[9:9]=1'h0>> <<salu_cmp_asrc_enable[10:10]=1'h1>> <<salu_cmp_opcode[14:11]=4'h7>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_cmp_alu[3][1], 0x28af); /* a=0x20109fc   <<salu_cmp_const_src[3:0]=4'hf>> <<salu_cmp_regfile_const[4:4]=1'h0>> <<salu_cmp_bsrc_input[5:5]=1'h1>> <<salu_cmp_bsrc_sign[6:6]=1'h0>> <<salu_cmp_bsrc_enable[7:7]=1'h1>> <<salu_cmp_asrc_input[8:8]=1'h0>> <<salu_cmp_asrc_sign[9:9]=1'h0>> <<salu_cmp_asrc_enable[10:10]=1'h0>> <<salu_cmp_opcode[14:11]=4'h5>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_output_alu[0], 0x60); /* a=0x2010920   <<salu_output_cmpfn[3:0]=4'h0>> <<salu_output_asrc[6:4]=3'h6>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_output_alu[1], 0x46); /* a=0x2010924   <<salu_output_cmpfn[3:0]=4'h6>> <<salu_output_asrc[6:4]=3'h4>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_output_alu[2], 0x6); /* a=0x2010928   <<salu_output_cmpfn[3:0]=4'h6>> <<salu_output_asrc[6:4]=3'h0>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_output_alu[3], 0x4b); /* a=0x201092c   <<salu_output_cmpfn[3:0]=4'hb>> <<salu_output_asrc[6:4]=3'h4>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_common[0], 0x60); /* a=0x2010930   <<salu_alu2_lo_bsrc_math[0:0]=1'h0>> <<salu_alu2_lo_math_src[2:1]=2'h0>> <<salu_datasize[5:3]=3'h4>> <<salu_op_dual[6:6]=1'h1>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_common[1], 0x0); /* a=0x2010934   <<salu_alu2_lo_bsrc_math[0:0]=1'h0>> <<salu_alu2_lo_math_src[2:1]=2'h0>> <<salu_datasize[5:3]=3'h0>> <<salu_op_dual[6:6]=1'h0>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_common[2], 0x62); /* a=0x2010938   <<salu_alu2_lo_bsrc_math[0:0]=1'h0>> <<salu_alu2_lo_math_src[2:1]=2'h1>> <<salu_datasize[5:3]=3'h4>> <<salu_op_dual[6:6]=1'h1>> */
+ tu.OutWord(&mau_reg_map.rams.map_alu.meter_group[0].stateful.salu_instr_common[3], 0x28); /* a=0x201093c   <<salu_alu2_lo_bsrc_math[0:0]=1'h0>> <<salu_alu2_lo_math_src[2:1]=2'h0>> <<salu_datasize[5:3]=3'h5>> <<salu_op_dual[6:6]=1'h0>> */
+ phv_data_word = UINT64_C(0xc8af51bd4661b97c);
+ data_in_bv.set32(0,0xe20f1904);
+ data_in_bv.set32(1,0x4eba73e5);
+ data_in_bv.set32(2,0x132ca480);
+ data_in_bv.set32(3,0xc3b66c67);
+ addr = 0x0281239f;
+ salu->calculate_output(addr,phv_data_word,&data_in_bv,&data_out_bv,&action_out);
+ EXPECT_EQ(0xb978b983u,data_out_bv.get_word( 0,32));
+ EXPECT_EQ(0x4eba73e5u,data_out_bv.get_word(32,32));
+ EXPECT_EQ(0x132ca480u,data_out_bv.get_word(64,32));
+ EXPECT_EQ(0xc3b66c67u,data_out_bv.get_word(96,32));
+ phv_data_word = UINT64_C(0x04bfa7520c2bfeaa);
+ data_in_bv.set32(0,0x2f6042bb);
+ data_in_bv.set32(1,0xf669b870);
+ data_in_bv.set32(2,0xf7e9daec);
+ data_in_bv.set32(3,0xea127ffe);
+ addr = 0x02fdbe70;
+ salu->calculate_output(addr,phv_data_word,&data_in_bv,&data_out_bv,&action_out);
+ EXPECT_EQ(0x2f6042bbu,data_out_bv.get_word( 0,32));
+ EXPECT_EQ(0xf669b870u,data_out_bv.get_word(32,32));
+ EXPECT_EQ(0xf7e9daecu,data_out_bv.get_word(64,32));
+ EXPECT_EQ(0xfeaafeb1u,data_out_bv.get_word(96,32));
+ phv_data_word = UINT64_C(0xe6ae8d5a00a866b0);
+ data_in_bv.set32(0,0x9ed234c4);
+ data_in_bv.set32(1,0xa3b80b18);
+ data_in_bv.set32(2,0x9cd1fced);
+ data_in_bv.set32(3,0x09f75bed);
+ addr = 0x03964a5e;
+ salu->calculate_output(addr,phv_data_word,&data_in_bv,&data_out_bv,&action_out);
+ EXPECT_EQ(0x9ed234c4u,data_out_bv.get_word( 0,32));
+ EXPECT_EQ(0xa3b80b18u,data_out_bv.get_word(32,32));
+ EXPECT_EQ(0xfefffdffu,data_out_bv.get_word(64,32));
+ EXPECT_EQ(0x09f75bedu,data_out_bv.get_word(96,32));
+// ********** end extracted from log

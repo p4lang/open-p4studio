@@ -1,0 +1,928 @@
+{
+    "program_name": "parser-static-config",
+    "compiler_version": "hand-crafted-may-not-represent-actual-context-json",
+    "build_date": "Thu Jan 24 00:01:02 2019",
+    "run_id": "0123456789abcdef",
+    "compile_command": "exists-to-provide-strings-for-p4-lookup-in-tests",
+    "schema_version": "1.6.0",
+    "phv_allocation": [
+        {
+            "ingress": [
+                {
+                    "phv_number": 0,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 557,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 31,
+                            "phv_msb": 31,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.da_lo_32",
+                            "field_width": 32,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 1,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 31,
+                            "phv_msb": 31,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.sa_lo_32",
+                            "field_width": 32,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 2,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 31,
+                            "phv_msb": 31,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_src",
+                            "field_width": 32,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 3,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 31,
+                            "phv_msb": 31,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_dst",
+                            "field_width": 32,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 13,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "is_pov": false,
+                            "field_msb": 15,
+                            "field_lsb": 8,
+                            "phv_msb": 7,
+                            "phv_lsb": 0,
+                            "is_compiler_generated": false,
+                            "field_name": "split_header",
+                            "field_width": 8
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 12,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "field_lsb": 0,
+                            "phv_msb": 7,
+                            "phv_lsb": 0,
+                            "is_compiler_generated": false,
+                            "field_name": "split_header",
+                            "field_width": 8
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 14,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "junk_word_14_a",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        },
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 553,
+                            "phv_lsb": 8,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 15,
+                            "is_compiler_generated": false,
+                            "field_name": "junk_word_14_b",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                },
+                {
+                  "phv_number": 15,
+                  "records": [
+                    {
+                      "mutually_exclusive_with": [],
+                      "pov_headers": [
+                        {
+                          "bit_index": 0,
+                          "position_offset": 616,
+                          "header_name": "my_metadata.da_lo_32",
+                          "hidden": false
+                        },
+                        {
+                          "bit_index": 1,
+                          "position_offset": 617,
+                          "header_name": "my_metadata.ip4_src",
+                          "hidden": false
+                        },
+                        {
+                          "bit_index": 2,
+                          "position_offset": 618,
+                          "header_name": "my_metadata.sa_lo_32",
+                          "hidden": false
+                        },
+                        {
+                          "bit_index": 4,
+                          "position_offset": 620,
+                          "header_name": "ipv4_option_32b",
+                          "hidden": false
+                        },
+                        {
+                          "bit_index": 5,
+                          "position_offset": 621,
+                          "header_name": "ipv6",
+                          "hidden": false
+                        }
+                      ],
+                      "live_end": "deparser",
+                      "live_start": "parser",
+                      "position_offset": 0,
+                      "phv_lsb": 0,
+                      "is_pov": true,
+                      "field_msb": 39,
+                      "phv_msb": 14,
+                      "is_compiler_generated": true,
+                      "field_name": "POV",
+                      "field_width": 0,
+                      "field_lsb": 8
+                    },
+                    {
+                      "mutually_exclusive_with": [],
+                      "pov_headers": [
+                        {
+                          "bit_index": 27,
+                          "position_offset": 642,
+                          "header_name": "skipped_some_pov_bits__test",
+                          "hidden": false
+                        }
+                      ],
+                      "live_end": "deparser",
+                      "live_start": "parser",
+                      "position_offset": 0,
+                      "phv_lsb": 27,
+                      "is_pov": true,
+                      "field_msb": 0,
+                      "phv_msb": 27,
+                      "is_compiler_generated": true,
+                      "field_name": "POV",
+                      "field_width": 0,
+                      "field_lsb": 0
+                    },
+                    {
+                      "mutually_exclusive_with": [],
+                      "pov_headers": [
+                        {
+                          "bit_index": 28,
+                          "position_offset": 642,
+                          "header_name": "multiple_pov_records",
+                          "hidden": false
+                        },
+                        {
+                          "bit_index": 3,
+                          "position_offset": 619,
+                          "header_name": "my_metadata.ip4_dst",
+                          "hidden": false
+                        }
+                      ],
+                      "live_end": "deparser",
+                      "live_start": "parser",
+                      "position_offset": 0,
+                      "phv_lsb": 28,
+                      "is_pov": true,
+                      "field_msb": 0,
+                      "phv_msb": 28,
+                      "is_compiler_generated": true,
+                      "field_name": "POV",
+                      "field_width": 0,
+                      "field_lsb": 0
+                    },
+                    {
+                      "mutually_exclusive_with": [],
+                      "live_end": "deparser",
+                      "live_start": "parser",
+                      "position_offset": 0,
+                      "phv_lsb": 29,
+                      "is_pov": false,
+                      "field_msb": 2,
+                      "phv_msb": 31,
+                      "is_compiler_generated": true,
+                      "field_name": "other_mixed_with_POV",
+                      "field_width": 3,
+                      "field_lsb": 0
+                    }
+                  ],
+                  "word_bit_width": 32,
+                  "container_type": "normal"
+                },
+                {
+                    "phv_number": 64,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_hl",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 66,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_ttl",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 67,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_proto",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 96,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "phv8_0",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 97,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "phv8_1",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 98,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "phv8_2",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 99,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "phv8_3",
+                            "field_width": 8,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 8,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 128,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.da_hi_16",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 129,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.sa_hi_16",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 130,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.eth_type",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 131,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_id",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 132,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_len",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 133,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_frag",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 134,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.ip4_cksm",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 135,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.p_sport",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                },
+                {
+                    "phv_number": 136,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 528,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 7,
+                            "phv_msb": 7,
+                            "is_compiler_generated": false,
+                            "field_name": "my_metadata.p_dport",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 16,
+                    "container_type": "normal"
+                }
+            ],
+            "egress": [
+                {
+                    "phv_number": 195,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 557,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 15,
+                            "phv_msb": 15,
+                            "is_compiler_generated": false,
+                            "field_name": "egress_field",
+                            "field_width": 16,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                }
+            ],
+            "stage_number": 0
+        },
+        {
+            "ingress": [
+                {
+                    "phv_number": 1,
+                    "records": [
+                        {
+                            "mutually_exclusive_with": [],
+                            "live_end": "deparser",
+                            "live_start": 0,
+                            "position_offset": 557,
+                            "phv_lsb": 0,
+                            "is_pov": false,
+                            "field_msb": 31,
+                            "phv_msb": 31,
+                            "is_compiler_generated": false,
+                            "field_name": "phv_1.stage_1",
+                            "field_width": 32,
+                            "field_lsb": 0
+                        }
+                    ],
+                    "word_bit_width": 32,
+                    "container_type": "normal"
+                }
+            ],
+            "egress": [
+            ],
+            "stage_number": 1
+        }
+	],
+    "parser": {
+        "ingress": [
+            {
+                "parser_state_id": 0,
+                "parser_name": "my_state_0"
+            },
+            {
+                "parser_state_id": 1,
+                "parser_name": "my_state_1"
+            },
+            {
+                "parser_state_id": 2,
+                "parser_name": "my_state_2"
+            },
+            {
+                "parser_state_id": 255,
+                "parser_name": "my_state_255"
+            }
+        ],
+       "egress": []
+    },
+    "tables" : [
+        {
+            "table_type" : "match",
+            "name" : "table_0_1",
+            "match_attributes" : {
+                "match_type" : "exact",
+                "stage_tables" : [
+                    {
+                        "logical_table_id" : 1,
+                        "stage_number" : 0,
+                        "action_format" : [
+                          {
+                            "action_name" : "action_name_0_1_1",
+                            "vliw_instruction_full" : 1
+                          },
+                          {
+                            "action_name" : "action_name_0_1_2",
+                            "vliw_instruction_full" : 2
+                          }
+                        ]
+                    }
+                    ]
+            },
+            "match_key_fields" : [
+                {
+                    "name" : "my_metadata.da_lo_32",
+                    "global_name" : "foo"
+                },
+                {
+                    "name" : "my_metadata.ip4_src"
+                },
+                {
+                    "name" : "see_global_name",
+                    "global_name" : "my_metadata.ip4_dst"
+                },
+                {
+                    "name" : "split_header"
+                }
+            ],
+            "actions": [
+                {
+                    "name": "action_1",
+                    "handle": 536872456,
+                    "p4_parameters": [
+                        {
+                            "position": 0,
+                            "name": "pkt_len_adjust",
+                            "start_bit": 0,
+                            "bit_width": 16
+                        }
+                    ],
+                    "is_compiler_added_action": false,
+                    "allowed_as_default_action": true,
+                    "constant_default_action": false,
+                    "override_meter_addr": false,
+                    "override_meter_full_addr": 0,
+                    "override_meter_addr_pfe": false,
+                    "override_stat_addr": false,
+                    "override_stat_full_addr": 0,
+                    "override_stat_addr_pfe": false,
+                    "override_stateful_addr": false,
+                    "override_stateful_full_addr": 0,
+                    "override_stateful_addr_pfe": false,
+                    "is_action_meter_color_aware": false,
+                    "indirect_resources": [],
+                    "primitives": [
+                        {
+                            "name": "primitive_1",
+                            "operation": "add",
+                            "dst": {
+                                "type": "phv",
+                                "name": "eg_intr_md.pkt_length"
+                            },
+                            "src1": {
+                                "type": "action_param",
+                                "name": "pkt_len_adjust"
+                            },
+                            "src2": {
+                                "type": "phv",
+                                "name": "junk_word_14_a"
+                            },
+                            "src3": {
+                                "type": "phv",
+                                "name": "egress_field"
+                            }
+                        },
+                        {
+                            "name": "primitive_2",
+                            "operation": "add",
+                            "dst": {
+                                "type": "stateful",
+                                "name": "table_0_1_stateful"
+                            }
+                        }
+                      ]
+                }
+            ]
+        },
+        {
+            "table_type" : "match",
+            "name" : "table_0_2",
+            "match_attributes" : {
+                "match_type" : "exact",
+                "stage_tables" : [
+                    {
+                        "logical_table_id" : 2,
+                        "stage_number" : 0,
+                        "action_format" : [
+                          {
+                            "action_name" : "action_name_0_2_7",
+                            "vliw_instruction_full" : 7
+                          }
+                        ]
+                    }
+                    ]
+            },
+            "match_key_fields" : [
+                {
+                    "name" : "my_metadata.sa_lo_32"
+                },
+                {
+                    "name" : "my_metadata.ip4_dst"
+                }
+            ],
+            "actions": []
+        },
+        {
+            "table_type" : "match",
+            "name" : "table_1_1",
+            "match_attributes" : {
+                "match_type" : "exact",
+                "stage_tables" : [
+                    {
+                        "logical_table_id" : 1,
+                        "stage_number" : 1,
+                        "action_format" : [
+                          {
+                            "action_name" : "action_name_1_1",
+                            "vliw_instruction_full" : 3
+                          }
+                        ]
+                    }
+                    ]
+            },
+            "match_key_fields" : [
+                {
+                    "name" : "phv_1.stage_1"
+                }
+            ],
+            "actions": []
+        },
+        {
+            "table_type" : "match",
+            "name" : "table_2_1",
+            "match_attributes" : {
+                "match_type" : "exact",
+                "stage_tables" : [
+                    {
+                        "logical_table_id" : 1,
+                        "stage_number" : 2,
+                        "action_format" : [
+                          {
+                            "action_name" : "action_name_2_1",
+                            "vliw_instruction_full" : 2
+                          }
+                        ]
+                    }
+                    ]
+            },
+            "match_key_fields" : [
+                {
+                    "name" : "no_phv_alloc_for_stage_2"
+                }
+            ],
+            "actions": []
+        },
+        {
+            "table_type" : "match",
+            "name" : "table_0_3",
+            "match_attributes" : {
+                "match_type" : "exact",
+                "stage_tables" : [
+                    {
+                        "logical_table_id" : 3,
+                        "stage_number" : 0,
+                        "action_format" : [
+                          {
+                            "action_name" : "action_name_0_3",
+                            "vliw_instruction_full" : 5
+                          }
+                        ]
+                    }
+                    ]
+            },
+            "match_key_fields" : [
+                {
+                    "name" : "egress_field"
+                }
+            ],
+            "actions": []
+        },
+        {
+            "table_type" : "condition",
+            "name" : "table_0_4",
+            "condition" : "the_condition",
+            "attached_to" : " attached_to_something",
+            "stage_tables" : [
+                {
+                    "logical_table_id" : 4,
+                    "stage_number" : 0
+                }
+            ],
+            "actions": []
+        },
+        {
+            "table_type" : "stateful",
+            "name" : "table_0_1_stateful",
+            "stage_tables" : [
+                {
+                    "logical_table_id" : 1,
+                    "stage_number" : 0,
+                    "meter_alu_index" : 2
+                }
+            ],
+            "actions": []
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+  "p4_program_list" : [
+    {
+      "instance" : 0,
+      "table-config" : "path/to/context.json"
+    }
+  ]
+}
