@@ -1335,12 +1335,12 @@ switch_status_t _ActionEntry::set_arg(const bf_rt_field_id_t field_id,
     return bf_rt_status_xlate(rc);
   }
 
-  SWITCH_DEBUG_LOG(switch_log(
-      SWITCH_API_LEVEL_DEBUG,
-      SWITCH_OT_NONE,
-      "arg: {} -> {}",
-      dataFieldNameGetInternal(table, field_id, _action_id, indirect),
-      key));
+  // SWITCH_DEBUG_LOG(switch_log(
+  //     SWITCH_API_LEVEL_DEBUG,
+  //     SWITCH_OT_NONE,
+  //     "arg: {} -> {}",
+  //     dataFieldNameGetInternal(table, field_id, _action_id, indirect),
+  //     key));
   return status;
 }
 
@@ -1412,16 +1412,16 @@ switch_status_t _ActionEntry::set_arg(const bf_rt_field_id_t field_id,
 
   rc = table_data->setValue(field_id, key);
   if (rc != BF_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OT_NONE,
-               "{}.{}:{}: rc: {} failed setValue: \"{}.{}\" key {}",
-               __NS__,
-               __func__,
-               __LINE__,
-               bf_err_str(rc),
-               tableNameGetInternal(table),
-               dataFieldNameGetInternal(table, field_id, _action_id, indirect),
-               key);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OT_NONE,
+    //            "{}.{}:{}: rc: {} failed setValue: \"{}.{}\" key {}",
+    //            __NS__,
+    //            __func__,
+    //            __LINE__,
+    //            bf_err_str(rc),
+    //            tableNameGetInternal(table),
+    //            dataFieldNameGetInternal(table, field_id, _action_id, indirect),
+    //            key);
     return bf_rt_status_xlate(rc);
   }
   return status;

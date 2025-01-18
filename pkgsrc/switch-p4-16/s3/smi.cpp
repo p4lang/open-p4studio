@@ -100,13 +100,13 @@ switch_status_t smi_object_create_attr_check(
     const switch_attr_flags_t &flags = get_flags(object_type, attr.id_get());
     if (flags.is_internal || flags.is_read_only) {
       status = SWITCH_STATUS_INVALID_PARAMETER;
-      switch_log(SWITCH_API_LEVEL_ERROR,
-                 object_type,
-                 "{}:{}: ot={}, create attrs {}",
-                 __func__,
-                 __LINE__,
-                 model_info->get_object_name_from_type(object_type),
-                 attrs);
+      // switch_log(SWITCH_API_LEVEL_ERROR,
+      //            object_type,
+      //            "{}:{}: ot={}, create attrs {}",
+      //            __func__,
+      //            __LINE__,
+      //            model_info->get_object_name_from_type(object_type),
+      //            attrs);
       switch_log(SWITCH_API_LEVEL_ERROR,
                  object_type,
                  "{}:{}: ot={}, incorrect flags status={} attr {} "

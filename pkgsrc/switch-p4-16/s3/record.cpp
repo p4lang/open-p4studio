@@ -403,23 +403,23 @@ void record_file_replay(std::string replay_file) {
         auto status =
             switch_store::object_create(object_type, attrs, object_handle);
         if (status != SWITCH_STATUS_SUCCESS) {
-          switch_log(SWITCH_API_LEVEL_ERROR,
-                     SWITCH_OT_NONE,
-                     "Create failed for {} {} status {}",
-                     object_type,
-                     attrs,
-                     status);
+          // switch_log(SWITCH_API_LEVEL_ERROR,
+          //            SWITCH_OT_NONE,
+          //            "Create failed for {} {} status {}",
+          //            object_type,
+          //            attrs,
+          //            status);
         }
       } break;
       case 's': {
         auto status = switch_store::attribute_set(object_id, *attrs.begin());
         if (status != SWITCH_STATUS_SUCCESS) {
-          switch_log(SWITCH_API_LEVEL_ERROR,
-                     SWITCH_OT_NONE,
-                     "Set failed for {} {} {}",
-                     object_id,
-                     *attrs.begin(),
-                     status);
+          // switch_log(SWITCH_API_LEVEL_ERROR,
+          //            SWITCH_OT_NONE,
+          //            "Set failed for {} {} {}",
+          //            object_id,
+          //            attrs,
+          //            status);
         }
       } break;
         break;
@@ -437,13 +437,13 @@ void record_file_replay(std::string replay_file) {
         attr_w attr(0);
         auto status = switch_store::attribute_get(object_id, attr_id, attr);
         if (status != SWITCH_STATUS_SUCCESS) {
-          switch_log(SWITCH_API_LEVEL_ERROR,
-                     SWITCH_OT_NONE,
-                     "Get failed for {} {} {} status {}",
-                     object_id,
-                     attr_id,
-                     attr,
-                     status);
+          // switch_log(SWITCH_API_LEVEL_ERROR,
+          //            SWITCH_OT_NONE,
+          //            "Get failed for {} {} {} status {}",
+          //            object_id,
+          //            attr_id,
+          //            attr,
+          //            status);
         }
       } break;
       case 'n':

@@ -3024,15 +3024,15 @@ static void update_internal_ppg(const switch_object_id_t object_id,
   switch_status_t temp_status = SWITCH_STATUS_SUCCESS;
   temp_status = switch_store::attribute_set(object_id, attr);
   if (temp_status != SWITCH_STATUS_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
-               "{}.{}: Failure to update internal ppg {} attr {}"
-               "status {}",
-               __func__,
-               __LINE__,
-               object_id,
-               attr,
-               temp_status);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
+    //            "{}.{}: Failure to update internal ppg {} attr {}"
+    //            "status {}",
+    //            __func__,
+    //            __LINE__,
+    //            object_id,
+    //            attr,
+    //            temp_status);
   }
   status.set_value(temp_status);
   return;
@@ -3152,16 +3152,16 @@ switch_status_t before_ppg_create_add_internal_ports_ppg(
     internal_ppg_create.join();
     status = ppg_status.get();
     if (status != SWITCH_STATUS_SUCCESS) {
-      switch_log(SWITCH_API_LEVEL_ERROR,
-                 SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
-                 "{}:{}: Failed to add internal ppg for port {} corresponding "
-                 "to external port {} with attrs {}",
-                 __func__,
-                 __LINE__,
-                 port,
-                 port_handle,
-                 attrs,
-                 status);
+      // switch_log(SWITCH_API_LEVEL_ERROR,
+      //            SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
+      //            "{}:{}: Failed to add internal ppg for port {} corresponding "
+      //            "to external port {} with attrs {}",
+      //            __func__,
+      //            __LINE__,
+      //            port,
+      //            port_handle,
+      //            attrs,
+      //            status);
       goto cleanup;
     }
     switch_object_id_t internal_ppg_handle{oid.get()};
@@ -3236,17 +3236,17 @@ switch_status_t before_ppg_update_update_internal_ports_ppg(
     if (ppg_handle.data) ppg_handles.push_back(ppg_handle);
   }
   if (status != SWITCH_STATUS_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
-               "{}.{}: Failure to update attr {} for internal ppgs "
-               "corresponding to external port {} ppg {}"
-               "status {}",
-               __func__,
-               __LINE__,
-               attr,
-               port_handle,
-               object_id,
-               status);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
+    //            "{}.{}: Failure to update attr {} for internal ppgs "
+    //            "corresponding to external port {} ppg {}"
+    //            "status {}",
+    //            __func__,
+    //            __LINE__,
+    //            attr,
+    //            port_handle,
+    //            object_id,
+    //            status);
   }
   if (ppg_handles.empty()) return status;
   //  Attribute Set
@@ -3259,17 +3259,17 @@ switch_status_t before_ppg_update_update_internal_ports_ppg(
     status |= update_status.get();
   }
   if (status != SWITCH_STATUS_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
-               "{}.{}: Failure to update attr {} for internal ppgs "
-               "corresponding to external port {} ppg {}"
-               "status {}",
-               __func__,
-               __LINE__,
-               attr,
-               port_handle,
-               object_id,
-               status);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
+    //            "{}.{}: Failure to update attr {} for internal ppgs "
+    //            "corresponding to external port {} ppg {}"
+    //            "status {}",
+    //            __func__,
+    //            __LINE__,
+    //            attr,
+    //            port_handle,
+    //            object_id,
+    //            status);
   }
   return status;
 }
@@ -3297,17 +3297,17 @@ switch_status_t after_scheduler_added_to_queue(
                                          queue_handle);
     }
     if (status != SWITCH_STATUS_SUCCESS) {
-      switch_log(SWITCH_API_LEVEL_ERROR,
-                 SWITCH_OBJECT_TYPE_QUEUE,
-                 "{}.{}: Failure to update attr {} for a queue {} "
-                 "corresponding to port {}"
-                 "status {}",
-                 __func__,
-                 __LINE__,
-                 attr,
-                 queue_handle,
-                 port_handle,
-                 status);
+      // switch_log(SWITCH_API_LEVEL_ERROR,
+      //            SWITCH_OBJECT_TYPE_QUEUE,
+      //            "{}.{}: Failure to update attr {} for a queue {} "
+      //            "corresponding to port {}"
+      //            "status {}",
+      //            __func__,
+      //            __LINE__,
+      //            attr,
+      //            queue_handle,
+      //            port_handle,
+      //            status);
     }
   }
   return status;
@@ -3361,16 +3361,16 @@ switch_status_t before_scheduler_removed_from_queue(
           0 /* min_rate */);
 
       if (status != SWITCH_STATUS_SUCCESS) {
-        switch_log(SWITCH_API_LEVEL_ERROR,
-                   SWITCH_OBJECT_TYPE_QUEUE,
-                   "{}.{}: Failure to detach scheduler from a queue {} "
-                   "corresponding to port {}"
-                   "status {}",
-                   __func__,
-                   __LINE__,
-                   queue_handle,
-                   port_handle,
-                   status);
+        // switch_log(SWITCH_API_LEVEL_ERROR,
+        //            SWITCH_OBJECT_TYPE_QUEUE,
+        //            "{}.{}: Failure to detach scheduler from a queue {} "
+        //            "corresponding to port {}"
+        //            "status {}",
+        //            __func__,
+        //            __LINE__,
+        //            queue_handle,
+        //            port_handle,
+        //            status);
       }
     }
   }

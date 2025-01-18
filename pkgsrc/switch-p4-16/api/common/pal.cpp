@@ -1803,14 +1803,14 @@ switch_status_t speed_set(switch_object_id_t port_handle,
   port_lane_list.v_set(lane_list);
   status = switch_store::attribute_set(port_handle, port_lane_list);
   if (status != SWITCH_STATUS_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OBJECT_TYPE_PORT,
-               "{}.{}: lane_list failure port_handle {} speed {} status {}",
-               __func__,
-               __LINE__,
-               port_handle,
-               port_lane_list,
-               status);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OBJECT_TYPE_PORT,
+    //            "{}.{}: lane_list failure port_handle {} speed {} status {}",
+    //            __func__,
+    //            __LINE__,
+    //            port_handle,
+    //            port_lane_list,
+    //            status);
   }
 
   switch_enum_t _link_pause = {0};
@@ -3526,14 +3526,14 @@ switch_status_t after_port_create(const switch_object_id_t object_id,
   port_lane_list.v_set(lane_list);
   status = switch_store::attribute_set(object_id, port_lane_list);
   if (status != SWITCH_STATUS_SUCCESS) {
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               SWITCH_OBJECT_TYPE_PORT,
-               "{}.{}: lane_list failure port_handle {} speed {} status {}",
-               __func__,
-               __LINE__,
-               object_id,
-               port_lane_list,
-               status);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            SWITCH_OBJECT_TYPE_PORT,
+    //            "{}.{}: lane_list failure port_handle {} speed {} status {}",
+    //            __func__,
+    //            __LINE__,
+    //            object_id,
+    //            port_lane_list,
+    //            status);
   }
 
   status |= switch_store::v_get(device_hdl, SWITCH_DEVICE_ATTR_DEV_ID, device);

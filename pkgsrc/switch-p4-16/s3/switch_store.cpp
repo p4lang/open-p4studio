@@ -1538,17 +1538,17 @@ switch_status_t create_keys(switch_object_id_t object_id,
     }
     const auto ret = secondary_index->insert(key_attrs, object_id);
     if (!ret.second) {
-      switch_log(SWITCH_API_LEVEL_ERROR,
-                 object_type,
-                 SMI_GET_OPERATION,
-                 "{}: key already exists for {}, key {}",
-                 __func__,
-                 object_info->get_object_name(),
-                 key_attrs);
+      // switch_log(SWITCH_API_LEVEL_ERROR,
+      //            object_type,
+      //            SMI_GET_OPERATION,
+      //            "{}: key already exists for {}, key {}",
+      //            __func__,
+      //            object_info->get_object_name(),
+      //            key_attrs);
       return SWITCH_STATUS_ITEM_ALREADY_EXISTS;
     }
-    SWITCH_DETAIL_LOG(switch_log(
-        SWITCH_API_LEVEL_DETAIL, object_type, "create_keys: {}", key_attrs));
+    // SWITCH_DETAIL_LOG(switch_log(
+    //     SWITCH_API_LEVEL_DETAIL, object_type, "create_keys: {}", key_attrs));
   }
 
   return status;
@@ -1576,33 +1576,33 @@ switch_status_t update_keys(
     if (is_add) {
       const auto ret = secondary_index->insert(key_attrs, object_id);
       if (!ret.second) {
-        switch_log(SWITCH_API_LEVEL_ERROR,
-                   object_type,
-                   "{}.{}: failed to insert key {}, object_id {}",
-                   __func__,
-                   __LINE__,
-                   key_attrs,
-                   object_id.data);
+        // switch_log(SWITCH_API_LEVEL_ERROR,
+        //            object_type,
+        //            "{}.{}: failed to insert key {}, object_id {}",
+        //            __func__,
+        //            __LINE__,
+        //            key_attrs,
+        //            object_id.data);
         return SWITCH_STATUS_FAILURE;
       }
     } else {
       const auto num_erased = secondary_index->erase(object_type, key_attrs);
       if (num_erased != 1) {
-        switch_log(SWITCH_API_LEVEL_ERROR,
-                   object_type,
-                   "{}.{}: failed to erase key {}, object_id {}",
-                   __func__,
-                   __LINE__,
-                   object_id.data,
-                   key_attrs);
+        // switch_log(SWITCH_API_LEVEL_ERROR,
+        //            object_type,
+        //            "{}.{}: failed to erase key {}, object_id {}",
+        //            __func__,
+        //            __LINE__,
+        //            object_id.data,
+        //            key_attrs);
         return SWITCH_STATUS_FAILURE;
       }
     }
-    SWITCH_DETAIL_LOG(switch_log(SWITCH_API_LEVEL_DETAIL,
-                                 object_type,
-                                 "update_keys: {}: {}",
-                                 is_add,
-                                 key_attrs));
+    // SWITCH_DETAIL_LOG(switch_log(SWITCH_API_LEVEL_DETAIL,
+    //                              object_type,
+    //                              "update_keys: {}: {}",
+    //                              is_add,
+    //                              key_attrs));
   }
 
   return status;
@@ -1676,13 +1676,13 @@ switch_status_t get_wkey(switch_object_type_t object_type,
   } else {
     status = SWITCH_STATUS_ITEM_NOT_FOUND;
   }
-  SWITCH_DETAIL_LOG(switch_log(SWITCH_API_LEVEL_DETAIL,
-                               object_type,
-                               SMI_GET_OPERATION,
-                               "{}: key used {}, result={:#x}",
-                               __func__,
-                               key_attrs,
-                               object_id.data));
+  // SWITCH_DETAIL_LOG(switch_log(SWITCH_API_LEVEL_DETAIL,
+  //                              object_type,
+  //                              SMI_GET_OPERATION,
+  //                              "{}: key used {}, result={:#x}",
+  //                              __func__,
+  //                              key_attrs,
+  //                              object_id.data));
 
   return status;
 }
@@ -3306,14 +3306,14 @@ exit:
       }
     }
 
-    switch_log(SWITCH_API_LEVEL_ERROR,
-               object_type,
-               SMI_CREATE_OPERATION,
-               "{}.{}:{}: {}",
-               __NS__,
-               __func__,
-               __LINE__,
-               attrs);
+    // switch_log(SWITCH_API_LEVEL_ERROR,
+    //            object_type,
+    //            SMI_CREATE_OPERATION,
+    //            "{}.{}:{}: {}",
+    //            __NS__,
+    //            __func__,
+    //            __LINE__,
+    //            attrs);
   }
   if (trigger) {
     const auto num_erased = trigger_context.erase(object_type);
