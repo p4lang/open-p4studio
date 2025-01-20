@@ -55,7 +55,7 @@ jobs:
       - name: Show build logs
         if: success() || failure()
         run: |
-          ./show-build-logs.sh
+          ./ci/show-build-logs.sh
 
       - name: Run tests
         run: |
