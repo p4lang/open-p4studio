@@ -103,4 +103,4 @@ check_cxx_source_compiles(
   STRERROR_R_CHAR_P)
 
 # generate a config.h file
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.cmake" "${CMAKE_CURRENT_BINARY_DIR}/config.h")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/p4studio_config.h.cmake" "${CMAKE_CURRENT_BINARY_DIR}/p4studio_config.h")

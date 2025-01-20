@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef P4STUDIO_CONFIG_H
+#define P4STUDIO_CONFIG_H
 
 
 /* Name of package */

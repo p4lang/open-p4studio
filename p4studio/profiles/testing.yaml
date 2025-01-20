@@ -19,3 +19,4 @@ features:
   #   thrift-switch: true
 architectures:
   - tofino
+  - tofino2
