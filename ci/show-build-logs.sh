@@ -9,6 +9,16 @@ uname -a
 nproc
 cat /proc/meminfo
 gcc --version
+
+set +x
+echo "------------------------------------------------------------"
+echo "Info about Python binaries and packages installed."
+echo "------------------------------------------------------------"
+set -x
+python3 -V
+find . -name 'python3.*'
+du install/lib
+
 set +x
 for f in p4studio/logs/*
 do
