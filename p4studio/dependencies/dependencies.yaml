@@ -318,7 +318,7 @@ packages:
         tags: [default, source]
         type: source
     thrift:
-        attributes: {flags: --with-cl="no" --with-java="no" --with-kotlin="no" --with-python="yes" --with-py3="yes" --with-ruby="no" --with-haxe="no" --with-netstd="no" --with-perl="no" --with-php="no" --with-php_extension="no" --with-dart="no" --with-erlang="no" --with-go="no" --with-d="no" --with-nodejs="no" --with-nodets="no" --with-lua="no" --with-rs="no" --with-swift="no" --enable-tests=no, url: 'https://archive.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz', version: 0.14.1}
+        attributes: {flags: --with-cl="no" --with-java="no" --with-kotlin="no" --with-python="yes" --with-py3="yes" --with-ruby="no" --with-haskell="no" --with-haxe="no" --with-netstd="no" --with-perl="no" --with-php="no" --with-php_extension="no" --with-dart="no" --with-erlang="no" --with-go="no" --with-d="no" --with-nodejs="no" --with-nodets="no" --with-lua="no" --with-rs="no" --with-swift="no" --enable-tests=no, url: 'https://archive.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz', version: 0.14.1}
         tags: [default, source]
         dependencies: [boost]
         type: source

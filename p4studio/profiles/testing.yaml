@@ -12,11 +12,10 @@ features:
     # FIXME: broken
     # - p4-14-programs
     - p4-16-programs
-  # FIXME: broken
-  # switch:
-  #   profile: x2_tofino
-  #   sai: true
-  #   thrift-switch: true
+  switch:
+    profile: x2_tofino
+    sai: true
+    thrift-switch: true
 architectures:
   - tofino
   - tofino2
