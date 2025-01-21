@@ -18,6 +18,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import os
 from collections import OrderedDict
+import sys
 from typing import Optional, List, Sequence
 
 import click
@@ -124,6 +125,71 @@ def profile_file_autocompletion(ctx: Context, args: List[str], incomplete: str) 
     return [fn for fn in yaml_file_names if incomplete in fn]
 
 
+# Example first line of /proc/meminfo file on Linux:
+# MemTotal:        8108300 kB
+def available_mem_MBytes() -> int:
+    firstline = None
+    with open('/proc/meminfo', 'r') as f:
+        firstline = f.readline()
+    mem_KBytes = int(firstline.split()[1])
+    mem_MBytes = mem_KBytes // 1024
+    return mem_MBytes
+
+
+# When p4c is built with the unity option, at least one individual
+# process uses 4.5 GBytes of RAM, and there are others that use
+# 2-3 GBytes of RAM that might run in parallel with that one.
+#
+# To be safe, overestimate slightly using this formula for
+# p4c unity builds, where N is the number of parallel jobs:
+#
+# expected_max_mem_usage(N) = 2 GBytes + N * (4 GBytes)
+#
+# If later we decide to disable unity build for p4c, I suspect
+# we could use this formula instead, but I have not tested this:
+#
+# expected_max_mem_usage(N) = 2 GBytes + N * (2 GBytes)
+
+def expected_max_mem_usage_MBytes(num_jobs) -> int:
+    return 2048 + num_jobs * 4096
+
+
+def max_parallel_jobs(avail_mem_MBytes) -> int:
+    cpu_count = os.cpu_count()
+    num_jobs = 0
+    while True:
+        required_mem_MBytes = expected_max_mem_usage_MBytes(num_jobs + 1)
+        if required_mem_MBytes > avail_mem_MBytes:
+            break
+        num_jobs += 1
+    #print("Available memory (MBytes): %s" % (avail_mem_MBytes))
+    #print("Max number of parallel jobs for available mem: %s" % (num_jobs))
+    #print("Max number of parallel jobs for processors: %s" % (cpu_count))
+    if num_jobs > cpu_count:
+        num_jobs = cpu_count
+    return num_jobs
+
+
+def calculate_jobs_from_available_cpus_and_memory() -> int:
+    cpu_count = os.cpu_count()
+    avail_mem_MBytes = available_mem_MBytes()
+    mem_comment = ""
+    num_jobs = max_parallel_jobs(avail_mem_MBytes)
+    abort = False
+    if num_jobs < 1:
+        mem_comment = "too low"
+        abort = True
+    else:
+        mem_comment = "enough for %s parallel jobs" % (num_jobs)
+    print("Minimum recommended memory to run this script: %s MBytes"
+          "" % (expected_max_mem_usage_MBytes(1)))
+    print("Memory on this system from /proc/meminfo:      %s MBytes -> %s"
+          "" % (avail_mem_MBytes, mem_comment))
+    if abort:
+        print("Aborting because system has too little RAM.", file=sys.stderr)
+    return num_jobs
+
+
 @click.command('apply')
 @click.argument("file",
                 type=DefaultDirectoryFile(default_directory=str(current_workspace().p4studio_profiles_dir),
@@ -132,7 +198,7 @@ def profile_file_autocompletion(ctx: Context, args: List[str], incomplete: str) 
 @logging_options('INFO', default_log_file_name())
 @click.option("--override-option", "override_options", type=Choice(_allowed_options()), multiple=True,
               metavar="[CONFIG|^CONFIG]", help="Override any option in a profile")
-@click.option("--jobs", default=os.cpu_count(), help="Allow specific number of jobs to be used")
+@click.option("--jobs", default=None, help="Allow specific number of jobs to be used")
 @click.option("--bsp-path", type=click.Path(exists=True), help="BSP to be used and installed")
 @click.option('--skip-dependencies', default=False, is_flag=True, help="Do not install dependencies")
 @click.option('--skip-system-check', default=False, is_flag=True, help="Do not check system")
@@ -148,6 +214,8 @@ def profile_apply_command(context: Context,
     """
     Build and install SDE using existing profile
     """
+    if jobs is None:
+        jobs = calculate_jobs_from_available_cpus_and_memory()
     plan = create_plan(file, bsp_path, jobs, override_options)
 
     if not skip_system_check:
