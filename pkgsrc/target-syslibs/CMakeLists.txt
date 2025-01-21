@@ -14,7 +14,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_BUILD_TYPE "RelWithDebInfo")
 
-include(ConfigureChecks)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureChecks.cmake)
 
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
