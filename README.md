@@ -64,7 +64,7 @@ you customize the installation choices.
 ```bash
 # If you have not already done so, update submodules
 git submodule update --init --recursive
-sudo -E ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
 ./create-setup-script.sh > ~/setup-open-p4studio.bash
 ```
 
