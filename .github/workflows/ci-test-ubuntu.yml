@@ -50,17 +50,22 @@ jobs:
 
       - name: Build
         run: |
-          sudo -E ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+          ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+
+      - name: Show build logs
+        if: success() || failure()
+        run: |
+          ./ci/show-build-logs.sh
 
       - name: Run tests
         run: |
           # FIXME: Move these into a separate test suite.
-          sudo -E ENABLE_BF_ASM=TRUE make -C build tna_counter install
+          ENABLE_BF_ASM=TRUE make -C build tna_counter install
           export SDE=`pwd`
           export SDE_INSTALL="`pwd`/install"
 
           sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
-          sudo -E ./run_tofino_model.sh -p tna_counter --arch tofino -q |& sed 's/^/model: /' &
-          sudo -E ./run_switchd.sh -p tna_counter --arch tofino |& sed 's/^/switchd: /' &
-          sudo -E timeout 10800 ./run_p4_tests.sh -p tna_counter --arch tofino |& sed 's/^/tests: /'
+          ./run_tofino_model.sh -p tna_counter --arch tofino -q |& sed 's/^/model: /' &
+          ./run_switchd.sh -p tna_counter --arch tofino |& sed 's/^/switchd: /' &
+          timeout 10800 ./run_p4_tests.sh -p tna_counter --arch tofino |& sed 's/^/tests: /'
 
