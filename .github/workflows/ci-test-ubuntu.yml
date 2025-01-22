@@ -50,7 +50,7 @@ jobs:
 
       - name: Build
         run: |
-          ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+          ./p4studio/p4studio profile apply --verbosity DEBUG ./p4studio/profiles/testing.yaml
 
       - name: Show build logs
         if: success() || failure()
