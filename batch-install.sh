@@ -195,10 +195,6 @@ date
 TIME_START=$(date +%s)
 set -x
 
-# This is required for some of the build steps, but is not installed
-# by any later commands.
-sudo apt-get install --yes ccache
-
 set +x
 echo "Version of p4lang/open-p4studio repo used:"
 set -x
@@ -212,7 +208,7 @@ set -x
 git log -n 1 | head -n 3
 cd "${THIS_SCRIPT_DIR_ABSOLUTE}"
 
-sudo -E ./p4studio/p4studio profile apply --jobs ${num_jobs} ./p4studio/profiles/testing.yaml
+./p4studio/p4studio profile apply --jobs ${num_jobs} ./p4studio/profiles/testing.yaml
 
 set +x
 echo "------------------------------------------------------------"
