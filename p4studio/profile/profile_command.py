@@ -36,7 +36,7 @@ from dependencies.dependencies_command import install_command
 from system.check_system_command import check_system_command
 from utils.default_directory_file import DefaultDirectoryFile
 from utils.log import logging_options, default_log_file_name
-from utils.terminal import print_green, print_separator
+from utils.terminal import print_green, print_separator, print_warning
 from workspace import current_workspace
 from .profile import Profile, load_profile_from_file
 from .profile_execution_plan import ProfileExecutionPlan
@@ -149,7 +149,6 @@ def available_mem_MBytes() -> int:
 # we could use this formula instead, but I have not tested this:
 #
 # expected_max_mem_usage(N) = 2 GBytes + N * (2 GBytes)
-
 def expected_max_mem_usage_MBytes(num_jobs) -> int:
     return 2048 + num_jobs * 4096
 
@@ -162,9 +161,6 @@ def max_parallel_jobs(avail_mem_MBytes) -> int:
         if required_mem_MBytes > avail_mem_MBytes:
             break
         num_jobs += 1
-    #print("Available memory (MBytes): %s" % (avail_mem_MBytes))
-    #print("Max number of parallel jobs for available mem: %s" % (num_jobs))
-    #print("Max number of parallel jobs for processors: %s" % (cpu_count))
     if num_jobs > cpu_count:
         num_jobs = cpu_count
     return num_jobs
@@ -181,12 +177,13 @@ def calculate_jobs_from_available_cpus_and_memory() -> int:
         abort = True
     else:
         mem_comment = "enough for %s parallel jobs" % (num_jobs)
-    print("Minimum recommended memory to run this script: %s MBytes"
-          "" % (expected_max_mem_usage_MBytes(1)))
-    print("Memory on this system from /proc/meminfo:      %s MBytes -> %s"
-          "" % (avail_mem_MBytes, mem_comment))
+    print_green("Minimum recommended memory to run this script:"
+                " {} MBytes", expected_max_mem_usage_MBytes(1))
+    print_green("Memory on this system from /proc/meminfo:      "
+                "{} MBytes -> {}", avail_mem_MBytes, mem_comment)
     if abort:
-        print("Aborting because system has too little RAM.", file=sys.stderr)
+        print_warning("Aborting because system has too little RAM.")
+        sys.exit(1)
     return num_jobs
 
 
