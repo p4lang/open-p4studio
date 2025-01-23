@@ -22,6 +22,12 @@ readonly MY_PATH=$(realpath "$0")
 readonly MY_DIR=$(dirname "$MY_PATH")
 "$MY_DIR/p4studio/p4studio" interactive
 
+INSTALL_DIR="${PWD}"
+
+THIS_SCRIPT_FILE_MAYBE_RELATIVE="$0"
+THIS_SCRIPT_DIR_MAYBE_RELATIVE="${THIS_SCRIPT_FILE_MAYBE_RELATIVE%/*}"
+THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
+
 cd "${HOME}"
 cp /dev/null setup-open-p4studio.bash
 echo "export SDE=\"${THIS_SCRIPT_DIR_ABSOLUTE}\"" >> setup-open-p4studio.bash
