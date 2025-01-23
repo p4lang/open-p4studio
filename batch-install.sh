@@ -226,14 +226,4 @@ echo  "DISK_USED_END                  ${DISK_USED_END}"
 echo  "DISK_USED_END - DISK_USED_START : $((${DISK_USED_END}-${DISK_USED_START})) MBytes"
 
 set +x
-cd "${HOME}"
-cp /dev/null setup-open-p4studio.bash
-echo "export SDE=\"${THIS_SCRIPT_DIR_ABSOLUTE}\"" >> setup-open-p4studio.bash
-echo "export SDE_INSTALL=\"\${SDE}/install\"" >> setup-open-p4studio.bash
-echo "export LD_LIBRARY_PATH=\"\${SDE_INSTALL}/lib\"" >> setup-open-p4studio.bash
-echo "export PATH=\"\${SDE_INSTALL}/bin:\${PATH}\"" >> setup-open-p4studio.bash
-
-echo "If you use a Bash-like command shell, you may wish to add a line like"
-echo "the following to your .bashrc or other shell rc file:"
-echo ""
-echo "    source \$HOME/setup-open-p4studio.bash"
+bash ./create-setup-script.sh

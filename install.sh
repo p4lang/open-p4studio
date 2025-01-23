@@ -21,3 +21,5 @@ set -x
 readonly MY_PATH=$(realpath "$0")
 readonly MY_DIR=$(dirname "$MY_PATH")
 "$MY_DIR/p4studio/p4studio" interactive
+
+bash ./create-setup-script.sh
