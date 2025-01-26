@@ -70,8 +70,8 @@ rm –rf   $SDE/build/p4-build/my_program
 mkdir –p $SDE/build/p4-build/my_program
 cd       $SDE/build/p4-build/my_program
 cmake $SDE/p4studio                                         \
-     -DCMAKE_MODULE_PATH="$SDE/cmake”                       \
-     -DCMAKE_INSTALL_PREFIX="$SDE_INSTALL”                  \
+     -DCMAKE_MODULE_PATH="$SDE/cmake"                       \
+     -DCMAKE_INSTALL_PREFIX="$SDE_INSTALL"                  \
      -DP4_PATH=<full_path_to_my_program.p4>/my_program.p4   \
      -DP4_NAME=my_program                                   \
      -DP4_LANG=p4_16                                        \
@@ -96,6 +96,14 @@ If you need to specify additional compiler flags, it can be done by adding an ad
 
 ```
 -DP4FLAGS="--no-dead-code-elimination"
+```
+
+### Specifying a non-standard compiler
+
+By default, the command above will use the compiler with the name `bf-p4c` located anywhere in your path. If you need to use a different compiler (as of today, `open-p4studio` installs Tofino P4 compiler as `$SDE_INSTALL/bin/p4c`, for example), you can add an additional parameter `-DP4C=` to the `cmake` command, e.g.
+
+```
+-DP4C=$SDE_INSTALL/bin/p4c
 ```
 
 ### Building for both Tofino and Tofino2
