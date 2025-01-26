@@ -3,18 +3,17 @@ if(PYTHON_DEPENDENCIES_INCLUDED)
 endif()
 set(PYTHON_DEPENDENCIES_INCLUDED TRUE)
 
-if (NOT DEFINED PYTHON_EXECUTABLE)
-    execute_process(
-        COMMAND bash -c "readlink --canonicalize $(which python3)"
-        OUTPUT_VARIABLE PYTHON_EXECUTABLE
-        RESULT_VARIABLE PYTHON_EXECUTABLE_RET
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+# Find Python 3
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
-    if (NOT PYTHON_EXECUTABLE_RET EQUAL 0)
-        message(FATAL_ERROR "Python executable not found")
-    endif ()
-endif ()
+if(Python3_FOUND)
+    message(STATUS "Python3 found: ${Python3_EXECUTABLE}")
+    message(STATUS "Python3 version: ${Python3_VERSION}")
+    message(STATUS "Python3 include dir: ${Python3_INCLUDE_DIRS}")
+    set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+else()
+    message(FATAL_ERROR "Python3 not found. Please install Python3 development files.")
+endif()
 
 if(NOT DEFINED SDE_GENERATED_PYTHON_DIR)
     execute_process(
