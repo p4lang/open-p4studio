@@ -13,16 +13,16 @@ bf-p4c my_program.p4
 
 This should work for any simple program, written for Tofino. At the end of the compilation process the compiler will create the directory `my_program.tofino`, containing all compilation artifacts. If your program is intended for Tofino2, add the parameter `--target tofino2`; the name of the compilation directory will be `my_program.tofino2` then.
 
-In more complex cases, you might need to provide addiional parameters, similar to the ones used by most C compilers, such as `-I <include_dir>`, `-DCPP_VAR[=value]` or `-UCPP_VAR`. It is also highly recommended to add the `-g` parameter, so that the compiler can output the detailed logs and placement information (especially if you have access to the `p4i` (P4Insight) tool). 
+In more complex cases, you might need to provide additional parameters, similar to the ones used by most C compilers, such as `-I <include_dir>`, `-DCPP_VAR[=value]` or `-UCPP_VAR`. It is also highly recommended to add the `-g` parameter, so that the compiler can output the detailed logs and placement information (especially if you have access to the `p4i` (P4Insight) tool). 
 
-The compiler has many other special options and they might sometimse be required, but they are not the focus of this document.
+The compiler has many other special options and they might sometimes be required, but they are not the focus of this document.
 
 While the command above is the easiest way to invoke the compiler and is often used by the developers to check whether the program compiles or not, it is rarely used. The reason is that after compiling a program we need to exercise it by starting the user-space driver and loading the program onto the target, be it either a Tofino model or the real ASIC. In the simulation case it is also important to allow the model to load the program layout information so that it can produce human-readable logs by translating low-level operations back into the familiar symbols from your program. 
 
 Generally speaking, the compiler produces three main artifacts that are neccessary to run a P4 program:
 
 1. The compiled program binary, called `tofino.bin` (or `tofino2.bin`) that needs to be loaded into the ASIC or the model so that they can execute the P4 code
-2. The `bf-rt.json` file that describes all the objects, defined in the P4 program, such as tables and their key fields, actions and their action data fields, parser value sets and externs
+2. The `bf-rt.json` file (sometimes also called `bfrt.json`) that describes all the objects, defined in the P4 program, such as tables and their key fields, actions and their action data fields, parser value sets and externs
 3. The `context.json` file that describes the detailed layout of the objects, contained in the `bf-rt.json` file inside the device resources
 
 While in theory these files can be located anywhere, the standard programs and scripts provided as a part of open-P4studio assume that there is a **fourth**, so-called _config file_, named `my_program.conf` that contains the information about the location of the three files above. Moreover, when you run a standard script, such as 
@@ -37,7 +37,7 @@ or
 $SDE/run_switchd.sh [ --arch tofino2] -p my_program
 ```
 
-they assume that the config file `my_program.conf` is located in the directory `$SDE_INSTALL/share/p4/targets/tofino/` (or `tofino2`). That's where they retrieve it from. While it is possible to run these scripts while having the config file located in another place, it is more complicated. 
+they assume that the config file `my_program.conf` is located in the directory `$SDE_INSTALL/share/p4/targets/tofino/` (or `tofino2`). That's where they retrieve it from. It is possible to run these scripts while having the config file located in another place (and pass its location via an additional `-c` parameter), but that's more complicated. 
 
 Therefore, after compiling the P4 program it is important to also **install** the compilation artifacts into the proper locatons, specifically:
 
@@ -50,7 +50,7 @@ Therefore, after compiling the P4 program it is important to also **install** th
 3. Install the file `my_program.conf`, containing the proper paths to the files above into the directory `$SDE_INSTALL/share/p4/targets/tofino/`
    a. In Tofino2 case the directory name will be `$SDE_INSTALL/share/p4/targets/tofino2/`
 
-Therefore, open-p4studio provides a special framework that not only invokes the compiler, but performs the correct installation of all the artifacts into the proper places. This is what you should be using if you plan to exercise your P4 programs using the standard tools and scripts.
+Therefore, `open-p4studio` provides a special framework that not only invokes the compiler, but performs the correct installation of all the artifacts into the proper places. This is what you should be using if you plan to exercise your P4 programs using the standard tools and scripts.
 
 ## The standard P4 build process
 
