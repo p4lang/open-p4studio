@@ -191,12 +191,6 @@ if (P4RT)
   set(GRPC ON CACHE BOOL "GRPC is enabled if P4RT is on" FORCE)
 endif()
 
-if (BF-PYTHON)
-  set(CPYTHON ON CACHE BOOL "target-utils cpython option is required if BF_PYTHON is on" FORCE)
-else()
-  set(CPYTHON OFF CACHE BOOL "target-utils cpython option should be off if BF_PYTHON is off" FORCE)
-endif()
-
 if (TARGETSYS-DEBUG-MODE)
   add_definitions(-DTARGET_SYS_LIBS_DEBUG_MODE)
 endif()
