@@ -318,7 +318,7 @@ packages:
         type: pip
     Pygments==2.12.0:
         type: pip
-    traitlets==5.2.2:
+    traitlets==5.14.3:
         type: pip
     wcwidth==0.2.5:
         type: pip
