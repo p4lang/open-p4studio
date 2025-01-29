@@ -79,7 +79,7 @@ option(PROFILER      "Build with CPU profiler" OFF)
 option(ASAN          "Build with ASAN" OFF)
 option(LTO           "Build with LinkTimeOptimization" OFF)
 option(FORCE32       "Force a 32bit compile on 64bit" OFF)
-option(BF-PYTHON     "Build and enable bf-python CLI" OFF)
+option(BF-PYTHON     "Build and enable bf-python CLI" ON)
 
 # global
 option(ASIC          "Build for ASIC" OFF)
@@ -189,12 +189,6 @@ endif()
 if (P4RT)
   set(PI ON CACHE BOOL "PI is enabled if P4RT is on" FORCE)
   set(GRPC ON CACHE BOOL "GRPC is enabled if P4RT is on" FORCE)
-endif()
-
-if (BF-PYTHON)
-  set(CPYTHON ON CACHE BOOL "target-utils cpython option is required if BF_PYTHON is on" FORCE)
-else()
-  set(CPYTHON OFF CACHE BOOL "target-utils cpython option should be off if BF_PYTHON is off" FORCE)
 endif()
 
 if (TARGETSYS-DEBUG-MODE)

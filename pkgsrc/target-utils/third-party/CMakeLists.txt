@@ -70,27 +70,6 @@ file(COPY xxHash DESTINATION
   FILES_MATCHING PATTERN *.h)
 
 
-if(CPYTHON)
-  set(TDI_PYTHON_VER 3.10)
-  set(LIBPYTHONNAME libpython3.10)
-  set(LIBPYTHONNAMETAG v3.10.9)
-  set(LIBPYTHONPIP pip3.10)
-  EXTERNALPROJECT_ADD(
-    ${LIBPYTHONNAME}
-    PREFIX ${LIBPYTHONNAME}
-    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cpython
-    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/cpython/configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-shared LDFLAGS=-Wl,-rpath=${CMAKE_INSTALL_PREFIX}/lib > /dev/null
-    BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${N} > /dev/null
-    INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} altinstall > /dev/null
-    COMMAND cd ${CMAKE_CURRENT_SOURCE_DIR}/pip_packages &&
-    ${CMAKE_INSTALL_PREFIX}/bin/${LIBPYTHONPIP} install --no-index --find-links . -r cpython.requirements.txt
-  )
-
-  add_library(cpythonlib UNKNOWN IMPORTED)
-  set_property(TARGET cpythonlib PROPERTY IMPORTED_LOCATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${LIBPYTHONNAME}.so)
-  add_dependencies(cpythonlib ${LIBPYTHONNAME})
-endif()
-
 if(ASAN)
   set(C_FLAGS "${C_FLAGS} -fsanitize=address -fsanitize-recover=address -fsanitize=leak")
 endif()
