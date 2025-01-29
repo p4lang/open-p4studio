@@ -1,8 +1,7 @@
 global-options: {}
 features:
-  # FIXME: broken
-  # bf-diags:
-    # thrift-diags: true
+  bf-diags:
+    thrift-diags: true
   drivers:
     bfrt: true
     bfrt-generic-flags: true
