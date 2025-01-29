@@ -16,4 +16,5 @@ features:
     thrift-switch: true
 architectures:
   - tofino
-  - tofino2
+  # Cannot enble all of bf-diags, tofino, and tofino2 in same build.
+  # - tofino2
