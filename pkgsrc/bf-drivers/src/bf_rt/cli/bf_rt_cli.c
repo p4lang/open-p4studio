@@ -49,12 +49,14 @@ static int bf_rt_start_cli(int in_fd,
   bf_dev_id_t *dev_id_list = NULL;
   int ret_val = 0;
 
+  // first run, initialize python interpreter.
+  // Use the system-default config and add site-packages modules.
   if (!Py_IsInitialized()) {
     PyConfig config;
-    wchar_t cfg_home_path[256];
     PyConfig_InitPythonConfig(&config);
-    swprintf(cfg_home_path, 256, L"%s", install_dir);
-    config.home = cfg_home_path;
+    wchar_t py_path[256];
+    swprintf(py_path, 256, L"%slib/python%d.%d/site-packages", install_dir, PY_MAJOR_VERSION, PY_MINOR_VERSION);
+    config.pythonpath_env = py_path;
     Py_InitializeFromConfig(&config);
   }
 
@@ -64,21 +66,32 @@ static int bf_rt_start_cli(int in_fd,
     bf_rt_device_id_list_get(dev_id_list);
   }
 
-  // first run, initialize python interpreter
   if (bfrtpModule == NULL) {
-    PyObject *pName;
-    /* Load the bfrtcli python program. Py_Initialize loads its libraries from
-    the install dir we installed Python into. */
-    pName = PyUnicode_DecodeFSDefault("bfrtcli");
-    /* Error checking of pName left out */
-    bfrtpModule = PyImport_Import(pName);
-    Py_DECREF(pName);
+      PyObject *pName;
+      pName = PyUnicode_DecodeFSDefault("bfrtcli");
+      if (pName == NULL) {
+        fprintf(stderr, "Failed to decode module name 'bfrtcli' as a Python string.\n");
+        ret_val = 1;
+        goto cleanup;
+      }
+
+      bfrtpModule = PyImport_Import(pName);
+      Py_DECREF(pName);
+
     if (bfrtpModule == NULL) {
-      printf("cannot import module in bfrt\n");
+      fprintf(stderr, "Failed to import module 'bfrtcli'.\n");
+
+      if (PyErr_Occurred()) {
+          PyErr_Print();
+      } else {
+          fprintf(stderr, "No additional error information from Python.\n");
+      }
+
       ret_val = 1;
       goto cleanup;
     }
   }
+
 
   if (bfrtpModule != NULL) {
     // Create a call to the start_bfrt function in bfrtcli.py

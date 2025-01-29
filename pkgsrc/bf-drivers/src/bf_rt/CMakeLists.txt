@@ -77,14 +77,10 @@ c_frontend/bf_rt_info_c.cpp
 )
 
 if(BF-PYTHON)
-  add_library(bfpythonlib UNKNOWN IMPORTED)
-  set_property(TARGET bfpythonlib PROPERTY IMPORTED_LOCATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libpython${BF_PYTHON_VER}.so)
-  add_dependencies(bfpythonlib libpython${BF_PYTHON_VER})
   add_library(bfshell_plugin_bf_rt_o OBJECT cli/bf_rt_cli.c)
-  include_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/../include/python${BF_PYTHON_VER})
-  add_dependencies(bfshell_plugin_bf_rt_o bfpythonlib)
+  target_include_directories(bfshell_plugin_bf_rt_o PUBLIC ${Python3_INCLUDE_DIRS})
   add_library(bfshell_plugin_bf_rt SHARED $<TARGET_OBJECTS:bfshell_plugin_bf_rt_o>)
-  target_link_libraries(bfshell_plugin_bf_rt bfpythonlib)
+  target_link_libraries(bfshell_plugin_bf_rt ${Python3_LIBRARIES})
   SET_TARGET_PROPERTIES(bfshell_plugin_bf_rt PROPERTIES PREFIX "")
   install(FILES xml/bf_rt.xml DESTINATION share/cli/xml)
 endif()
@@ -240,7 +236,7 @@ else()
 endif()
 
 # Install bfrt_python files to python install directory
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bf_rt_python/ DESTINATION lib/python${BF_PYTHON_VER})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bf_rt_python/ DESTINATION lib/python${BF_PYTHON_VER}/site-packages)
 
 #Install bfruntime python client files
 install(FILES

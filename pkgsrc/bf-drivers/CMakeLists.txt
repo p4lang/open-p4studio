@@ -127,8 +127,8 @@ if (THRIFT-DRIVER)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTHRIFT_ENABLED")
 endif()
 
-set(BF_PYTHON_VER 3.10)
-set(TDI_PYTHON_VER 3.10)
+set(BF_PYTHON_VER "${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}")
+set(TDI_PYTHON_VER ${BF_PYTHON_VER})
 
 add_subdirectory(third-party)
 add_subdirectory(src)
