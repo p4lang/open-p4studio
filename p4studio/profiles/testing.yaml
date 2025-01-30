@@ -9,8 +9,7 @@ features:
     grpc: true
     thrift-driver: true
   p4-examples:
-    # FIXME: broken
-    # - p4-14-programs
+    - p4-14-programs
     - p4-16-programs
   switch:
     profile: x2_tofino
