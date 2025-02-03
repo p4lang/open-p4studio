@@ -118,8 +118,6 @@
 # It is of course possible to build any target by citing it on the `make`
 # command line e.g. `make tofinoB0` will cause libtofinoB0.a to be built
 # regardless of the value of the model-tofinoB0 option.
-
-cmake_minimum_required(VERSION 3.5)
 project(model LANGUAGES C CXX)
 
 
@@ -157,7 +155,6 @@ option(precompiled-headers "precompile header files (default ON)" ON)
 ###############################################################################
 # Common setup
 ###############################################################################
-set(CMAKE_CXX_STANDARD 11)
 #set(CMAKE_VERBOSE_MAKEFILE ON)  # uncomment to see compiler commands
 
 
@@ -185,13 +182,6 @@ if (${model-sanitize})
     # TODO add: -fsanitize=memory -fsanitize-memory-track-origins
   endif ()
 endif ()
-
-
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-    MESSAGE(STATUS "Enabling ccache")
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
-endif()
 
 # Optionally enable Include-What-You-Use
 # See `https://wiki.ith.intel.com/display/BXDMODEL/Include+What+You+Use` for details.
