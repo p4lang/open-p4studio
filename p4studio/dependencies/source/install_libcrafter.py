@@ -45,8 +45,8 @@ def install_libcrafter(config: SourceDependencyConfig) -> None:
     env = os.environ.copy()
     env['LDFLAGS'] = "-Wl,-s"
 
-    execute("./autogen.sh".format(config.jobs), build_dir)
-    execute("./configure".format(config.jobs), build_dir)
+    execute("./autogen.sh", build_dir)
+    execute("./configure --prefix={}".format(config.install_dir), build_dir)
     execute('make PREFIX={} install -j{}'.format(config.install_dir, config.jobs), build_dir)
     execute("sudo ldconfig")
 
