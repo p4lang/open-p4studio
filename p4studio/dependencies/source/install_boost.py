@@ -44,7 +44,8 @@ def install_boost(config: SourceDependencyConfig) -> None:
 
     execute("tar xf {} --strip-components 1 -C {}".format(boost_file, build_dir))
     execute("./bootstrap.sh --prefix={} --without-libraries=python".format(config.install_dir), build_dir)
-    execute("./b2 -j{} {}".format(config.jobs, boost_attrs["flags"]), build_dir)
+    # Use C++17 here.
+    execute("./b2 cxxstd=17 -j{} {}".format(config.jobs, boost_attrs["flags"]), build_dir)
     execute("sudo ldconfig", build_dir)
 
 
