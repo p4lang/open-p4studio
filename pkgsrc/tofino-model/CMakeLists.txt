@@ -118,7 +118,7 @@
 # It is of course possible to build any target by citing it on the `make`
 # command line e.g. `make tofinoB0` will cause libtofinoB0.a to be built
 # regardless of the value of the model-tofinoB0 option.
-project(model LANGUAGES C CXX)
+project(model LANGUAGES CXX)
 
 
 ###############################################################################
@@ -852,79 +852,3 @@ add_subdirectory(runner)
 add_subdirectory(tests/wrapper)
 add_subdirectory(tests/utests)
 add_subdirectory(tests/simple_test_harness)
-
-
-
-
-###############################################################################
-# External project to build model using legacy autotools build chain
-###############################################################################
-# The model-autotools target enables the legacy autotools build process
-# to be executed from cmake. It is now excluded from the default targets
-# so will need to be explicitly built using:
-#
-#   make model-autotools
-#
-# Set the option that will be passed to the model autotools configure command;
-# the defaults can be overridden by using cmake options -DCONFIGURE_OPTIONS,
-# for example:
-#  cmake -DCONFIGURE_OPTIONS="--enable-model-jbay --disable-simple-test-harness --disable-model-dv-utests"
-set(CONFIGURE_OPTIONS
-        "--enable-model-tofinoB0 --disable-model-dv-utests"
-        CACHE STRING
-        "Options to pass to autotools configure (applies to model-autotools target only)")
-separate_arguments(CONFIGURE_OPTIONS)
-
-# build the model in a sub-directory of the cmake build dir to avoid clashing
-# Makefiles; typically this will something like <repo dir>/cmake-build/build
-set(MODEL_BUILD_DIR ${CMAKE_BINARY_DIR}/build)
-
-# use an external project to drive the model's autotools autogen, configure and
-# make steps
-include(ExternalProject)
-# Note: specifying '-j4' in the BUILD_COMMAND below provokes "warning: -jN
-# forced in submake: disabling jobserver mode." because the model 'make'
-# command is being called from the cmake 'make' command. However, the model
-# 'make' does appear to execute 4 parallel jobs.
-# Note: specifying 'TESTS=' in the BUILD_COMMAND prevents any tests being
-# automatically run by 'make' after the test target has been built
-ExternalProject_Add(model-autotools
-        SOURCE_DIR ${PROJECT_SOURCE_DIR}
-        BINARY_DIR ${MODEL_BUILD_DIR}
-        CONFIGURE_COMMAND  ${PROJECT_SOURCE_DIR}/configure ${CONFIGURE_OPTIONS} ${EXTRA_CONFIGURE_OPTIONS}
-        BUILD_COMMAND make -j4
-        BUILD_ALWAYS true
-        INSTALL_COMMAND ""
-        EXCLUDE_FROM_ALL true
-        )
-ExternalProject_Add_Step(model-autotools configure-message
-        COMMENT "Displaying configure options"
-        DEPENDEES autogen
-        DEPENDERS configure
-        COMMAND echo "Using autotools configure options: ${CONFIGURE_OPTIONS} ${EXTRA_CONFIGURE_OPTIONS}"
-        )
-ExternalProject_Add_Step(model-autotools autogen
-        COMMENT "Performing autogen step for model-autotools"
-        DEPENDEES patch
-        DEPENDERS configure-message
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        COMMAND ./autogen.sh
-        )
-ExternalProject_Add_Step(model-autotools make-testcheck
-        COMMENT "Performing test compilation step for model-autotools"
-        DEPENDEES build
-        DEPENDERS install
-        WORKING_DIRECTORY ${MODEL_BUILD_DIR}
-        COMMAND make test_reader_O3 && make -j4 testcheck TESTS=
-        )
-ExternalProject_Add(model-autotools-clean
-        SOURCE_DIR ${PROJECT_SOURCE_DIR}
-        BINARY_DIR ${MODEL_BUILD_DIR}
-        CONFIGURE_COMMAND  ""
-        BUILD_COMMAND make clean
-        BUILD_ALWAYS true
-        INSTALL_COMMAND ""
-        EXCLUDE_FROM_ALL true
-        )
-
-###############################################################################

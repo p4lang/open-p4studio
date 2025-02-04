@@ -289,11 +289,11 @@ set(JBAY_EXTRA_UTEST_SOURCES
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-find_library(CRAFTER_LIB crafter HINTS /usr/intel/pkgs/libcrafter/1.0/lib REQUIRED)
+find_library(CRAFTER_LIB crafter REQUIRED)
 message("Found crafter libs at ${CRAFTER_LIB}")
-find_path(CRAFTER_INCLUDE_DIR crafter/Crafter.h HINTS /usr/intel/pkgs/libcrafter/1.0/include REQUIRED)
+find_path(CRAFTER_INCLUDE_DIR crafter/Crafter.h REQUIRED)
 message("Found crafter includes at ${CRAFTER_INCLUDE_DIR}")
-find_path(PCAP_INCLUDE_DIR pcap.h HINTS /usr/intel/pkgs/libcrafter/1.0/include REQUIRED)
+find_path(PCAP_INCLUDE_DIR pcap.h REQUIRED)
 message("Found pcap includes at ${PCAP_INCLUDE_DIR}")
 
 set(COMMON_REQUIRED_UTEST_SOURCES
