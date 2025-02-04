@@ -48,7 +48,7 @@ def install_thrift(config: SourceDependencyConfig) -> None:
     override_envs = {
         'PATH': '{}/bin:{}'.format(config.install_dir, os.environ['PATH']),
     }
-    configure_command = './configure PY_PREFIX={dir} {flags} --prefix={dir} --with-boost={dir}'.format(
+    configure_command = 'CXXFLAGS="-std=c++17" ./configure PY_PREFIX={dir} {flags} --prefix={dir} --with-boost={dir}'.format(
         dir=config.install_dir,
         flags=attrs['flags']
     )
