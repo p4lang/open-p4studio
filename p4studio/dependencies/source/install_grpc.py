@@ -168,7 +168,7 @@ def install_grpc(config: SourceDependencyConfig) -> None:
 
     # P4C requires static and dynamic libraries. Install protobuf from source.
     protobuf_build_dir = (build_dir / 'third_party/protobuf')
-    if protobuf_version == '3.25.3':
+    if protobuf_version == '25.0.0':
         execute("""cmake . -DCMAKE_INSTALL_PREFIX={install_path} -Dprotobuf_WITH_ZLIB=ON """
                 """ -DZLIB_INCLUDE_DIR={install_path}/include -DZLIB_LIB={install_path}/lib """
                 """ -Dprotobuf_ABSL_PROVIDER=package -DCMAKE_PREFIX_PATH={install_path} """
