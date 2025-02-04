@@ -719,14 +719,12 @@ std::vector<P4PhvContainer*> P4NameLookup::ParsePhvContainers(const int stage, b
         auto vpn = Address::stats_addr_get_vpn(stats_addr);
         auto idx = Address::stats_addr_get_index(stats_addr);
         auto subword = Address::stats_addr_get_subword(stats_addr);
-        char vpn_str[4];
-        snprintf(vpn_str, 4, "%d ", vpn);
-        char idx_str[6];
-        snprintf(idx_str, 6, "%d ", idx);
-        char subword_str[4];
-        snprintf(subword_str, 4, "%d ", subword);
-        log_str.push_back(std::string("\t----- Update counter: ")+dst_name+"\n");
-        log_str.push_back(std::string("\t\t VPN : ")+std::string(vpn_str)+(" Ram Line : ")+std::string(idx_str)+" Subword(Including LSBs. Need to right shift based on stats table format) : "+std::string(subword_str)+"\n");
+        log_str.push_back(std::string("\t----- Update counter: ") + dst_name +"\n");
+        log_str.push_back(std::string("\t\t VPN : ") + std::to_string(vpn) +
+                          (" Ram Line : ") + std::to_string(idx) +
+                          " Subword(Including LSBs. Need to right shift based on "
+                          "stats table format) : " +
+                          std::to_string(subword) + "\n");
         return;
       } else if (strcmp(dst_type, "phv") == 0 && pov_headers.count(dst_name) == 0) {
         log_str.push_back("\tDestination:\n");
