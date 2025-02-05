@@ -49,6 +49,17 @@ Some things not included, that one must get from Intel:
 
 # Setup
 
+If you attempt to install this software on a system that already has other
+P4 development tools on it, or any other software that uses similar libraries
+such as protobuf, gRPC, Thrift, etc., then it is likely that the installation
+will fail to give you a working system.
+
+If you attempt to install this software on anything other than a _freshly
+installed_ supported operating system (currently Ubuntu 20.04 or 22.04, with x86_64
+processor architecture), and anything goes wrong during installation or use of the
+resulting software, we strongly recommend that you start over on a freshly installed
+system.
+
 ```bash
 git clone https://github.com/p4lang/open-p4studio.git
 cd open-p4studio
