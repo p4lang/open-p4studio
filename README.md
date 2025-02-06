@@ -74,8 +74,7 @@ Proceed by choosing one of the following options:
 
 This script checks that you have the right processor type, and
 sufficient RAM and free disk space, and then installs the SDE using a
-default choice for options.  See later below for instructions that let
-you customize the installation choices.
+default choice for options.
 
 ```bash
 # If you have not already done so, update submodules
