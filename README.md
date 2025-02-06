@@ -63,7 +63,9 @@ cd open-p4studio
 Proceed by choosing one of the following options:
 
 + a "batch build", with a default choice of packages selected
-  for you.  See instructions in the next section.
+  for you.  See instructions in the next section.  This option
+  is recommended if you are trying out this software for the first
+  time.
 + Or, if you wish to customize the set of packages to be installed,
   skip down to the section "Installation with customization of options"
 
