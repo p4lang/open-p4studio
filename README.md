@@ -49,21 +49,24 @@ Some things not included, that one must get from Intel:
 
 # Setup
 
-If you attempt to install this software on a system that already has other
-P4 development tools on it, or any other software that uses similar libraries
-such as protobuf, gRPC, Thrift, etc., then it is likely that the installation
-will fail to give you a working system.
-
-If you attempt to install this software on anything other than a _freshly
-installed_ supported operating system (currently Ubuntu 20.04 or 22.04, with x86_64
-processor architecture), and anything goes wrong during installation or use of the
-resulting software, we strongly recommend that you start over on a freshly installed
-system.
+The installation scripts for these programs attempt to enable installing
+multiple versions of it, in different directories, on the same system.
+That said, if you have unusual problems installing it, consider attempting
+to follow the install steps on a freshly installed and supported version of
+Linux, to see if that helps.
 
 ```bash
 git clone https://github.com/p4lang/open-p4studio.git
 cd open-p4studio
 ```
+
+Proceed by choosing one of the following options:
+
++ a "batch build", with a default choice of packages selected
+  for you.  See instructions in the next section.
++ Or, if you wish to customize the set of packages to be installed,
+  skip down to the section "Installation with customization of options"
+
 
 # Batch build and install Intel® P4 Studio Software Development Environment (SDE)
 
@@ -76,29 +79,11 @@ you customize the installation choices.
 # If you have not already done so, update submodules
 git submodule update --init --recursive
 ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
-./create-setup-script.sh > ~/setup-open-p4studio.bash
 ```
 
-# Run instructions
+When that script completes, proceed by following the steps in section
+"Finishing the installation" below.
 
-Do this command in each terminal where you wish to use the SDE:
-
-```bash
-source $HOME/setup-open-p4studio.bash
-```
-
-You may wish to add that line to your `$HOME/.bashrc` file to automate
-this.
-
-This command creates many virtual Ethernet interfaces that are used
-when running tests involving the Tofino model, so it can send and
-receive packets on those interfaces.  It only needs to be done once on
-a system after it has been rebooted, before running tests that require
-these interfaces:
-
-```bash
-sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
-```
 
 # Installation with customization of options
 
@@ -160,8 +145,51 @@ sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
     h)	Select **Yes** to configure advanced options. Advanced options include p4rt, TDI, and SAI configurations.
     
     i)	The created profile details are displayed at this stage. Save the profile details in a YAML file for future use. 
-    
+
 3. Script completes the SDE installation process.
+
+When that script completes, proceed by following the steps in section
+"Finishing the installation" below.
+
+
+# Finishing the installation
+
+Run this command from the `open-p4studio` directory where you
+installed the software from:
+
+```bash
+./create-setup-script.sh > ~/setup-open-p4studio.bash
+```
+
+If you only install one version of this software on a system,
+you will likely find it very convenient to add a line like
+the following to your `~/.bashrc` file (or customize it for your
+choice of command shell, if you do not use Bash):
+
+```bash
+source ~/setup-open-p4studio.bash
+```
+
+If you do not do this, you will need to do that command once in each
+terminal or shell session where you wish to use this software.
+
+Tip for advanced users: If you install more than one version of this
+software on the same system, and want to switch between them, create
+_different_ `setup-<name>.bash` files, one for each version you want
+to use.
+
+
+# Run instructions
+
+This command creates many virtual Ethernet interfaces that are used
+when running tests involving the Tofino model, so it can send and
+receive packets on those interfaces.  It only needs to be done once on
+a system after it has been rebooted, before running tests that require
+these interfaces:
+
+```bash
+sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
+```
 
 
 # Run the Tofino Model
