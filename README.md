@@ -164,8 +164,7 @@ installed the software:
 
 If you only install one version of this software on a system,
 you will likely find it very convenient to add a line like
-the following to your `~/.bashrc` file (or customize it for your
-choice of command shell, if you do not use Bash):
+the following to your `~/.bashrc` file:
 
 ```bash
 source ~/setup-open-p4studio.bash
