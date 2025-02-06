@@ -157,7 +157,7 @@ When that script completes, proceed by following the steps in section
 # Finishing the installation
 
 Run this command from the `open-p4studio` directory where you
-installed the software from:
+installed the software:
 
 ```bash
 ./create-setup-script.sh > ~/setup-open-p4studio.bash
