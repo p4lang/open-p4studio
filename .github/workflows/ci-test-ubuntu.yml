@@ -60,7 +60,7 @@ jobs:
       - name: Run tests
         run: |
           # FIXME: Move these into a separate test suite.
-          ENABLE_BF_ASM=TRUE make -C build tna_counter install
+          make -C build tna_counter install
           export SDE=`pwd`
           export SDE_INSTALL="`pwd`/install"
 
