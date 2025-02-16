@@ -6,10 +6,6 @@ else ()
     message("Configuring model simple test harness targets")
 endif ()
 
-add_compile_options(
-        # disable -Werror in this directory
-        -Wno-error
-)
 
 # Note: the legacy autotools configure.ac had pcap as a requirement for simple
 # test harness but it does not appear to be used, so omitting it here

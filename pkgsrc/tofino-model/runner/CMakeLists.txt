@@ -1,4 +1,4 @@
-option(model-runner "build the model runner executable (default OFF)" OFF)
+option(model-runner "build the model runner executable (default OFF)" ON)
 # MODEL-597: By default the model runner is fully statically linked. For partial
 # static linking we are more selective; the goal of partial static linking is
 # to statically link as much as possible without including certain libs e.g.
@@ -117,17 +117,6 @@ else ()
             -Wno-unused-function
             )
 
-    # libmodel is provided by bf-drivers so we need to know where that is installed
-    # via ${CMAKE_INSTALL_PREFIX} option
-    # Note: this lib may not exist at time cmake is run (e.g. when building the
-    # model as part of p4factory) so we proceed unconditionally
-    set(BF_DRIVER_MODEL_LIB ${CMAKE_INSTALL_PREFIX}/lib/libmodel.a)
-    if(EXISTS ${BF_DRIVER_MODEL_LIB})
-        message("Found ${BF_DRIVER_MODEL_LIB}")
-    else()
-        message("Warning: ${BF_DRIVER_MODEL_LIB} not found but will be "
-                "required to build model runner")
-    endif()
     ###############################################################################
     # target for the tofino-model.debug executable - this depends on libmodel.a
     # from bf-drivers
@@ -164,7 +153,7 @@ else ()
                 ${CRYPT_LIB}
                 ${PCAP_LIB}
                 "-Wl,-Bdynamic"
-                ${BF_DRIVER_MODEL_LIB}
+                dru_model
                 Threads::Threads
                 )
     elseif (${runner-static})
@@ -174,7 +163,7 @@ else ()
                 ${CLI_LIB}
                 ${CRYPT_LIB}
                 ${PCAP_LIB}
-                ${BF_DRIVER_MODEL_LIB}
+                dru_model
                 Threads::Threads
                 )
     else ()
@@ -182,7 +171,7 @@ else ()
                 ${CLI_LIB}
                 ${CRYPT_LIB}
                 ${PCAP_LIB}
-                ${BF_DRIVER_MODEL_LIB}
+                dru_model
                 Threads::Threads
                 )
     endif ()

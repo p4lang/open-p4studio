@@ -85,6 +85,7 @@ option(ASAN          "Build with ASAN" OFF)
 option(LTO           "Build with LinkTimeOptimization" OFF)
 option(FORCE32       "Force a 32bit compile on 64bit" OFF)
 option(BF-PYTHON     "Build and enable bf-python CLI" ON)
+option(BUILD_MODEL   "Build the Tofino model from source" OFF)
 
 # global
 option(ASIC          "Build for ASIC" OFF)
@@ -245,10 +246,54 @@ include_directories(${BF_PKG_DIR}/bf-drivers)
 include_directories(${BF_PKG_DIR}/bf-drivers/include)
 add_subdirectory(${BF_PKG_DIR}/bf-drivers)
 
-#compiler/model
-include(FindP4CModel)
+#compiler
+# install bf-p4c
+# FIXME: This setup is a little strange. Clean it up. Do we actually need all these variables?
+ExternalProject_Add(bf-p4c
+  DOWNLOAD_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+)
+if (STANDALONE)
+  set(P4C ${CMAKE_INSTALL_PREFIX}/bin/bf-p4c)
+  set(P4C-GEN-BFRT-CONF ${CMAKE_INSTALL_PREFIX}/bin/p4c-gen-bfrt-conf)
+  set(P4C-MANIFEST-CONFIG ${CMAKE_INSTALL_PREFIX}/bin/p4c-manifest-config)
+else()
+  # Use the build-local binaries if we are not building standalone.
+  set(P4C ${CMAKE_BINARY_DIR}/${BF_PKG_DIR}/p4-compilers/p4c/bf-p4c)
+  set(P4C-GEN-BFRT-CONF ${CMAKE_BINARY_DIR}/${BF_PKG_DIR}/p4-compilers/p4c/p4c-gen-bfrt-conf)
+  set(P4C-MANIFEST-CONFIG ${CMAKE_BINARY_DIR}/${BF_PKG_DIR}/p4-compilers/p4c/p4c-manifest-config)
+endif()
+set(PDGEN ${CMAKE_INSTALL_PREFIX}/bin/generate_tofino_pd)
+set(PDGEN_COMMAND ${PYTHON_COMMAND} ${PDGEN})
+set(PDGENCLI ${CMAKE_INSTALL_PREFIX}/bin/gencli)
+set(PDGENCLI_COMMAND ${PYTHON_COMMAND} ${PDGENCLI})
+set(PDSPLIT ${CMAKE_INSTALL_PREFIX}/bin/split_pd_thrift.py)
+set(PDSPLIT_COMMAND ${PYTHON_COMMAND} ${PDSPLIT})
+
 add_subdirectory(${BF_PKG_DIR}/p4-compilers)
-add_subdirectory(${BF_PKG_DIR}/tofino-model)
+
+# model.
+if(BUILD_MODEL)
+  add_subdirectory(${BF_PKG_DIR}/tofino-model)
+else()
+  # install tofino-model by arch
+  if("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8")
+    install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/${BF_PKG_DIR}/tofino-model/bin/tofino-model.x86_64.bin DESTINATION bin RENAME tofino-model)
+  else()
+    install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/${BF_PKG_DIR}/tofino-model/bin/tofino-model.i686.bin DESTINATION bin RENAME tofino-model)
+  endif()
+endif()
+
+# install p4o
+ExternalProject_Add(bf-p4o
+  DOWNLOAD_COMMAND tar -xvf ${CMAKE_CURRENT_SOURCE_DIR}/${BF_PKG_DIR}/p4o/p4o-1.0.x86_64.tar.gz
+      -C ${CMAKE_INSTALL_PREFIX} --strip-components=1
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+)
 
 if(ASIC AND BSP)
   #platform
