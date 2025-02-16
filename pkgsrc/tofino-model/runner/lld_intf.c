@@ -104,7 +104,6 @@ typedef enum {
   BF_DMA_MAX_TOF_DR = lld_dr_cmp_tx_pkt_3,
   BF_DMA_MAX_TOF2_DR = lld_dr_cmp_que_read_block_1,
   BF_DMA_MAX_TOF3_DR = lld_dr_cmp_que_read_block_1,
-  BF_DMA_MAX_TF5_DR = lld_dr_cmp_que_read_block_1,  // FTR
   BF_DMA_NO_DR = 0xff,
 #undef LLD_DR_ID
 } bf_dma_dr_id_t;
@@ -614,7 +613,6 @@ bf_dev_family_t lld_dev_family_get(bf_dev_id_t dev_id) {
     if(lld_dev_is_tofino(dev_id)) return BF_DEV_FAMILY_TOFINO;
     else if(lld_dev_is_tof2(dev_id)) return BF_DEV_FAMILY_TOFINO2;
     else if(lld_dev_is_tof3(dev_id)) return BF_DEV_FAMILY_TOFINO3;
-    else if(lld_dev_is_tf5(dev_id)) return BF_DEV_FAMILY_TOFINO5; //FTR
     else return BF_DEV_FAMILY_UNKNOWN;
 }
 
@@ -631,10 +629,6 @@ int lld_validate_dr_id(bf_dev_id_t dev_id, bf_dma_dr_id_t dr_id) {
     case BF_DEV_FAMILY_TOFINO3:
       if (dr_id > BF_DMA_MAX_TOF3_DR) return -1;
       break;
-    case BF_DEV_FAMILY_TOFINO5: /* FTR_S */
-      if (dr_id > BF_DMA_MAX_TF5_DR) return -1;
-      break;
-      /* FTR_E */
     default:
       return -1;
   }

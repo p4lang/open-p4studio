@@ -127,11 +127,11 @@ project(model LANGUAGES CXX)
 # All chip types are OFF by default, but if none are specified with cmake
 # command then model-tofino will be set to ON.
 # To enable a chip type pass one or more options -Dmodel-<chip> to cmake
-option(model-internal "build the Model with BFN-internal extra code")
-option(model-tofino "build the Model with TofinoA0 support")
-option(model-tofinoB0 "build the Model with TofinoB0 support")
-option(model-jbay "build the Model with JbayA0 support")
-option(model-jbayB0 "build the Model with JbayB0 support")
+option(model-internal "build the Model with BFN-internal extra code" OFF)
+option(model-tofino "build the Model with TofinoA0 support" ON)
+option(model-tofinoB0 "build the Model with TofinoB0 support" OFF)
+option(model-jbay "build the Model with JbayA0 support" ON)
+option(model-jbayB0 "build the Model with JbayB0 support" OFF)
 if (NOT (${model-tofino} OR ${model-tofinoB0} OR ${model-jbay} OR ${model-jbayB0}
 	))
     message("Defaulting to building model for tofinoA0 chip only")
@@ -173,7 +173,7 @@ else ()
   message (NOTICE "MODEL unknown 'CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}'. Expected 'Release', 'Debug'")
 endif()
 
-option (model-sanitize "Turn on run-time sanitize checking" OFF)
+option(model-sanitize "Turn on run-time sanitize checking" OFF)
 if (${model-sanitize})
   message(STATUS "Enabling Sanitizer tooling (model-sanitize=ON)")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSANITIZER_RUNNING=1 -fsanitize=address -fsanitize=leak -fsanitize=undefined -fno-omit-frame-pointer -fno-sanitize=vptr")
@@ -321,7 +321,7 @@ function(add_pch target hdr_file)
         return()
     endif()
     get_filename_component(hdr_filename ${hdr_file} NAME)
-    file(RELATIVE_PATH hdr_file_rel_path ${PROJECT_SOURCE_DIR} ${hdr_file})
+    file(RELATIVE_PATH hdr_file_rel_path ${CMAKE_CURRENT_SOURCE_DIR} ${hdr_file})
 
     # build pch file as a library (rather than directly calling compiler
     # command) so that cmake provides all the default compiler options
@@ -382,11 +382,12 @@ endfunction()
 # target to generate the model-version.h file
 ###############################################################################
 # Note: the file is only modified if its current content would change
-set(MODEL_VERSION_HEADER_FILE ${PROJECT_SOURCE_DIR}/include/model_core/model-version.h)
+set(MODEL_VERSION_DIR ${CMAKE_CURRENT_BINARY_DIR}/model_core)
+set(MODEL_VERSION_HEADER_FILE ${MODEL_VERSION_DIR}/model-version.h)
 add_custom_target(generate_version_file
         COMMENT "Generating ${MODEL_VERSION_HEADER_FILE}"
-        COMMAND ./tools/build_generated_versions.sh . MODEL --match model --output ${MODEL_VERSION_HEADER_FILE}
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMAND mkdir -p ${MODEL_VERSION_DIR} && ./tools/build_generated_versions.sh . MODEL --match model --output ${MODEL_VERSION_HEADER_FILE}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
 
@@ -422,29 +423,30 @@ endif ()
 add_library(modelcore STATIC)
 add_dependencies(modelcore generate_version_file)
 target_include_directories (modelcore PRIVATE
-        ${PROJECT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}
         )
 target_sources(modelcore PRIVATE
-        ${PROJECT_SOURCE_DIR}/src/model_core/capture.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/chip_interface.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/event.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/file-logger.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/json-loader.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/log-buffer.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/model.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/p4-objects.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/port-json-loader.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/register_block.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt-debug.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt-global.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt-phv-modification.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt-types.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt-util.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/rmt.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/spinlock.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/timer-manager.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/timer.cpp
-        ${PROJECT_SOURCE_DIR}/src/model_core/version-string.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/capture.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/chip_interface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/event.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/file-logger.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/json-loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/log-buffer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/model.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/p4-objects.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/port-json-loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/register_block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt-debug.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt-global.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt-phv-modification.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt-types.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt-util.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/rmt.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/spinlock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/timer-manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/timer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/model_core/version-string.cpp)
 target_link_libraries(modelcore PRIVATE configured_chips_compiler_options)
 
 ###############################################################################
@@ -455,225 +457,225 @@ target_link_libraries(modelcore PRIVATE configured_chips_compiler_options)
 
 #### shared ####
 set(SHARED_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/shared/action-output-hv-xbar.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/afc-metadata-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/bitvector.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/checksum-engine-shared.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/chip.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/epb-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/hash-address-vh-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/indirect_access_block.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/instr.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/ipb-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/learning-filter.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/learning-filter-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mac-counters.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/match-data-input-vh-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-addr-dist.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-color-switchbox.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-table-counters.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-defs.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-delay.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-dependencies.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-execute-step.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-gateway-payload.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-gateway-payload-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-gateway-table.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-gateway-table-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-hash-distribution.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-hash-generator-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-info.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-input-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-instr-store-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-row.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-row-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-table.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-table-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-tcam.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-tcam-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-lookup-result.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-lpf-meter.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-mapram.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-mapram-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-memory.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-meter.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-meter-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-moveregs.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-object.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-op-handler-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-predication-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-result-bus.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sbox.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-selector-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-snapshot-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram-column.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram-column-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram-row.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-sram-row-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stash.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stash-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stash-column.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stash-column-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stateful-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-stats-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-tcam.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-tcam-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-tcam-row.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-teop-common.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mirror.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/p4-name-lookup.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet-body.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet-buffer.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet-pipe-data.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet-replication-engine.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/packet-replication-engine-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/parser-block.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/parser.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/parser-static-config.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/phv.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/phv-modification.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/phv-pipe-data.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/phv-factory.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/pipe.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/pipe-object.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/port.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/queueing.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rdm.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-config.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-defs.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-log.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-object.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-object-manager.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-string-map.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-op-handler.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-packet-coordinator.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-sweeper.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/tcam-row-vh-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/tofino_lfsr.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/event.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/rmt-event-emitter.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-event-emitter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/action-output-hv-xbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/afc-metadata-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/bitvector.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/checksum-engine-shared.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/chip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/epb-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/hash-address-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/indirect_access_block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/instr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/ipb-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/learning-filter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/learning-filter-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mac-counters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/match-data-input-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-addr-dist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-color-switchbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-table-counters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-defs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-delay.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-dependencies.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-execute-step.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-gateway-payload.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-gateway-payload-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-gateway-table.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-gateway-table-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-hash-distribution.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-hash-generator-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-info.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-input-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-instr-store-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-row.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-row-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-table.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-table-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-tcam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-tcam-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-lookup-result.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-lpf-meter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-mapram.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-mapram-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-memory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-meter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-meter-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-moveregs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-object.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-op-handler-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-predication-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-result-bus.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sbox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-selector-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-snapshot-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram-column.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram-column-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram-row.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-sram-row-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stash.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stash-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stash-column.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stash-column-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stateful-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-stats-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-tcam.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-tcam-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-tcam-row.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-teop-common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mirror.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/p4-name-lookup.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet-body.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet-buffer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet-pipe-data.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet-replication-engine.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/packet-replication-engine-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser-block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/parser-static-config.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/phv.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/phv-modification.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/phv-pipe-data.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/phv-factory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/pipe.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/pipe-object.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/port.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/queueing.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rdm.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-config.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-defs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-log.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-object.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-object-manager.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-string-map.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-op-handler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-packet-coordinator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-sweeper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/tcam-row-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/tofino_lfsr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/event.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/rmt-event-emitter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-event-emitter.cpp
         )
 
 #### tofinoXX and jbay ####
 set(TOFINOXX_JBAY_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/comira-umac3.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/comira-umac4.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/mau-logical-tcam-col.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/mau-mpr-tcam-table.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/mirror.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX_jbay/queueing.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/comira-umac3.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/comira-umac4.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/mau-logical-tcam-col.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/mau-mpr-tcam-table.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/mirror.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX_jbay/queueing.cpp
         )
 
 #### tofinoxx only ####
 set(TOFINOXX_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/checksum-engine.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/chip.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-block.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-chip-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-egress.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-ingress.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-learning.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/epb.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/instr-opcode.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/ipb.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mac-factory.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-chip-lpf-meter.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-chip-stateful-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-chip-tcam-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-gateway-payload-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-hash-generator-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-ignored-regs.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-instr-store.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-op-handler.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-predication.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-snapshot.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-stash.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-stateful-counters.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-teop.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/parser-arbiter.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/parser.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/pktgen.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/pktgen-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/pktgen-app-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/rdm-chip.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/tcam-row-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/checksum-engine.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/chip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-chip-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-egress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-ingress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-learning.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/epb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/instr-opcode.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/ipb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mac-factory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-chip-lpf-meter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-chip-stateful-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-chip-tcam-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-gateway-payload-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-hash-generator-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-ignored-regs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-instr-store.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-op-handler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-predication.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-snapshot.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-stash.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-stateful-counters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-teop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/parser-arbiter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/pktgen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/pktgen-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/pktgen-app-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/rdm-chip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/tcam-row-vh-xbar-with-reg.cpp
         )
 
 #### jbay shared ####
 set(JBAY_SHARED_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/checksum-engine.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/chip.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-block.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-egress.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-ingress.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-learning.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/epb.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/instr-opcode.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-chip-addr-dist.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-chip-lpf-meter.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-chip-result-bus.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-chip-stateful-alu.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-gateway-payload-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-hash-generator-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-instr-store.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-mapram.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-op-handler.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-predication.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-snapshot.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-sram-row-chip-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-stash.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-stateful-counters.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mau-teop.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/mirror-buffer-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/p2s.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/parse-merge-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/parser-arbiter.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/parser.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/pktgen-app-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/pktgen-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/pktgen.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/rate-lim.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tcam-row-vh-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-object.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-pex.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-qlc.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-config.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-exc-rate.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-max-rate.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-min-rate.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-model-wrapper.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-node-arb.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-occ.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-pex-cr.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-port-arb.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-sel.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch-state.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/tm-sch.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/checksum-engine.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/chip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-block.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-egress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-ingress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-learning.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/epb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/instr-opcode.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-chip-addr-dist.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-chip-lpf-meter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-chip-result-bus.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-chip-stateful-alu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-gateway-payload-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-hash-generator-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-instr-store.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-mapram.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-op-handler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-predication.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-snapshot.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-sram-row-chip-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-stash.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-stateful-counters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mau-teop.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/mirror-buffer-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/p2s.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/parse-merge-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/parser-arbiter.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/pktgen-app-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/pktgen-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/pktgen.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/rate-lim.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tcam-row-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-object.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-pex.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-qlc.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-config.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-exc-rate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-max-rate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-min-rate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-model-wrapper.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-node-arb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-occ.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-pex-cr.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-port-arb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-sel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch-state.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/tm-sch.cpp
         )
 
 #### jbayXX sources ####
 set(JBAYXX_SOURCES
-        ${PROJECT_SOURCE_DIR}/src/jbay/deparser-chip-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/deparser-ingress.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/egress-buf.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/epb-counters.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/ipb.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/mac-factory.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/mau-chip-tcam-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbayXX/mau-ignored-regs.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/parse-merge-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/parser.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/s2p.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay/rdm-chip.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/deparser-chip-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/deparser-ingress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/egress-buf.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/epb-counters.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/ipb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/mac-factory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/mau-chip-tcam-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbayXX/mau-ignored-regs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/parse-merge-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/parser.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/s2p.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay/rdm-chip.cpp
         )
 
 
@@ -681,22 +683,22 @@ set(JBAYXX_SOURCES
 # special case some source files to ignore some compiler warnings
 # e.g. ignore unitialized var warnings where register adapter pattern is used
 set_source_files_properties(
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-logical-table-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/mau-gateway-payload-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/shared/tcam-row-vh-xbar-with-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/deparser-reg.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/ipb.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-snapshot.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-logical-table-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/mau-gateway-payload-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/shared/tcam-row-vh-xbar-with-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/deparser-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/ipb.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-snapshot.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
         PROPERTIES COMPILE_FLAGS ${NO_UNINITIALIZED}
 )
 set_source_files_properties(
-        ${PROJECT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbay_shared/deparser-reg.cpp
         PROPERTIES COMPILE_FLAGS ${NO_UNINITIALIZED}
 )
 set_source_files_properties(
-        ${PROJECT_SOURCE_DIR}/src/tofinoXX/mau-ignored-regs.cpp
-        ${PROJECT_SOURCE_DIR}/src/jbayXX/mau-ignored-regs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoXX/mau-ignored-regs.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/jbayXX/mau-ignored-regs.cpp
         PROPERTIES COMPILE_FLAGS "${NO_UNINITIALIZED} ${NO_VAR_TRACKING}"
 )
 
@@ -711,26 +713,27 @@ target_compile_options(tofino_compiler_options INTERFACE
 
 add_library(tofino_includes INTERFACE)
 target_include_directories(tofino_includes INTERFACE
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/include/tofino
-        ${PROJECT_SOURCE_DIR}/include/tofino/dummy_registers
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX_jbay
-        ${PROJECT_SOURCE_DIR}/include/shared
-        ${PROJECT_SOURCE_DIR}/include/tofino/register_includes
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofino
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofino/dummy_registers
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX_jbay
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofino/register_includes
         )
 
 add_library(tofino STATIC EXCLUDE_FROM_ALL)
 add_dependencies(tofino generate_version_file)
-add_pch(tofino ${PROJECT_SOURCE_DIR}/include/shared/mau.h)
+add_pch(tofino ${CMAKE_CURRENT_SOURCE_DIR}/include/shared/mau.h)
 target_link_libraries(tofino PRIVATE tofino_includes tofino_compiler_options)
 target_sources(tofino PRIVATE
         ${SHARED_SOURCES}
         ${TOFINOXX_JBAY_SOURCES}
         ${TOFINOXX_SOURCES}
-        ${PROJECT_SOURCE_DIR}/src/tofino/deparser-ingress.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofino/mau-mapram.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofino/mirror-buffer-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofino/deparser-ingress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofino/mau-mapram.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofino/mirror-buffer-reg.cpp
         )
 
 ###############################################################################
@@ -744,26 +747,27 @@ target_compile_options(tofinoB0_compiler_options INTERFACE
 
 add_library(tofinoB0_includes INTERFACE)
 target_include_directories(tofinoB0_includes INTERFACE
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/include/tofinoB0
-        ${PROJECT_SOURCE_DIR}/include/tofinoB0/dummy_registers
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX_jbay
-        ${PROJECT_SOURCE_DIR}/include/shared
-        ${PROJECT_SOURCE_DIR}/include/tofinoB0/register_includes
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoB0
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoB0/dummy_registers
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX_jbay
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoB0/register_includes
         )
 
 add_library(tofinoB0 STATIC EXCLUDE_FROM_ALL)
-add_pch(tofinoB0 ${PROJECT_SOURCE_DIR}/include/shared/mau.h)
+add_pch(tofinoB0 ${CMAKE_CURRENT_SOURCE_DIR}/include/shared/mau.h)
 add_dependencies(tofinoB0 generate_version_file)
 target_link_libraries(tofinoB0 PRIVATE tofinoB0_includes tofinoB0_compiler_options)
 target_sources(tofinoB0 PRIVATE
         ${SHARED_SOURCES}
         ${TOFINOXX_JBAY_SOURCES}
         ${TOFINOXX_SOURCES}
-        ${PROJECT_SOURCE_DIR}/src/tofinoB0/deparser-ingress.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoB0/mau-mapram.cpp
-        ${PROJECT_SOURCE_DIR}/src/tofinoB0/mirror-buffer-reg.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoB0/deparser-ingress.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoB0/mau-mapram.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/tofinoB0/mirror-buffer-reg.cpp
         )
 
 ###############################################################################
@@ -777,18 +781,19 @@ target_compile_options(jbay_compiler_options INTERFACE
 
 add_library(jbay_includes INTERFACE)
 target_include_directories(jbay_includes INTERFACE
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/include/jbay
-        ${PROJECT_SOURCE_DIR}/include/jbay/dummy_registers
-        ${PROJECT_SOURCE_DIR}/include/jbayXX
-        ${PROJECT_SOURCE_DIR}/include/jbay_shared
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX_jbay
-        ${PROJECT_SOURCE_DIR}/include/shared
-        ${PROJECT_SOURCE_DIR}/include/jbay/register_includes
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbay
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbay/dummy_registers
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbayXX
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbay_shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX_jbay
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbay/register_includes
         )
 
 add_library(jbay STATIC EXCLUDE_FROM_ALL)
-add_pch(jbay ${PROJECT_SOURCE_DIR}/include/shared/mau.h)
+add_pch(jbay ${CMAKE_CURRENT_SOURCE_DIR}/include/shared/mau.h)
 add_dependencies(jbay generate_version_file)
 target_link_libraries(jbay PRIVATE jbay_includes jbay_compiler_options)
 target_sources(jbay PRIVATE
@@ -809,18 +814,19 @@ target_compile_options(jbayB0_compiler_options INTERFACE
 
 add_library(jbayB0_includes INTERFACE)
 target_include_directories(jbayB0_includes INTERFACE
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/include/jbayB0
-        ${PROJECT_SOURCE_DIR}/include/jbayB0/dummy_registers
-        ${PROJECT_SOURCE_DIR}/include/jbayXX
-        ${PROJECT_SOURCE_DIR}/include/jbay_shared
-        ${PROJECT_SOURCE_DIR}/include/tofinoXX_jbay
-        ${PROJECT_SOURCE_DIR}/include/shared
-        ${PROJECT_SOURCE_DIR}/include/jbayB0/register_includes
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbayB0
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbayB0/dummy_registers
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbayXX
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbay_shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/tofinoXX_jbay
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/shared
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/jbayB0/register_includes
         )
 
 add_library(jbayB0 STATIC EXCLUDE_FROM_ALL)
-add_pch(jbayB0 ${PROJECT_SOURCE_DIR}/include/shared/mau.h)
+add_pch(jbayB0 ${CMAKE_CURRENT_SOURCE_DIR}/include/shared/mau.h)
 add_dependencies(jbayB0 generate_version_file)
 target_link_libraries(jbayB0 PRIVATE jbayB0_includes jbayB0_compiler_options)
 target_sources(jbayB0 PRIVATE

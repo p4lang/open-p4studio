@@ -88,6 +88,12 @@ class ConfigOption:
     def __hash__(self) -> int:
         return hash((self.p4studio_name, self.enabled))
 
+    def __repr__(self) -> str:
+        return "ConfigOption({},{},{})".format(self.p4studio_name, self.cmake_args, self.enabled)
+
+    def __str__(self) -> str:
+        return "ConfigOption({},{},{})".format(self.p4studio_name, self.cmake_args, self.enabled)
+
 
 class ConfigOptionDefinition:
     def __init__(self, option: ConfigOption, category: str, description: str):
@@ -109,6 +115,12 @@ class ConfigOptionDefinition:
 
     def option(self, enabled: bool) -> ConfigOption:
         return self._option.copy_with(enabled=enabled)
+
+    def __str__(self) -> str:
+        return "ConfigOptionDefinition({},{},{})".format(self._option, self.category, self.description)
+
+    def __repr__(self) -> str:
+        return "ConfigOptionDefinition({},{},{})".format(self._option, self.category, self.description)
 
 
 def user_defined_options_definitions() -> List[ConfigOptionDefinition]:

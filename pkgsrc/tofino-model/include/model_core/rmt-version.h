@@ -22,12 +22,12 @@
 
 #define RMT_REV "1.1.0"
 
-#include <model_core/build-version.h>
+#include "model_core/build-version.h"
 #ifndef BUILD_NUM
 #define BUILD_NUM "00000"
 #endif
 
-#include <model_core/model-version.h>
+#include "model_core/model-version.h"
 #ifndef MODEL_TAG
 #define MODEL_TAG "000"
 #endif
