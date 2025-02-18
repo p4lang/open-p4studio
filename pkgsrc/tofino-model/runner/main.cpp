@@ -1042,8 +1042,8 @@ void *chip_dv_reg_service_thread_entry(void *param)
     return NULL;
 }
 
-void *null_parm;
-void *null_thread_parm;
+void *null_param;
+void *null_thread_param;
 pthread_t rtl_tx_pkt_service_thread;
 pthread_t rtl_int_service_thread;
 pthread_t rtl_dma_service_thread;
@@ -1106,12 +1106,12 @@ harlyn_lld_init(void)
                                dru_rx_pkt );
     if (g_rtl_integ) {
         /* create the RTL Tx packet proxy thread */
-        pthread_create(&rtl_tx_pkt_service_thread, NULL, rtl_tx_pkt_service_thread_entry, &null_parm);
-        pthread_create(&rtl_int_service_thread, NULL, rtl_int_service_thread_entry, &null_parm);
-        pthread_create(&rtl_dma_service_thread, NULL, rtl_dma_service_thread_entry, &null_parm);
+        pthread_create(&rtl_tx_pkt_service_thread, NULL, rtl_tx_pkt_service_thread_entry, &null_param);
+        pthread_create(&rtl_int_service_thread, NULL, rtl_int_service_thread_entry, &null_param);
+        pthread_create(&rtl_dma_service_thread, NULL, rtl_dma_service_thread_entry, &null_param);
     }
     if (g_include_chip_dv_socket) {
-        pthread_create(&chip_dv_reg_service_thread, NULL, chip_dv_reg_service_thread_entry, &null_parm);
+        pthread_create(&chip_dv_reg_service_thread, NULL, chip_dv_reg_service_thread_entry, &null_param);
     }
     return BFM_E_NONE;
 }
@@ -1184,7 +1184,7 @@ rmt_model_timer_entry (void *arg)
 void
 rmt_timer_thread_start()
 {
-    pthread_create(&rmt_model_timer_thread, NULL, rmt_model_timer_entry, (void *) &null_thread_parm);
+    pthread_create(&rmt_model_timer_thread, NULL, rmt_model_timer_entry, (void *) &null_thread_param);
 }
 
 
