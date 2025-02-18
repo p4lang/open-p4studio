@@ -48,6 +48,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/lib")
 set(CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
 
+# Relative RPATH setup.
+list(APPEND CMAKE_INSTALL_RPATH $ORIGIN/../lib)
+set(CMAKE_SKIP_BUILD_RPATH FALSE)           # Keep RPATH in build tree
+set(CMAKE_SKIP_INSTALL_RPATH FALSE)         # Keep RPATH when installing
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE) # Append linker paths to RPATH
 
 # p4 specific options
 option(TOFINO        "Architecture: Build P4 for tofino" OFF)
