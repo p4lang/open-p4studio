@@ -110,9 +110,9 @@ typedef enum {
 
 extern bool rmt_get_type(uint8_t asic_id, uint8_t *chip_type);
 
-pthread_t dru_service_thread;
+extern pthread_t dru_service_thread;
 extern void *dru_service_thread_entry(void *param);
-void *null_parm;
+extern void *null_parm;
 
 int socket_desc;
 

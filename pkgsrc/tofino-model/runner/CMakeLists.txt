@@ -3,8 +3,8 @@ option(model-runner "build the model runner executable (default OFF)" ON)
 # static linking we are more selective; the goal of partial static linking is
 # to statically link as much as possible without including certain libs e.g.
 # gettext (via libc) and cli.
-option(runner-static "statically link runner (default ON)" ON)
-option(runner-static-partial "statically link runner with some but not all libs; overrides runner-static option (default OFF)" OFF)
+option(runner-static "statically link runner (default ON)" OFF)
+option(runner-static-partial "statically link runner with some but not all libs; overrides runner-static option (default OFF)" ON)
 
 # if -Dmodel-internal OR BFN_INTERNAL set in enviroment, compile with -DBFN_INTERNAL
 if (${model-internal} OR DEFINED ENV{BFN_INTERNAL})
@@ -55,7 +55,7 @@ endfunction()
 
 if (${runner-static-partial})
     find_specific_library(CLI_LIB cli ".so")
-    find_specific_library(PCAP_LIB pcap ".a")
+    find_specific_library(PCAP_LIB pcap ".so")
     find_specific_library(CRYPT_LIB crypt ".a")
 elseif (${runner-static})
     find_specific_library(CLI_LIB cli ".a")
@@ -149,9 +149,9 @@ else ()
         target_link_libraries(tofino-model.debug PRIVATE
                 -static-libstdc++ -static-libgcc
                 ${CLI_LIB}
+                ${PCAP_LIB}
                 "-Wl,-Bstatic"
                 ${CRYPT_LIB}
-                ${PCAP_LIB}
                 "-Wl,-Bdynamic"
                 dru_model
                 Threads::Threads
