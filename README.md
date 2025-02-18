@@ -179,6 +179,25 @@ _different_ `setup-<name>.bash` files, one for each version you want
 to use.
 
 
+## Optional step: Install documentation
+
+You can generate HTML documentation using the following command:
+
+```bash
+cd $SDE/build/pkgsrc/bf-drivers
+make doc-driver install
+```
+
+At least some of this documentation is then browsable via the command:
+
+```bash
+xdg-open $SDE_INSTALL/share/doc/bf-drivers/html/index.html
+```
+
+Or you can use any other method appropriate on your system to open a
+browser to that HTML file.
+
+
 # Run instructions
 
 This command creates many virtual Ethernet interfaces that are used
