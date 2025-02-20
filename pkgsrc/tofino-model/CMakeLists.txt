@@ -185,6 +185,7 @@ if(${CMAKE_HOST_APPLE})
     include_directories(AFTER SYSTEM /usr/local/include /usr/include)
 endif()
 
+set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost 1.67.0 REQUIRED)
 
 # default preprocessor and compiler options: each of these is applied to every

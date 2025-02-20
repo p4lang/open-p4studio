@@ -17,7 +17,7 @@
  *  SPDX-License-Identifier: Apache-2.0
  ******************************************************************************/
 
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 std::string get_executable_dir_fallback()
 {
@@ -39,9 +39,9 @@ std::string get_executable_dir()
     }
     std::string path(buf, size);
     boost::system::error_code ec;
-    boost::filesystem::path p(
-        boost::filesystem::canonical(
-            path, boost::filesystem::current_path(), ec));
+    std::filesystem::path p(
+        std::filesystem::canonical(
+            path, std::filesystem::current_path(), ec));
     p.remove_filename();
     return p.make_preferred().string();
 }
@@ -57,7 +57,7 @@ std::string get_executable_dir()
 #endif
 
 std::string get_resource_file_path(std::string filename) {
-  boost::filesystem::path pth(get_executable_dir());
+  std::filesystem::path pth(get_executable_dir());
   pth /= "resources";
   pth /= filename;
   return pth.string();

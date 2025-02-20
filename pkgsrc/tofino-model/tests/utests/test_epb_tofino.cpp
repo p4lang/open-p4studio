@@ -45,12 +45,12 @@ class BFN_TEST_NAME(EpbCountersTest) : public CounterTestBase {
                          std::string counter_word) override {
     std::vector<PathElement> path{
         PathElement{"pipes", std::vector<int>{pipeIndex}},
-        PathElement{"pmarb", boost::none},
-        PathElement{"ebp18_reg", boost::none},
+        PathElement{"pmarb", std::nullopt},
+        PathElement{"ebp18_reg", std::nullopt},
         PathElement{"egrNx_reg", std::vector<int>{parseBufferIndex}},
-        PathElement{"epb_disp_port_regs", boost::none},
+        PathElement{"epb_disp_port_regs", std::nullopt},
         PathElement{counter_name, std::vector<int>{chanIndex}},
-        PathElement{counter_word, boost::none}
+        PathElement{counter_word, std::nullopt}
     };
     return tu_->lookup_register_map(path);
   }

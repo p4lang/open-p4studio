@@ -67,7 +67,7 @@ void ReaderActions::clear() {
 }
 
 
-void ReaderActions::set(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,int valid)
+void ReaderActions::set(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,int valid)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set %cphv_%s %de%d %d %x\n",c, s.c_str(), n, e,a0,a1);
@@ -77,56 +77,56 @@ void ReaderActions::set(const char c, const std::string s, const int n,  boost::
   if (debug && !valid) printf("set %cphv_%s %de%d %d %x skipped as invalid\n",c, s.c_str(), n, e,a0,a1);
 
 }
-void ReaderActions::phv_alloc(const char c, const std::string s, const int n,  boost::optional<int> oe)
+void ReaderActions::phv_alloc(const char c, const std::string s, const int n,  std::optional<int> oe)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("phv_alloc %cphv_%s %de%d\n",c, s.c_str(), n, e);
 
   phvs_.emplace( PhvKey( c, s, n, e ) , std::unique_ptr<Phv>(tu_->phv_alloc()) );
 }
-void ReaderActions::set_ingress(const char c, const std::string s, const int n,  boost::optional<int> oe)
+void ReaderActions::set_ingress(const char c, const std::string s, const int n,  std::optional<int> oe)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_ingress %cphv_%s %de%d\n",c, s.c_str(), n, e);
   phvs_[ PhvKey{c,s,n,e} ]->set_ingress();
 }
-void ReaderActions::set_egress(const char c, const std::string s, const int n,  boost::optional<int> oe)
+void ReaderActions::set_egress(const char c, const std::string s, const int n,  std::optional<int> oe)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_egress %cphv_%s %de%d\n",c, s.c_str(), n, e);
   phvs_[ PhvKey{c,s,n,e} ]->set_egress();
 }
-void ReaderActions::set_ghost(const char c, const std::string s, const int n,  boost::optional<int> oe)
+void ReaderActions::set_ghost(const char c, const std::string s, const int n,  std::optional<int> oe)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_ghost %cphv_%s %de%d\n",c, s.c_str(), n, e);
   phvs_[ PhvKey{c,s,n,e} ]->set_ghost();
 }
-void ReaderActions::set_version(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,bool a1)
+void ReaderActions::set_version(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,bool a1)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_version %cphv_%s %de%d %d %s\n",c, s.c_str(), n, e,a0,a1?"true":"false");
   phvs_[ PhvKey{c,s,n,e} ]->set_version( a0, a1 );
 }
-void ReaderActions::set_meter_tick_time(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,uint64_t a2)
+void ReaderActions::set_meter_tick_time(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,uint64_t a2)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_meter_tick_time %cphv_%s %de%d %d %d %" PRIi64 " \n",c, s.c_str(), n, e,a0,a1,a2);
   phvs_[ PhvKey{c,s,n,e} ]->set_meter_tick_time( a0,a1,a2 );
 }
-void ReaderActions::set_meter_random_value(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,uint64_t a2)
+void ReaderActions::set_meter_random_value(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,uint64_t a2)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_meter_tick_time %cphv_%s %de%d %d %d %" PRIi64 " \n",c, s.c_str(), n, e,a0,a1,a2);
   phvs_[ PhvKey{c,s,n,e} ]->set_meter_random_value( a0,a1,a2 );
 }
-void ReaderActions::set_relative_time(const char c, const std::string s, const int n,  boost::optional<int> oe , uint64_t a0)
+void ReaderActions::set_relative_time(const char c, const std::string s, const int n,  std::optional<int> oe , uint64_t a0)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_relative_time %cphv_%s %de%d %" PRIi64 " \n",c, s.c_str(), n, e,a0);
   phvs_[ PhvKey{c,s,n,e} ]->set_relative_time( a0 );
 }
-void ReaderActions::set_eopnum(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1, bool a2)
+void ReaderActions::set_eopnum(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1, bool a2)
 {
   int e = oe ? *oe : 0;
   if (debug) printf("set_eopnum %cphv_%s %de%d 0x%x %d %s\n",c, s.c_str(), n, e,a0,a1,a2?"true":"false");
@@ -149,7 +149,7 @@ void ReaderActions::selector_test(int a0,uint32_t a1, uint32_t a2, uint32_t a3, 
 
 void ReaderActions::stateful_test_jbay(std::vector<uint32_t> phv_d, std::vector<uint32_t> data_in,
                                        boost::fusion::vector4<uint32_t, int64_t ,std::vector<bool>,std::vector<bool>> params,
-                                       boost::optional<uint64_t> random_number,
+                                       std::optional<uint64_t> random_number,
                                        std::vector<uint32_t> data_out, std::vector<uint32_t> action_out) {
   using boost::fusion::at_c;
   stateful_test_internal(phv_d, data_in, at_c<0>(params) /*addr*/, at_c<1>(params) /*present_time*/,
@@ -160,7 +160,7 @@ void ReaderActions::stateful_test_jbay(std::vector<uint32_t> phv_d, std::vector<
 
 void ReaderActions::stateful_test_internal(std::vector<uint32_t> phv_d, std::vector<uint32_t> data_in, uint32_t addr, uint64_t present_time,
                                            std::vector<bool> match_bus, std::vector<bool> learn_or_match_bus,
-                                           boost::optional<uint64_t> random_number,
+                                           std::optional<uint64_t> random_number,
                                            std::vector<uint32_t> data_out, std::vector<uint32_t> action_out, bool check_action)
 {
   BitVector<MauDefs::kStatefulMeterAluDataBits> phv_data_word{};
@@ -211,7 +211,7 @@ void ReaderActions::stateful_test_internal(std::vector<uint32_t> phv_d, std::vec
 
 }
 
-void ReaderActions::stateful_test(uint64_t phv_d, std::vector<uint32_t> data_in, uint32_t addr, bool forwarding, std::vector<uint32_t> data_out, boost::optional<int> action_out)
+void ReaderActions::stateful_test(uint64_t phv_d, std::vector<uint32_t> data_in, uint32_t addr, bool forwarding, std::vector<uint32_t> data_out, std::optional<int> action_out)
 {
   bool action_valid = action_out ? true:false;
   uint32_t action = action_valid ? *action_out : 0;
@@ -228,7 +228,7 @@ void ReaderActions::stateful_test(uint64_t phv_d, std::vector<uint32_t> data_in,
 
   stateful_test_internal(phv_d_v, data_in, addr, present_time_,
                          { false, false, false, false }, { false, false, false, false },
-                         boost::optional<uint64_t>( boost::none ),
+                         std::optional<uint64_t>( std::nullopt ),
                          data_out, action_out_v, action_valid);
 }
 
@@ -371,7 +371,7 @@ void ReaderActions::reset()
   tu_->Reset();
   //tu_->update_log_flags(ALL, ALL, ALL, ALL, ALL, ALL, ALL);
 }
-void ReaderActions::indirect_write(uint64_t a0,uint64_t a1, uint64_t a2,boost::optional<uint64_t> T)
+void ReaderActions::indirect_write(uint64_t a0,uint64_t a1, uint64_t a2,std::optional<uint64_t> T)
 {
   if (T) {
     if (debug) printf("indirect_write  %" PRIx64 " %" PRIx64 " %" PRIx64 " %" PRIx64 "\n",a0,a1,a2,*T);
@@ -512,7 +512,7 @@ void ReaderActions::aht_do_writes()
   assert(action_hv_translator_);
   action_hv_translator_->do_writes(tu_);
 }
-uint32_t ReaderActions::rm_b4_x( boost::optional<int> a0, uint32_t a1 ) {
+uint32_t ReaderActions::rm_b4_x( std::optional<int> a0, uint32_t a1 ) {
   // this is mapped by a define in test util in the real actions
   int v= a0 ? *a0 : 0;
   if (debug) printf("rm_b4_x (%d) %x\n",v,a1);

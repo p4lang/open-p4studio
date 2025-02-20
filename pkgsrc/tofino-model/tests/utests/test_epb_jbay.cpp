@@ -50,13 +50,13 @@ class BFN_TEST_NAME(EpbCountersTest) : public CounterTestBase {
     std::string chan = "chan" + std::to_string(chanIndex) + "_group";
     std::vector<PathElement> path{
         PathElement{"pipes", std::vector<int>{pipeIndex}},
-        PathElement{"pardereg", boost::none},
-        PathElement{"pgstnreg", boost::none},
+        PathElement{"pardereg", std::nullopt},
+        PathElement{"pgstnreg", std::nullopt},
         PathElement{"epbprsr4reg", std::vector<int>{parseBufferIndex}},
-        PathElement{"epbreg", boost::none},
-        PathElement{chan, boost::none},
-        PathElement{counter_name, boost::none},
-        PathElement{counter_word, boost::none}
+        PathElement{"epbreg", std::nullopt},
+        PathElement{chan, std::nullopt},
+        PathElement{counter_name, std::nullopt},
+        PathElement{counter_word, std::nullopt}
     };
     return tu_->lookup_register_map(path);
   }

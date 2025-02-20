@@ -27,52 +27,52 @@
 
 // Some dummy actions for testing the parser
 struct DummyActions {
-  void set(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,int valid)
+  void set(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,int valid)
   {
     int e = oe ? *oe : 0;
     printf("set %cphv_%s %de%d %d %x %d\n",c, s.c_str(), n, e,a0,a1,valid);
   }
-  void phv_alloc(const char c, const std::string s, const int n,  boost::optional<int> oe)
+  void phv_alloc(const char c, const std::string s, const int n,  std::optional<int> oe)
   {
     int e = oe ? *oe : 0;
     printf("phv_alloc %cphv_%s %de%d\n",c, s.c_str(), n, e);
   }
-  void set_ingress(const char c, const std::string s, const int n,  boost::optional<int> oe)
+  void set_ingress(const char c, const std::string s, const int n,  std::optional<int> oe)
   {
     int e = oe ? *oe : 0;
     printf("set_ingress %cphv_%s %de%d\n",c, s.c_str(), n, e);
   }
-  void set_egress(const char c, const std::string s, const int n,  boost::optional<int> oe)
+  void set_egress(const char c, const std::string s, const int n,  std::optional<int> oe)
   {
     int e = oe ? *oe : 0;
     printf("set_egress %cphv_%s %de%d\n",c, s.c_str(), n, e);
   }
-  void set_ghost(const char c, const std::string s, const int n,  boost::optional<int> oe)
+  void set_ghost(const char c, const std::string s, const int n,  std::optional<int> oe)
   {
     int e = oe ? *oe : 0;
     printf("set_ghost %cphv_%s %de%d\n",c, s.c_str(), n, e);
   }
-  void set_version(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,bool a1)
+  void set_version(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,bool a1)
   {
       int e = oe ? *oe : 0;
     printf("set_version %cphv_%s %de%d %d %s\n",c, s.c_str(), n, e,a0,a1?"true":"false");
   }
-  void set_meter_tick_time(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,uint64_t a2)
+  void set_meter_tick_time(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,uint64_t a2)
   {
     int e = oe ? *oe : 0;
     printf("set_meter_tick_time %cphv_%s %de%d %d %d %" PRIi64 " \n",c, s.c_str(), n, e,a0,a1,a2);
   }
-  void set_meter_random_value(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1,uint64_t a2)
+  void set_meter_random_value(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1,uint64_t a2)
   {
     int e = oe ? *oe : 0;
     printf("set_meter_tick_time %cphv_%s %de%d %d %d %" PRIi64 " \n",c, s.c_str(), n, e,a0,a1,a2);
   }
-  void set_relative_time(const char c, const std::string s, const int n,  boost::optional<int> oe , uint64_t a0)
+  void set_relative_time(const char c, const std::string s, const int n,  std::optional<int> oe , uint64_t a0)
   {
     int e = oe ? *oe : 0;
     printf("set_relative_time %cphv_%s %de%d %" PRIi64 "\n",c, s.c_str(), n, e,a0);
   }
-  void set_eopnum(const char c, const std::string s, const int n,  boost::optional<int> oe , int a0,int a1, bool a2)
+  void set_eopnum(const char c, const std::string s, const int n,  std::optional<int> oe , int a0,int a1, bool a2)
   {
     int e = oe ? *oe : 0;
     printf("set_eopnum %cphv_%s %de%d 0x%x %d %s\n",c, s.c_str(), n, e,a0,a1,a2?"true":"false");
@@ -82,7 +82,7 @@ struct DummyActions {
     printf("selector_test %d %x %x %x %x\n",a0,a1,a2,a3,a4);
   }
 
-  void stateful_test(uint64_t phv_d, std::vector<uint32_t> data_in, uint32_t q3, bool forwarding, std::vector<uint32_t> data_out, boost::optional<int> action_out)
+  void stateful_test(uint64_t phv_d, std::vector<uint32_t> data_in, uint32_t q3, bool forwarding, std::vector<uint32_t> data_out, std::optional<int> action_out)
   {
     bool action_valid = action_out ? true:false;
     uint32_t action = action_valid ? *action_out : 0;
@@ -92,7 +92,7 @@ struct DummyActions {
   
   void stateful_test_jbay(std::vector<uint32_t> phv_d, std::vector<uint32_t> data_in,
                           boost::fusion::vector4<int, uint64_t ,std::vector<bool>,std::vector<bool>> params,
-                          boost::optional<uint64_t> random_nunmber,
+                          std::optional<uint64_t> random_nunmber,
                           std::vector<uint32_t> data_out, std::vector<uint32_t> action_out) 
   {
     using boost::fusion::at_c;
@@ -196,7 +196,7 @@ struct DummyActions {
   {
     printf("reset\n");
   }
-  void indirect_write(uint64_t a0,uint64_t a1, uint64_t a2,boost::optional<uint64_t> T)
+  void indirect_write(uint64_t a0,uint64_t a1, uint64_t a2,std::optional<uint64_t> T)
   {
     printf("indirect_write  %" PRIx64 " %" PRIx64 " %" PRIx64 "\n",a0,a1,a2);
   }
@@ -269,7 +269,7 @@ struct DummyActions {
   {
     printf("aht_do_writes\n");
   }
-  uint32_t rm_b4_x( boost::optional<int> a0, uint32_t a1 ) {
+  uint32_t rm_b4_x( std::optional<int> a0, uint32_t a1 ) {
     // this is mapped by a define in test util in the real actions
     int v= a0 ? *a0 : 0;
     printf("rm_b4_x (%d) %x\n",v,a1);

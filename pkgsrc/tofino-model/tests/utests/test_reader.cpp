@@ -22,7 +22,7 @@
 #include <utests/test_reader_grammar.h>
 // for finding the file
 #include <utests/filesystem_helper.h>
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 #include <regex>
 //#include <boost/predef.h> // use this if we ever upgrade to boost 1.55 or later
 
@@ -43,7 +43,7 @@ TestReader::~TestReader() {
   delete s;
 }
 
-bool TestReader::read_file(boost::filesystem::path p) {
+bool TestReader::read_file(std::filesystem::path p) {
   CommentSkipper<iterator_type> skipper;
   // open file, disable skipping of whitespace
   std::ifstream in(p.c_str());
@@ -63,7 +63,7 @@ bool TestReader::read_file(boost::filesystem::path p) {
 bool TestReader::read_file(const char* file_name) {
   std::string exe_path = get_executable_dir();
 
-  boost::filesystem::path p( exe_path );
+  std::filesystem::path p( exe_path );
   p /= file_name;
 
   return read_file(p);
@@ -77,8 +77,8 @@ bool TestReader::read_dir(const char* dir_name) {
   bool res = true;
 
   using namespace std;
-  using namespace boost::filesystem;
-  boost::filesystem::path pd( exe_path );
+  using namespace std::filesystem;
+  std::filesystem::path pd( exe_path );
   pd /= dir_name;
 
   const std::regex filter( ".*\\.test" );
