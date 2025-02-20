@@ -120,7 +120,6 @@
 # regardless of the value of the model-tofinoB0 option.
 project(model LANGUAGES CXX)
 
-
 ###############################################################################
 # cmake build options (these do not apply to the model-autotools target)
 ###############################################################################
@@ -158,21 +157,6 @@ option(precompiled-headers "precompile header files (default ON)" ON)
 #set(CMAKE_VERBOSE_MAKEFILE ON)  # uncomment to see compiler commands
 
 
-# Handle top-level options.
-# TODO: once integrated strip equiv section out of mimic/CMakeLists.txt
-#
-string (TOLOWER "${CMAKE_BUILD_TYPE}" build_type)
-if (build_type STREQUAL "release")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")   # Echo the flags that cmake will probably generate too.
-  message (STATUS "MODEL Release build: -O2 (CMAKE_BUILD_TYPE=Release)")
-elseif (build_type STREQUAL "debug")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -ggdb")
-  message (STATUS "MODEL Debug build: -O0 -ggdb (CMAKE_BUILD_TYPE=Debug)")
-else ()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -ggdb")
-  message (NOTICE "MODEL unknown 'CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}'. Expected 'Release', 'Debug'")
-endif()
-
 option(model-sanitize "Turn on run-time sanitize checking" OFF)
 if (${model-sanitize})
   message(STATUS "Enabling Sanitizer tooling (model-sanitize=ON)")
@@ -201,20 +185,7 @@ if(${CMAKE_HOST_APPLE})
     include_directories(AFTER SYSTEM /usr/local/include /usr/include)
 endif()
 
-if(DEFINED ENV{EC_SITE})
-    include_directories(AFTER SYSTEM /p/tfc/tools/opensource/rapidjson/include)
-endif()
-
-set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost 1.54.0 REQUIRED)
-
-
-
-message(STATUS "Using boost header-only libraries globally")
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPPFLAGS} ${CXXFLAGS} -DBOOST_LOG_DYN_LINK")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CFLAGS}")
+find_package(Boost 1.67.0 REQUIRED)
 
 # default preprocessor and compiler options: each of these is applied to every
 # target unless explicitly overridden for specific source files by a
