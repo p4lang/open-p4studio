@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(p4factory VERSION 9.13.4 LANGUAGES C CXX)
 include(CheckCXXCompilerFlag)
+include(ExternalProject)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
