@@ -551,12 +551,7 @@ target_link_libraries(utests INTERFACE PRIVATE "-Wl,${FORCE_LOAD} $<TARGET_LINKE
 target_link_libraries(utests PRIVATE modelrunnertest)
 target_link_libraries(utests PRIVATE modelrunner)
 
-# The utests use Boost::Filesystem, which is not a header-only library.
-# If your boost library is newer than your cmake, you will see the warning:
-#     "Imported targets not available for Boost version ...".
-# This is harmless, and is fixable by updating your cmake - do it!
-find_package(Boost 1.54.0 REQUIRED COMPONENTS system filesystem)
-message(STATUS "model-utests using boost libs: ${Boost_LIBRARIES}")
+find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 if (CMAKE_VERSION VERSION_LESS "3.13")
     link_directories(${Boost_LIBRARY_DIRS})
 else()

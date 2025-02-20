@@ -37,13 +37,13 @@ class BFN_TEST_NAME(IpbCountersTest) : public IpbCountersCommonTest {
     std::string chan = "chan" + std::to_string(chanIndex) + "_group";
     std::vector<PathElement> path{
         PathElement{"pipes", std::vector<int>{pipeIndex}},
-        PathElement{"pardereg", boost::none},
-        PathElement{"pgstnreg", boost::none},
+        PathElement{"pardereg", std::nullopt},
+        PathElement{"pgstnreg", std::nullopt},
         PathElement{"ipbprsr4reg", std::vector<int>{parseBufferIndex}},
-        PathElement{"ipbreg", boost::none},
-        PathElement{chan, boost::none},
-        PathElement{counter_name, boost::none},
-        PathElement{counter_word, boost::none}
+        PathElement{"ipbreg", std::nullopt},
+        PathElement{chan, std::nullopt},
+        PathElement{counter_name, std::nullopt},
+        PathElement{counter_word, std::nullopt}
     };
     return tu_->lookup_register_map(path);
   }

@@ -19,7 +19,7 @@
 
 #ifndef _FILESYSTEM_HELPER_
 #define _FILESYSTEM_HELPER_
-#include <boost/filesystem/operations.hpp>
+#include <filesystem>
 
 std::string get_executable_dir();
 
