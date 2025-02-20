@@ -1,4 +1,4 @@
-global-options: {}
+global-options: { build_model: true }
 features:
   # FIXME: broken
   # bf-diags:

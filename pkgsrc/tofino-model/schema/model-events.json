@@ -1,0 +1,347 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "model_event_schema_1-0-0",
+  "definitions": {
+    "chip": {
+      "type": "object",
+      "properties": {
+        "index": { "type": "integer" },
+        "chip_type": { "type": "string" }
+      }
+    },
+    "severity": { "enum": [ "UNKNOWN", "DEBUG", "INFO", "WARN", "ERROR" ]},
+    "gress": { "enum": [ "undef", "ingress", "egress", "both" ]},
+    "component": { "enum": [
+      "undef",
+      "chip",
+      "pipe",
+      "parser",
+      "deparser",
+      "mau",
+      "port",
+      "queueing"
+    ]},
+    "context": {
+      "type": "object",
+      "properties": {
+        "pkt": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "flags": { "type": "integer" }
+          },
+          "required": ["id", "flags"]
+        },
+        "chip": { "type": "integer" },
+        "pipe": { "type": "integer" },
+        "gress": { "$ref": "#/definitions/gress" },
+        "component": { "$ref": "#/definitions/component" },
+        "stage": { "type": "integer" },
+        "table": { "type": "integer" }
+      },
+      "required": ["pkt", "chip", "pipe", "gress", "component"]
+    },
+    "next_table": {
+      "type": "object",
+      "properties": {
+        "stage": { "type": "integer" },
+        "table": { "type": "integer" }
+      },
+      "required": ["stage", "table"]
+    },
+    "event_init": {
+      "type": "object",
+      "properties": {
+        "schema_version": { "type": "string" }
+      },
+      "required": ["schema_version"]
+    },
+    "event_chip_created": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "chip_created": { "$ref": "#/definitions/chip" }
+      },
+      "required": ["chip_created"]
+    },
+    "event_chip_destroyed": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "chip_destroyed": { "$ref": "#/definitions/chip" }
+      },
+      "required": ["chip_destroyed"]
+    },
+    "event_message": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "severity": { "$ref": "#/definitions/severity" },
+        "message": { "type": "string" }
+      },
+      "required": ["sim_time", "real_time", "severity", "message"]
+    },
+    "event_phv": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "phv": {
+          "type": "object",
+          "properties": {
+            "words": { "type": "array", "items": { "type": "string" }}
+          },
+          "required": ["words"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "phv"]
+    },
+    "event_packet": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "packet": {
+          "type": "object",
+          "properties": {
+            "length": { "type": "integer" },
+            "data": { "type": "array", "items": { "type": "string" }},
+            "port": { "type": "integer" }
+          },
+          "required": ["length", "data"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "packet"]
+    },
+    "event_parser_state": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "parser_state": { "type": "integer" }
+      },
+      "required": ["sim_time", "real_time", "context", "parser_state"]
+    },
+    "event_parser_extract": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "parser_extract": {
+          "type": "object",
+          "properties": {
+            "phv_word": { "type": "integer" },
+            "data": { "type": "string" },
+            "tag_along": { "type": "boolean" }
+          },
+          "required": ["phv_word", "data", "tag_along"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "parser_extract"]
+    },
+    "event_parser_tcam_match": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "parser_tcam_match": {
+          "type": "object",
+          "properties": {
+            "index": { "type": "integer" },
+            "lookup": { "type": "string" }
+          },
+          "required": ["index", "lookup"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "parser_tcam_match"]
+    },
+    "event_deparser_metadata_tm": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "deparser_metadata_tm": {
+          "type": "object",
+          "properties": {
+            "afc": { "type": "integer" },
+            "bypass_egr_mode": { "type": "boolean" },
+            "cpu_cos": { "type": "integer" },
+            "cpu_needs_copy": { "type": "boolean" },
+            "ct_disable_mode": { "type": "boolean" },
+            "ct_mcast_mode": { "type": "boolean" },
+            "dod": { "type": "boolean" },
+            "egress_uc_port": { "type": "integer" },
+            "has_mgid1": { "type": "integer" },
+            "has_mgid2": { "type": "integer" },
+            "hash1": { "type": "integer" },
+            "hash2": { "type": "integer" },
+            "icos": { "type": "integer" },
+            "irid": { "type": "integer" },
+            "is_egress_uc": { "type": "boolean" },
+            "meter_color": { "type": "integer" },
+            "mgid1": { "type": "integer" },
+            "mgid2": { "type": "integer" },
+            "mtu_trunc_err_f": { "type": "integer" },
+            "mtu_trunc_len": { "type": "integer" },
+            "multicast_pipe_vector": { "type": "integer" },
+            "needs_mc_copy": { "type": "boolean" },
+            "physical_ingress_port": { "type": "integer" },
+            "pipe_mask": { "type": "integer" },
+            "qid": { "type": "integer" },
+            "use_yid_tbl": { "type": "boolean" },
+            "version": { "type": "integer" },
+            "xid": { "type": "integer" },
+            "yid": { "type": "integer" }
+          },
+          "required": [
+            "version",
+            "physical_ingress_port",
+            "egress_uc_port",
+            "mgid1",
+            "mgid2",
+            "bypass_egr_mode",
+            "cpu_cos",
+            "ct_mcast_mode",
+            "multicast_pipe_vector",
+            "yid",
+            "xid",
+            "mtu_trunc_len",
+            "afc",
+            "has_mgid1",
+            "has_mgid2",
+            "qid",
+            "meter_color",
+            "mtu_trunc_err_f",
+            "icos",
+            "is_egress_uc",
+            "use_yid_tbl",
+            "pipe_mask",
+            "cpu_needs_copy",
+            "dod",
+            "needs_mc_copy",
+            "hash1",
+            "irid",
+            "hash2",
+            "ct_disable_mode"
+          ]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "deparser_metadata_tm"]
+    },
+    "event_deparser_metadata_mac": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "deparser_metadata_mac": {
+          "type": "object",
+          "properties": {
+            "afc": { "type": "integer" },
+            "capture_tx_ts": { "type": "boolean" },
+            "ecos": { "type": "integer" },
+            "egress_unicast_port": { "type": "integer" },
+            "force_tx_error": { "type": "boolean" },
+            "is_egress_uc": { "type": "boolean" },
+            "mtu_trunc_err_f": { "type": "integer" },
+            "mtu_trunc_len": { "type": "integer" },
+            "update_delay_on_tx": { "type": "boolean" }
+          },
+          "required": [
+            "egress_unicast_port",
+            "mtu_trunc_len",
+            "update_delay_on_tx",
+            "is_egress_uc",
+            "afc",
+            "force_tx_error",
+            "ecos",
+            "capture_tx_ts",
+            "mtu_trunc_err_f"
+          ]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "deparser_metadata_mac"]
+    },
+    "event_mau_gateway":{
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "mau_gateway": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "match": { "type": "boolean" },
+            "action_instr_addr": { "type": "string" },
+            "next_table": { "$ref": "#/definitions/next_table" }
+          },
+          "required": ["enabled", "match", "next_table"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "mau_gateway"]
+    },
+    "event_mau_table_hit": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "mau_table_hit": {
+          "type": "object",
+          "properties": {
+            "next_table": { "$ref": "#/definitions/next_table" },
+            "action_instr_addr": { "type": "string" },
+            "stats_addr": { "type": "string" },
+            "stats_addr_consumed": { "type": "boolean" }
+          },
+          "required": ["next_table", "action_instr_addr", "stats_addr", "stats_addr_consumed"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "mau_table_hit"]
+    },
+    "event_mau_stateful_alu": {
+      "type": "object",
+      "properties": {
+        "sim_time": { "type": "integer" },
+        "real_time": { "type": "string" },
+        "context": { "$ref": "#/definitions/context" },
+        "mau_stateful_alu": {
+          "type": "object",
+          "properties": {
+            "meter_alu": { "type": "integer" },
+            "stateful_instr": { "type": "integer" }
+          },
+          "required": ["meter_alu", "stateful_instr"]
+        }
+      },
+      "required": ["sim_time", "real_time", "context", "mau_stateful_alu"]
+    }
+  },
+  "anyOf": [
+    { "$ref": "#/definitions/event_init" },
+    { "$ref": "#/definitions/event_chip_created" },
+    { "$ref": "#/definitions/event_chip_destroyed" },
+    { "$ref": "#/definitions/event_message" },
+    { "$ref": "#/definitions/event_phv" },
+    { "$ref": "#/definitions/event_packet" },
+    { "$ref": "#/definitions/event_parser_state" },
+    { "$ref": "#/definitions/event_parser_extract" },
+    { "$ref": "#/definitions/event_parser_tcam_match" },
+    { "$ref": "#/definitions/event_deparser_metadata_tm" },
+    { "$ref": "#/definitions/event_deparser_metadata_mac" },
+    { "$ref": "#/definitions/event_mau_gateway" },
+    { "$ref": "#/definitions/event_mau_table_hit" },
+    { "$ref": "#/definitions/event_mau_stateful_alu" }
+  ]
+}

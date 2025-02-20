@@ -1,0 +1,1015 @@
+{
+  "program_name": "parser-static-config",
+  "compiler_version": "hand-crafted-may-not-represent-actual-context-json",
+  "build_date": "Thu Jan 24 00:01:02 2019",
+  "run_id": "0123456789abcdef",
+  "compile_command": "exists-to-provide-strings-for-p4-lookup-in-tests",
+  "schema_version": "1.6.1",
+  "phv_allocation": [
+    {
+      "ingress": [
+        {
+          "phv_number": 0,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 557,
+              "phv_lsb": 16,
+              "is_pov": false,
+              "field_msb": 31,
+              "phv_msb": 31,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.da_lo_32",
+              "field_width": 32,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 32,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 1,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 553,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 31,
+              "phv_msb": 31,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.sa_lo_32",
+              "field_width": 32,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 32,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 2,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 553,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 31,
+              "phv_msb": 31,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_src",
+              "field_width": 32,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 32,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 3,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 553,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 31,
+              "phv_msb": 31,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_dst",
+              "field_width": 32,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 32,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 15,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 553,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "junk_word_15_a",
+              "field_width": 8,
+              "field_lsb": 0
+            },
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 553,
+              "phv_lsb": 8,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 15,
+              "is_compiler_generated": false,
+              "field_name": "junk_word_15_b",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 32,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 64,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_hl",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 66,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_ttl",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 67,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_proto",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 96,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "phv8_0",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 97,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "phv8_1",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 98,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "phv8_2",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 99,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "phv8_3",
+              "field_width": 8,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 8,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 128,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.da_hi_16",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 129,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.sa_hi_16",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 130,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.eth_type",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 131,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_id",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 132,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_len",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 133,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_frag",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 134,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.ip4_cksm",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 135,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.p_sport",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        },
+        {
+          "phv_number": 136,
+          "records": [
+            {
+              "mutually_exclusive_with": [],
+              "live_end": "deparser",
+              "live_start": 0,
+              "position_offset": 528,
+              "phv_lsb": 0,
+              "is_pov": false,
+              "field_msb": 7,
+              "phv_msb": 7,
+              "is_compiler_generated": false,
+              "field_name": "my_metadata.p_dport",
+              "field_width": 16,
+              "field_lsb": 0
+            }
+          ],
+          "word_bit_width": 16,
+          "container_type": "normal"
+        }
+      ],
+      "egress": [],
+      "stage_number": 0
+    }
+  ],
+  "parser": {
+    "ingress": [
+      {
+        "parser_state_id": 0,
+        "parser_name": "my_state_0"
+      },
+      {
+        "parser_state_id": 1,
+        "parser_name": "my_state_1"
+      },
+      {
+        "parser_state_id": 2,
+        "parser_name": "my_state_2"
+      },
+      {
+        "parser_state_id": 255,
+        "parser_name": "my_state_255"
+      }
+    ],
+    "egress": []
+  },
+  "parsers": {
+    "ingress": [
+      {
+        "name": "pipe0.ig_prsr.prsr0",
+        "handle": 251658240,
+        "default_parser_id": [
+          0
+        ],
+        "states": [
+          {
+            "parser_name": "$entry_point",
+            "match_registers": [],
+            "tcam_rows": [
+              255
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 0
+          },
+          {
+            "parser_name": "start.$common",
+            "match_registers": [],
+            "tcam_rows": [
+              254
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 1
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [
+              {
+                "container_width": 8,
+                "container_hardware_id": 3,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 0
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 1
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 2
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 3
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 4
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 5
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 6
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 7
+                  }
+                ]
+              },
+              {
+                "container_width": 8,
+                "container_hardware_id": 2,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 8
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 9
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 10
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 11
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 12
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 13
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 14
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 15
+                  }
+                ]
+              }
+            ],
+            "tcam_rows": [
+              253,
+              252,
+              251,
+              250
+            ],
+            "uses_pvs": true,
+            "pvs_name": "pipe0.ig_prsr.prsr0.vs",
+            "pvs_handle": 511,
+            "parser_state_id": 2
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [],
+            "tcam_rows": [
+              249
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 2
+          },
+          {
+            "parser_name": "parse_jeju",
+            "match_registers": [],
+            "tcam_rows": [
+              248
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 3
+          }
+        ]
+      },
+      {
+        "name": "pipe0.ig_prsr.prsr1",
+        "handle": 251662336,
+        "default_parser_id": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "states": [
+          {
+            "parser_name": "$entry_point",
+            "match_registers": [],
+            "tcam_rows": [
+              255
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 0
+          },
+          {
+            "parser_name": "start.$common.0",
+            "match_registers": [],
+            "tcam_rows": [
+              254
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 1
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [],
+            "tcam_rows": [
+              253
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 2
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [
+              {
+                "container_width": 8,
+                "container_hardware_id": 3,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 0
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 1
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 2
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 3
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 4
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 5
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 6
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 7
+                  }
+                ]
+              },
+              {
+                "container_width": 8,
+                "container_hardware_id": 2,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 8
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 9
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 10
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 11
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 12
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 13
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 14
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 15
+                  }
+                ]
+              }
+            ],
+            "tcam_rows": [
+              252,
+              251,
+              250,
+              249
+            ],
+            "uses_pvs": true,
+            "pvs_name": "pipe0.ig_prsr.prsr1.vs",
+            "pvs_handle": 510,
+            "parser_state_id": 2
+          },
+          {
+            "parser_name": "parse_ipv4.$common",
+            "match_registers": [],
+            "tcam_rows": [
+              248
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 3
+          },
+          {
+            "parser_name": "parse_ipv4",
+            "match_registers": [],
+            "tcam_rows": [
+              247
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 4
+          }
+        ]
+      }
+    ],
+    "egress": [
+      {
+        "name": "pipe0.eg_prsr.prsr0",
+        "handle": 251666432,
+        "default_parser_id": [
+          0,
+          17
+        ],
+        "states": [
+          {
+            "parser_name": "$entry_point",
+            "match_registers": [],
+            "tcam_rows": [
+              255
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 0
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [],
+            "tcam_rows": [
+              254
+            ],
+            "uses_pvs": false,
+            "parser_state_id": 1
+          },
+          {
+            "parser_name": "start",
+            "match_registers": [
+              {
+                "container_width": 8,
+                "container_hardware_id": 3,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 0
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 1
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 2
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 3
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 4
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 5
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 6
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 7
+                  }
+                ]
+              },
+              {
+                "container_width": 8,
+                "container_hardware_id": 2,
+                "mask": 255,
+                "field_mapping": [
+                  {
+                    "register_bit": 0,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 0,
+                    "select_statement_bit": 8
+                  },
+                  {
+                    "register_bit": 1,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 1,
+                    "select_statement_bit": 9
+                  },
+                  {
+                    "register_bit": 2,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 2,
+                    "select_statement_bit": 10
+                  },
+                  {
+                    "register_bit": 3,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 3,
+                    "select_statement_bit": 11
+                  },
+                  {
+                    "register_bit": 4,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 4,
+                    "select_statement_bit": 12
+                  },
+                  {
+                    "register_bit": 5,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 5,
+                    "select_statement_bit": 13
+                  },
+                  {
+                    "register_bit": 6,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 6,
+                    "select_statement_bit": 14
+                  },
+                  {
+                    "register_bit": 7,
+                    "field_name": "hdr.ethernet.etherType",
+                    "start_bit": 7,
+                    "select_statement_bit": 15
+                  }
+                ]
+              }
+            ],
+            "tcam_rows": [
+              253,
+              252,
+              251,
+              250
+            ],
+            "uses_pvs": true,
+            "pvs_name": "pipe0.eg_prsr.prsr0.vs",
+            "pvs_handle": 509,
+            "parser_state_id": 1
+          }
+        ]
+      }
+    ]
+  }
+}

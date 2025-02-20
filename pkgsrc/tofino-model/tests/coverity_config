@@ -1,0 +1,56 @@
+GITHUB:
+  REPO_URL: "https://github.com/intel-restricted/networking.switching.barefoot.model"                         #[Required] Link to the main directory of project hosted on GitHub
+  GITHUB_API_URL: "https://api.github.com"                                                                        #[Required] API Address of GitHub
+
+PROJECTS:
+  - NAME: "Model"
+    PROJECT_SRC_DIR: ""                                                                                           #[Required] Path to the main source directory within project
+    PREBUILD_STAGES:                                                                                              #[Optional] Define if any PREBUILD_SCRIPT is needed
+    - NAME: "Git submodule update"                                                                                         #[Required] Name of the Script
+      WORKDIR: "/build"    # workdir vs root repo                                                                  #[Optional] Path to the working directory for this script                                                                                               #[Optional] Path to command line executable. e.g. VS dev console, PowerShell... By default Bash is used for Linux, CMD for Windows
+      COMMAND: "git submodule update --init --recursive --jobs $((`nproc`/2))"
+      
+    - NAME: "Copy p4factory artifacts"                                                                                     #[Required] Name of the Script
+      WORKDIR: "/build"    # workdir vs root repo                                                                  #[Optional] Path to the working directory for this script                                                                                                 #[Optional] Path to command line executable. e.g. VS dev console, PowerShell... By default Bash is used for Linux, CMD for Windows
+      COMMAND: "cp -rf /bf/install ../"
+        
+    - NAME: "Run CMAKE"                                                                                         #[Required] Name of the Script
+      WORKDIR: "/build"    # workdir vs root repo                                                                  #[Optional] Path to the working directory for this script                                                                                                #[Optional] Path to command line executable. e.g. VS dev console, PowerShell... By default Bash is used for Linux, CMD for Windows
+      COMMAND: "cmake .. -DCMAKE_INSTALL_PREFIX=../install -Dmodel-tofino=ON -Dmodel-tofinoB0=ON -Dmodel-jbay=ON -Dmodel-jbayB0=ON -Dmodel-cb=ON -Dsimple-test-harness=OFF -Dmodel-full-utests=OFF -Dmodel-wrapper=OFF -Dmodel-utests=OFF"
+
+    - NAME: "Make clean"                                                                                         #[Required] Name of the Script
+      WORKDIR: "/build"    # workdir vs root repo                                                                  #[Optional] Path to the working directory for this script                                                                                                #[Optional] Path to command line executable. e.g. VS dev console, PowerShell... By default Bash is used for Linux, CMD for Windows
+      COMMAND: "make clean"                                                                                       #[Required] Script to be performed during this stage. Please be aware that it will be called from the WORKDIR defined in the same stage.
+
+    - NAME: "Ignore files"
+      WORKDIR: "/build"
+      COMMAND: "cov-configure --config /opt/coverity/analysis/config/coverity_config.xml --gcc --xml-option=skip_file:**/register_includes/*"
+
+    BUILD_STAGE:
+      WORKDIR: "/build"                                                                                            #[Optional] Path to the working directory for this script, if not defined, the default will be used
+      COMMAND: "make  -j$((`nproc`/2))"                                                                            #[Required] Build script that would be injected to the Coverity scan. Please be aware that it will be called from the WORKDIR defined in the same stage.                                                                                                 #[Optional] Path to command line executable. e.g. VS dev console, PowerShell... By default Bash is used for Linux, CMD for Windows
+    COVERITY_STREAM_NAME: "master__model"                                                                    #[Required] Name of the project at Coverity Server
+    COVERITY_PROJECT_NAME: "Model"
+    SCAN_ONLY_CHANGED_FILES: True                                                                                #[True|False] Flag to scan whole repository or only the files that have been changed
+    COVERITY_ANALYZE_ARGS:               #[Optional] Additional flags to Coverity cov-run-desktop analyze
+    - --jobs $((`nproc`/2))
+    - --set-new-defect-owner false
+    - --concurrency                      #[Recomended] Flags listed in this example are recommended by Intel
+    - --security 
+    - --rule 
+    - --enable-constraint-fpp 
+    - --enable-fnptr 
+    - --enable-virtual
+    - --webapp-security
+
+COVERITY:
+  SERVER_URL: "https://coverityent.devtools.intel.com/prod8"                                                              #[Required] Address of Coverity Server that contain project reference
+  BIN_DIRECTORY: "/opt/coverity/analysis"                                                                              #[Required] Root directory for Coverity binaries at runner machine
+  AUTH_KEY: "/root/coverity.key"                                                                     #[Optional] Path to Coverity ltoken that will be used to authenticate to the Coverity server
+  COMPILER_CONFIG_PATH: "/opt/coverity/analysis/config/coverity_config.xml" 
+
+MISC:
+  ROOT_WORKDIR: "/PRDA/workspace"                                                                          #[Required] Name of the directory for temporary Coverity files
+  OS: "Linux"
+  CONSOLE_LOG_LEVEL: "DEBUG"                                                                                       #[Optional] Logging level for logs in console (INFO as default). Available levels [DEBUG, INFO, WARNING, ERROR].
+  FILE_LOG_LEVEL: "DEBUG"   

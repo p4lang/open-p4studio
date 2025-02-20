@@ -80,7 +80,7 @@ function(P4_BUILD_TARGET t arch target p4program)
   separate_arguments(COMPUTED_P4PPFLAGS UNIX_COMMAND ${P4PPFLAGS})
   # compile the p4 program
   add_custom_command(OUTPUT ${output_files}
-    COMMAND ${P4C} --std ${P4_LANG} --target ${target} --arch ${arch} --enable-bf-asm ${rt_commands} -o ${CMAKE_CURRENT_BINARY_DIR}/${t}/${target} ${COMPUTED_P4PPFLAGS} ${COMPUTED_P4FLAGS} ${P4FLAGS_INTERNAL} -g ${p4program}
+    COMMAND ${P4C} --std ${P4_LANG} --target ${target} --arch ${arch} ${rt_commands} -o ${CMAKE_CURRENT_BINARY_DIR}/${t}/${target} ${COMPUTED_P4PPFLAGS} ${COMPUTED_P4FLAGS} ${P4FLAGS_INTERNAL} -g ${p4program}
     COMMAND ${P4C-GEN-BFRT-CONF} --name ${t} --device ${chiptype} --testdir ./${t}/${target}
          --installdir share/${target}pd/${t} --pipe `${P4C-MANIFEST-CONFIG} --pipe ./${t}/${target}/manifest.json`
     DEPENDS ${p4program} bf-p4c
@@ -159,7 +159,7 @@ function(P4_BUILD_PD_TARGET t arch target p4program)
   separate_arguments(COMPUTED_PDFLAGS UNIX_COMMAND ${PDFLAGS})
   # compile the p4 program
   add_custom_command(OUTPUT ${t}/${target}/manifest.json
-    COMMAND ${P4C} --std ${P4_LANG} --target ${target} --arch ${arch} --enable-bf-asm --no-bf-rt-schema -o ${CMAKE_CURRENT_BINARY_DIR}/${t}/${target} ${COMPUTED_P4PPFLAGS} ${COMPUTED_P4FLAGS} ${P4FLAGS_INTERNAL} -g ${p4program}
+    COMMAND ${P4C} --std ${P4_LANG} --target ${target} --arch ${arch} --no-bf-rt-schema -o ${CMAKE_CURRENT_BINARY_DIR}/${t}/${target} ${COMPUTED_P4PPFLAGS} ${COMPUTED_P4FLAGS} ${P4FLAGS_INTERNAL} -g ${p4program}
     DEPENDS ${p4program} bf-p4c
   )
 

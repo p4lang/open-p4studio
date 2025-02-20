@@ -1,0 +1,66 @@
+{
+  "p4_devices" : [
+    {
+      "device-id" : 0,
+      "p4_programs" : [
+        {
+          "p4_pipelines" : [
+            {
+              "pipe_scope" : [0, 1, 2, 3],
+              "context" : "path/to/context.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "device-id" : 1,
+      "p4_programs" : [
+        {
+          "p4_pipelines" : [
+            {
+              "pipe_scope" : [0],
+              "context" : "path/to/contextx.json"
+            },
+            {
+              "pipe_scope" : [1, 2],
+              "context" : "path/to/contexty.json"
+            },
+            {
+              "pipe_scope" : [3],
+              "context" : "path/to/contextz.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "device-id" : 2,
+      "p4_programs" : [
+        {
+          "p4_pipelines" : [
+            {
+              "context" : "path/to/context-no-pipe-scope.json"
+            },
+            {
+              "pipe_scope" : [1, 3],
+              "context" : "path/to/context-pipe-scope-1-3.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "device-id" : 3,
+      "p4_programs" : [
+        {
+          "p4_pipelines" : [
+            {
+              "missing-context-member" : "bad conf json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

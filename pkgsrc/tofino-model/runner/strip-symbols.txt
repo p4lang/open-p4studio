@@ -1,0 +1,8 @@
+# Symbols to strip from tofino-model binary
+*tofino_*
+*pipe_top_level_*
+*jbay_*
+*tof2_*
+*cb_*
+*tof3_*
+*register_classes*

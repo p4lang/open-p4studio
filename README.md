@@ -104,6 +104,7 @@ When that script completes, proceed by following the steps in section
     
       * bridge
       * libcli
+      * libcrafter
       * thrift
       * grpc
 
