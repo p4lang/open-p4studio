@@ -45,26 +45,24 @@ def install_thrift(config: SourceDependencyConfig) -> None:
     thrift_package = config.download_dir(ensure_exists=True) / _THRIFT_FILE
     execute("tar xf {} --strip-components 1 -C {}".format(thrift_package, build_dir))
 
-    override_envs = {
-        'PATH': '{}/bin:{}'.format(config.install_dir, os.environ['PATH']),
-    }
-    configure_command = './configure PY_PREFIX={dir} {flags} --prefix={dir} --with-boost={dir}'.format(
-        dir=config.install_dir,
-        flags=attrs['flags']
+    build_dir = build_dir / "thrift_build"
+    os.makedirs(build_dir, exist_ok=True)
+
+    # Set the C++ standard to 17 and other flags
+    cmake_flags = (
+        f"{attrs['flags']} "
+        f"-DCMAKE_CXX_STANDARD=17 "
+        f"-DCMAKE_PREFIX_PATH={config.install_dir} "
+        f"-DCMAKE_INSTALL_PREFIX={config.install_dir} "
+        f"-DCMAKE_INSTALL_RPATH={config.install_dir} "
+        "-DBUILD_SHARED_LIBS=ON "
     )
-    execute(configure_command, build_dir, override_env=override_envs)
 
-    execute('make -j{}'.format(config.jobs), build_dir)
-    execute("make install -j{}".format(config.jobs), build_dir)
-    execute("sudo ldconfig", build_dir)
+    # Run CMake to configure Thrift
+    execute(f"cmake {cmake_flags} ..", build_dir)
 
-    if config.os.lower() in {'ubuntu:20.04', 'ubuntu:22.04', 'ubuntu:24.04', 'debian:11'}:
-        python_thrift_package = 'python3-thrift'
-    else:
-        python_thrift_package = 'python-thrift'
-
-    os_package_manager = config.dependency_manager().os_package_manager
-    execute('sudo {} -y remove {}'.format(os_package_manager, python_thrift_package), build_dir)
+    # Build and install Thrift
+    execute(f"cmake --build . --target install --config Release -- -j{config.jobs}", build_dir)
 
 
 def _is_thrift_installed(version: str, path: Path) -> bool:
