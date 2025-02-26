@@ -71,7 +71,7 @@ class SdeWorkspace(Workspace):
 
     def _sde_version(self) -> Optional[str]:
         manifest_possible_file_paths = glob(str(self.root_path / "bf-sde-*.manifest"))
-        if manifest_possible_file_paths == 0:
+        if len(manifest_possible_file_paths) == 0:
             return None
         manifest_filename = Path(manifest_possible_file_paths[0]).name
         regex = r"bf-sde-(?P<version>\d+\.\d+\.\d+(?:\.\d+)*(?:-cpr|-pr)?).manifest"
