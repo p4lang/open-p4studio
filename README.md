@@ -231,6 +231,10 @@ commands above has been started before they complete their
 initialization.  When it is, you will see a `bf_shell>` prompt in the
 driver window.
 
+On a VirtualBox VM, I have found that the wait time can be significantly
+lower if you configure the VM with only 1 VCPU.  This can be changed after
+building the software, by shutting down the VM.
+
 In the third window, launch the P4 test suite:
 ```bash
 ./run_p4_tests.sh -p [P4 TEST] --arch [tofino|tofino2]
