@@ -313,6 +313,6 @@ do
 	fi
 	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-one-test.sh -p ${P4_NAME} --arch ${ARCH}
 	test_exit_status=$?
-        echo "Test ARCH=${ARCH} exit_status=${test_exit_status} ${p4_variant} ${P4_NAME}
+        echo "Test ARCH=${ARCH} exit_status=${test_exit_status} ${p4_variant} ${P4_NAME}"
     done
 done
