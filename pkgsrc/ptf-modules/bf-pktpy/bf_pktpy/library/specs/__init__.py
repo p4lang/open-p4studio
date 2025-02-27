@@ -13,6 +13,7 @@
 from bf_pktpy.library.specs.ethernet import Ether
 from bf_pktpy.library.specs.ipv4 import IP
 from bf_pktpy.library.specs.templates.ipv6 import IPv6
+from bf_pktpy.library.specs.templates.arp import ARP
 from bf_pktpy.library.specs.tcp import TCP
 from bf_pktpy.library.specs.udp import UDP
 from bf_pktpy.library.specs.icmp import ICMP

@@ -29,7 +29,7 @@ from build.targets import get_switch_profiles_by_arch, all_switch_profiles
 from config.configuration_manager import current_configuration_manager
 from interactive.input_validation import validate_path_to_write, validate_kernel_headers_input, validate_file_to_read
 from profile.profile import Profile
-from profile.profile_command import execute_plan
+from profile.profile_command import execute_plan, calculate_jobs_from_available_cpus_and_memory
 from profile.profile_execution_plan import ProfileExecutionPlan
 from system.check_system_utils import print_multiple_checks
 from system.checks import get_initial_checks
@@ -166,7 +166,8 @@ def create_default_profile() -> Profile:
 
 
 def build_sde(context: Context, profile: Profile) -> None:
-    plan = ProfileExecutionPlan(profile, None, os.cpu_count())
+    jobs = calculate_jobs_from_available_cpus_and_memory()
+    plan = ProfileExecutionPlan(profile, None, jobs)
     execute_plan(context, plan)
 
 
