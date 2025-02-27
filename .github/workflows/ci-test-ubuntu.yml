@@ -65,7 +65,4 @@ jobs:
           export SDE_INSTALL="`pwd`/install"
 
           sudo ${SDE_INSTALL}/bin/veth_setup.sh 128
-          ./run_tofino_model.sh -p tna_counter --arch tofino -q |& sed 's/^/model: /' &
-          ./run_switchd.sh -p tna_counter --arch tofino |& sed 's/^/switchd: /' &
-          timeout 10800 ./run_p4_tests.sh -p tna_counter --arch tofino |& sed 's/^/tests: /'
-
+          ./ci/run-multiple-tests.sh
