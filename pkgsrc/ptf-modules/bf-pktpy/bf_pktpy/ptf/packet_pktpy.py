@@ -126,9 +126,6 @@ ls = bf_pktpy_ls
 # they were defined inside of ptf.packet, and they are commonly
 # available as ptf.packet.<name> regardless whether you use scapy or
 # bf-pktpy as the packet manipulation module.
-#
-# Commented-out lines are so because they have no equivalent function
-# implemented in bf-pktpy yet.
 
 send = bf_pktpy.commands.send
 sendp = bf_pktpy.commands.sendp
