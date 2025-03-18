@@ -19,6 +19,7 @@ Bf_pktpy implementation of packet manipulation module. For more information,
 see PTF documentation (section "Pluggable packet manipulation module").
 """
 import bf_pktpy.packets
+import bf_pktpy.commands
 from bf_pktpy.all import hexdump as bf_pktpy_hexdump, ls as bf_pktpy_ls
 from ptf import config
 
@@ -119,3 +120,20 @@ def get_erspan_alternative():
 # bf_pktpy implementation of hexdump
 hexdump = bf_pktpy_hexdump
 ls = bf_pktpy_ls
+
+# The names below are assigned here so that, like the other names
+# above, they can be used by importers of the ptf.packet module as if
+# they were defined inside of ptf.packet, and they are commonly
+# available as ptf.packet.<name> regardless whether you use scapy or
+# bf-pktpy as the packet manipulation module.
+
+send = bf_pktpy.commands.send
+sendp = bf_pktpy.commands.sendp
+sr = bf_pktpy.commands.sr
+sr1 = bf_pktpy.commands.sr1
+srp = bf_pktpy.commands.srp
+srp1 = bf_pktpy.commands.srp1
+srloop = bf_pktpy.commands.srloop
+srploop = bf_pktpy.commands.srploop
+sniff = bf_pktpy.commands.sniff
+bridge_and_sniff = bf_pktpy.commands.bridge_and_sniff
