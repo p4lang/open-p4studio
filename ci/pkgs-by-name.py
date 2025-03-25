@@ -4,13 +4,45 @@ import os, sys, re, fileinput, copy
 import math
 import pprint as pp
 import subprocess
-import shell_var_parser as svp
 
 if not os.path.exists('/etc/os-release'):
     print("No file /etc/os-release to determine Linux distribution.  Aborting.", file=sys.stderr)
     sys.exit(1)
 
-#print("File /etc/os-release exists.  Parsing")
+def parse_lines(lines):
+    ret = {}
+    for idx in range(len(lines)):
+        line = lines[idx]
+        equalidx = line.find('=')
+        if equalidx == -1:
+            print("Line %d of config '%s' contains no equals sign (=).  Skipping."
+                  "" % (idx+1, line),
+                  file=sys.stderr)
+            continue
+        varname = line[0:equalidx].strip()
+        if varname == '':
+            print("Line %d of config '%s' contains no variable name before the equals sign (=).  Skipping."
+                  "" % (idx+1, line),
+                  file=sys.stderr)
+            continue
+        value = line[equalidx+1:].strip()
+        if value[:1] == '"' and value[-1:] == '"':
+            value = value[1:-1]
+        if varname in ret:
+            print("Line %d of config '%s' contains variable name that occurred earlier in the config.  Replacing earlier value with later one."
+                  "" % (idx+1, line),
+                  file=sys.stderr)
+        ret[varname] = value
+    return ret
+
+def loads(s):
+    return parse_lines(s.split())
+
+def load(fname):
+    lines = []
+    for line in fileinput.input(fname):
+        lines.append(line)
+    return parse_lines(lines)
 
 
 ######################################################################
@@ -23,7 +55,7 @@ if not os.path.exists('/etc/os-release'):
 # variable, and everything after that is the value, optionally
 # enclosed in double quotes.
 
-osinfo = svp.load('/etc/os-release')
+osinfo = load('/etc/os-release')
 
 #print(len(sys.argv))
 if len(sys.argv) != 1 and len(sys.argv) != 2:
