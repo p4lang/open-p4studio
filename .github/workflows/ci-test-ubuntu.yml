@@ -50,6 +50,7 @@ jobs:
 
       - name: Build
         run: |
+          sudo apt-get install -y pv
           echo "----------------------------------------"
           echo "Installed packages before install:"
           ./ci/pkgs-by-name.py | pv -q -L 3k
