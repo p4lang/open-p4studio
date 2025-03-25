@@ -50,7 +50,15 @@ jobs:
 
       - name: Build
         run: |
+          echo "----------------------------------------"
+          echo "Installed packages before install:"
+          ./ci/pkgs-by-name.py
+          echo "----------------------------------------"
           ./p4studio/p4studio profile apply --jobs $(nproc) ./p4studio/profiles/testing.yaml
+          echo "----------------------------------------"
+          echo "Installed packages after install:"
+          ./ci/pkgs-by-name.py
+          echo "----------------------------------------"
 
       - name: Show build logs
         if: success() || failure()
