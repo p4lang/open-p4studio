@@ -40,7 +40,8 @@ Some things not included, that one must get from Intel:
 + BSPs (Board Support Packages) that enable the SDE to access and
   configure hardware on a physical board, e.g. configuring physical
   Ethernet ports and manage related components, such as repeaters,
-  retimers, SFPs, QSFPs, etc.
+  retimers, SFPs, QSFPs, etc. Reach out to Intel 
+  (intel.tofino.contact@intel.com) for the BSP package.
 + ASIC-specific Serdes drivers.  These are not necessary for running
   the simulation model, but essential for running the code on the real
   ASICs.  See instructions in the directory `hw`.  The necessary code
