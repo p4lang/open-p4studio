@@ -89,16 +89,19 @@ def install_grpc_third_party(config: SourceDependencyConfig) -> None:
                                       -DABSL_PROPAGATE_CXX_STD=ON '\
                                       .format(install_dir=config.install_dir, rpath=install_lib)
     grpc_dependencies['zlib'] = 'cmake -DCMAKE_INSTALL_PREFIX={install_dir} \
-                                -DCMAKE_INSTALL_RPATH={rpath} ..' \
+                                -DCMAKE_INSTALL_RPATH={rpath} .. \
+                                -DCMAKE_POLICY_VERSION_MINIMUM=3.12' \
                                 .format(install_dir=config.install_dir, rpath=install_lib)
     grpc_dependencies['cares'] = 'cmake -DCARES_SHARED=on \
                                  -DCMAKE_INSTALL_PREFIX={install_dir} \
                                  -DCMAKE_INSTALL_RPATH={rpath} \
+                                 -DCMAKE_POLICY_VERSION_MINIMUM=3.12 \
                                  ../cares' \
                                  .format(install_dir=config.install_dir, rpath=install_lib)
     grpc_dependencies['re2'] = 'cmake -DBUILD_SHARED_LIBS=on \
                                -DCMAKE_BUILD_TYPE=RELEASE \
                                -DCMAKE_INSTALL_PREFIX={install_dir} \
+                               -DCMAKE_POLICY_VERSION_MINIMUM=3.12 \
                                -DCMAKE_INSTALL_RPATH={rpath} ..' \
                                .format(install_dir=config.install_dir, rpath=install_lib)
 
