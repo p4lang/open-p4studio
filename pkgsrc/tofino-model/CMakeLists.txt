@@ -128,9 +128,9 @@ project(model LANGUAGES CXX)
 # To enable a chip type pass one or more options -Dmodel-<chip> to cmake
 option(model-internal "build the Model with BFN-internal extra code" OFF)
 option(model-tofino "build the Model with TofinoA0 support" ON)
-option(model-tofinoB0 "build the Model with TofinoB0 support" OFF)
+option(model-tofinoB0 "build the Model with TofinoB0 support" ON)
 option(model-jbay "build the Model with JbayA0 support" ON)
-option(model-jbayB0 "build the Model with JbayB0 support" OFF)
+option(model-jbayB0 "build the Model with JbayB0 support" ON)
 if (NOT (${model-tofino} OR ${model-tofinoB0} OR ${model-jbay} OR ${model-jbayB0}
 	))
     message("Defaulting to building model for tofinoA0 chip only")
