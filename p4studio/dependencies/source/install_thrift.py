@@ -55,7 +55,7 @@ def install_thrift(config: SourceDependencyConfig) -> None:
         f"-DCMAKE_PREFIX_PATH={config.install_dir} "
         f"-DCMAKE_INSTALL_PREFIX={config.install_dir} "
         f"-DCMAKE_INSTALL_RPATH={config.install_dir} "
-        "-DBUILD_SHARED_LIBS=ON "
+        "-DCMAKE_POLICY_VERSION_MINIMUM=3.12 -DBUILD_SHARED_LIBS=ON "
     )
 
     # Run CMake to configure Thrift
