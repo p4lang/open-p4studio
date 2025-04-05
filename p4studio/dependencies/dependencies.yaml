@@ -336,7 +336,7 @@ packages:
                 protobuf: {version: 3.12.2}
                 version: 1.31.0
             64b:
-                protobuf: {version: 3.25.3}
+                protobuf: {version: 25.0.0}
                 version: 1.60.0
         tags: [default, source]
         dependencies: [boost]
@@ -350,7 +350,7 @@ packages:
         tags: [default, source]
         type: source
     thrift:
-        attributes: {flags: --with-cl="no" --with-java="no" --with-kotlin="no" --with-python="yes" --with-py3="yes" --with-ruby="no" --with-haskell="no" --with-haxe="no" --with-netstd="no" --with-perl="no" --with-php="no" --with-php_extension="no" --with-dart="no" --with-erlang="no" --with-go="no" --with-d="no" --with-nodejs="no" --with-nodets="no" --with-lua="no" --with-rs="no" --with-swift="no" --enable-tests=no, url: 'https://archive.apache.org/dist/thrift/0.14.1/thrift-0.14.1.tar.gz', version: 0.14.1}
+        attributes: {flags: -DWITH_CPP=ON -DWITH_QT5=OFF -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_CL=OFF -DWITH_JAVA=OFF -DWITH_JAVASCRIPT=OFF -DWITH_KOTLIN=OFF -DWITH_RUBY=OFF -DWITH_HASKELL=OFF -DWITH_HAXE=OFF -DWITH_NETSTD=OFF -DWITH_PERL=OFF -DWITH_PHP=OFF -DWITH_PHP_EXTENSION=OFF -DWITH_DART=OFF -DWITH_ERLANG=OFF -DWITH_GO=OFF -DWITH_D=OFF -DWITH_NODEJS=OFF -DWITH_NODETS=OFF -DWITH_LUA=OFF -DWITH_RS=OFF -DWITH_SWIFT=OFF -DBUILD_TESTING=OFF, url: 'https://archive.apache.org/dist/thrift/0.21.0/thrift-0.21.0.tar.gz', version: 0.21.0}
         tags: [default, source]
         dependencies: [boost]
         type: source
