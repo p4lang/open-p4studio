@@ -1,0 +1,193 @@
+/*******************************************************************************
+ *  Copyright (C) 2024 Intel Corporation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions
+ *  and limitations under the License.
+ *
+ *
+ *  SPDX-License-Identifier: Apache-2.0
+ ******************************************************************************/
+
+// Generated using:
+//    ./tools/make_dummy_register.py --out_dir include/jbay/dummy_registers/register_includes include/tofino/register_includes/next_table_map_data.h
+
+#ifndef __REGISTER_INCLUDES_NEXT_TABLE_MAP_DATA_H__
+#define __REGISTER_INCLUDES_NEXT_TABLE_MAP_DATA_H__
+
+
+#include <cstdint>
+#include <cassert>
+#include <array>
+#include <vector>
+#include <string>
+#include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
+#include <model_core/register_block.h>
+#include <shared/bitvector.h>
+
+
+
+
+
+
+
+
+
+
+
+
+namespace jbay {
+  namespace register_classes {
+
+class NextTableMapData : public model_core::DummyRegisterBlock<RegisterCallback> {
+public:
+  NextTableMapData(
+      int chipNumber, int index_pipe_addrmap, int index_mau_addrmap, int index_next_table_map_data_0, int index_next_table_map_data_1, RegisterCallback& write_callback = 0, RegisterCallback& read_callback = 0
+  )
+    : DummyRegisterBlock()
+    {
+    }
+  NextTableMapData(
+      
+  )
+    : DummyRegisterBlock()
+    {
+    }
+public:
+  uint8_t next_table_map_data0() { assert(0); return 0; }
+  uint8_t next_table_map_data1() { assert(0); return 0; }
+  uint8_t next_table_map_data2() { assert(0); return 0; }
+  uint8_t next_table_map_data3() { assert(0); return 0; }
+
+  bool read(
+      uint32_t offset, uint32_t* data
+      ) const {
+    if (read_callback_) read_callback_();
+    *data = next_table_map_data0_;
+    *data |= (next_table_map_data1_ << 8);
+    *data |= (next_table_map_data2_ << 16);
+    *data |= (next_table_map_data3_ << 24);
+    return true;
+  }
+
+
+  bool write(
+      uint32_t offset, uint32_t data
+      ) {
+    next_table_map_data0_ = data;
+    next_table_map_data1_ = (data >> 8);
+    next_table_map_data2_ = (data >> 16);
+    next_table_map_data3_ = (data >> 24);
+    if (write_callback_) write_callback_();
+    return true;
+  }
+
+  void reset(
+      
+      ) {
+    next_table_map_data0_ = 0x0;
+    next_table_map_data1_ = 0x0;
+    next_table_map_data2_ = 0x0;
+    next_table_map_data3_ = 0x0;
+    if (write_callback_) write_callback_();
+  }
+
+  std::string to_string(
+      uint32_t offset, bool print_zeros = false, std::string indent_string = ""
+      ) const {
+    std::string r("");
+    bool all_zeros=true;
+    r += indent_string + std::string("NextTableMapData") + ":\n";
+    r += indent_string + "  " + std::string("next_table_map_data0") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data0_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data0_);
+    r += indent_string + "  " + std::string("next_table_map_data1") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data1_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data1_);
+    r += indent_string + "  " + std::string("next_table_map_data2") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data2_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data2_);
+    r += indent_string + "  " + std::string("next_table_map_data3") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data3_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data3_);
+    if (all_zeros && !print_zeros) {
+      return("");
+    }
+    else {
+      return r;
+    }
+  }
+
+  std::string to_string(
+      bool print_zeros = false, std::string indent_string = ""
+      ) const {
+    std::string r("");
+    bool all_zeros=true;
+    r += indent_string + std::string("NextTableMapData") + ":\n";
+    r += indent_string + "  " + std::string("next_table_map_data0") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data0_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data0_);
+    r += indent_string + "  " + std::string("next_table_map_data1") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data1_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data1_);
+    r += indent_string + "  " + std::string("next_table_map_data2") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data2_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data2_);
+    r += indent_string + "  " + std::string("next_table_map_data3") +  ": 0x" + boost::str( boost::format("%x") % static_cast<uint>(next_table_map_data3_) ) + "\n";
+    all_zeros &= (0 == next_table_map_data3_);
+    if (all_zeros && !print_zeros) {
+      return("");
+    }
+    else {
+      return r;
+    }
+  }
+
+private:
+  uint8_t next_table_map_data0_;
+  uint8_t next_table_map_data1_;
+  uint8_t next_table_map_data2_;
+  uint8_t next_table_map_data3_;
+private:
+  static int StartOffset(
+      int index_pipe_addrmap, int index_mau_addrmap, int index_next_table_map_data_0, int index_next_table_map_data_1
+      ) {
+    int offset=0;
+    offset += 0x2000000; // to get to pipes
+    assert(index_pipe_addrmap < 4);
+    offset += index_pipe_addrmap * 0x800000; // pipe_addrmap[]
+    assert(index_mau_addrmap < 12);
+    offset += index_mau_addrmap * 0x80000; // mau_addrmap[]
+    offset += 0x18000; // to get to match
+    offset += 0x4000; // to get to merge
+    offset += 0x3680; // to get to next_table_map_data
+    assert(index_next_table_map_data_0 < 16);
+    offset += index_next_table_map_data_0 * 0x8; // next_table_map_data[]
+    assert(index_next_table_map_data_1 < 2);
+    offset += index_next_table_map_data_1 * 0x4; // next_table_map_data[][]
+    return offset;
+  }
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }; // namespace register_classes
+}; // namespace jbay
+
+#endif // __REGISTER_INCLUDES_NEXT_TABLE_MAP_DATA_H__
