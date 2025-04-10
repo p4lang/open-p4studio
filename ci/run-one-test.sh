@@ -41,7 +41,21 @@ then
     exit 1
 fi
 
-./run_tofino_model.sh -p ${P4_NAME} --arch ${ARCH} -q |& sed 's/^/model: /' &
+OUTF=`mktemp -t tofino-model-output-XXXXXX.txt`
+./run_tofino_model.sh -p ${P4_NAME} --arch ${ARCH} -q |& tee ${OUTF} |& sed 's/^/model: /' &
+MODEL_PID=$!
+sleep 3
+# Check if model process is still running.
+if ps -p ${MODEL_PID} > /dev/null
+then
+    echo "tofino-model process is still running.  Continuing."
+else
+    echo "tofino-model process has exited quickly.  Output is in file ${OUTF}, and copied below:"
+    echo "----------------------------------------"
+    cat ${OUTF}
+    echo "----------------------------------------"
+    exit 1
+fi
 ./run_switchd.sh -p ${P4_NAME} --arch ${ARCH} |& sed 's/^/switchd: /' &
 timeout 10800 ./run_p4_tests.sh -p ${P4_NAME} --arch ${ARCH} |& sed 's/^/tests: /'
 test_exit_status=${PIPESTATUS[0]}
