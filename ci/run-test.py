@@ -12,7 +12,7 @@ import tempfile
 import shutil
 import re
 from pathlib import Path
-from typing import Optional, List, Dict, Tuple, IO
+from typing import Optional, List, Dict, Tuple, IO, Any
 
 # --- Configuration ---
 TESTS_TIMEOUT_SECONDS = 10800
@@ -32,7 +32,7 @@ output_threads: List[threading.Thread] = []
 logger = logging.getLogger(APP_NAME)
 
 
-def setup_logging(level: int = DEFAULT_LOG_LEVEL):
+def setup_logging(level: int = DEFAULT_LOG_LEVEL) -> None:
     """Configures the global logger."""
     log_formatter = logging.Formatter(
         "%(asctime)s - %(levelname)s - [%(threadName)s] - %(message)s"
@@ -65,7 +65,7 @@ def prefix_output(
     prefix: str,
     encoding: str = "utf-8",
     errors: str = "replace",
-):
+) -> None:
     """Reads output from a pipe, adds a prefix, and logs to INFO."""
     if not pipe:
         logger.warning("No pipe provided for prefix '%s'", prefix)
@@ -92,7 +92,7 @@ def prefix_output(
 
 
 # Uses terminate_process from user's reference (no process group kill)
-def terminate_process(proc: subprocess.Popen, name: str):
+def terminate_process(proc: subprocess.Popen, name: str) -> None:
     """Gracefully terminates a process using Popen object, resorting to SIGKILL."""
     global final_exit_code
     pid = proc.pid
@@ -121,7 +121,7 @@ def terminate_process(proc: subprocess.Popen, name: str):
                 "Error sending SIGTERM to %s (PID: %d): %s", name, pid, e
             )  # Fallthrough
 
-        if proc.poll() is None:  # If still running after potential errors or timeout
+        if proc.poll() is None:
             logger.warning("Force killing %s (PID: %d).", name, pid)
             try:
                 proc.kill()
@@ -131,7 +131,6 @@ def terminate_process(proc: subprocess.Popen, name: str):
                 logger.error(
                     "Failed fallback SIGKILL %s (PID: %d): %s", name, pid, kill_e
                 )
-                final_exit_code = 1
     else:
         logger.debug(
             "%s (PID: %d) already stopped (rc: %s).", name, pid, proc.returncode
@@ -144,6 +143,7 @@ def run_command_sync(
     cwd: Path,
     namespace: Optional[str] = None,
     check: bool = True,
+    shell: bool = False,
 ) -> bool:
     """Runs a command synchronously in cwd (optionally namespace), logs, returns success."""
     global final_exit_code
@@ -162,7 +162,13 @@ def run_command_sync(
         logger.debug("Running command synchronously in %s: %s", cwd, " ".join(exec_cmd))
     try:
         result = subprocess.run(
-            exec_cmd, check=check, capture_output=True, text=True, env=env, cwd=cwd
+            exec_cmd,
+            check=check,
+            capture_output=True,
+            text=True,
+            env=env,
+            cwd=cwd,
+            shell=shell,
         )
         if result.stdout:
             logger.info(
@@ -367,7 +373,7 @@ def run_tests(
                 pass
 
 
-def cleanup():
+def cleanup() -> None:
     """Cleans up background processes."""
     global _cleanup_running, background_processes
     if _cleanup_running:
@@ -387,7 +393,7 @@ def cleanup():
     _cleanup_running = False
 
 
-def signal_handler(signum, frame):
+def signal_handler(signum: int, frame: Any) -> None:
     """Handles termination signals."""
     global final_exit_code, _cleanup_running
     if _cleanup_running:
@@ -403,7 +409,7 @@ def signal_handler(signum, frame):
     # Let finally block handle cleanup order and exit
 
 
-def join_output_threads(timeout=2):
+def join_output_threads(timeout: int = 2) -> None:
     """Waits for output threads to finish."""
     global output_threads
     logger.debug("Joining output threads (timeout: %ds)...", timeout)
@@ -538,8 +544,19 @@ def create_netns(name: str, env: Dict[str, str], cwd: Path) -> bool:
     return run_command_sync(cmd, env=env, cwd=cwd, check=True)
 
 
-def delete_netns(name: str, env: Dict[str, str], cwd: Path):
-    """Deletes a network namespace, logs errors."""
+def delete_netns(name: str, env: Dict[str, str], cwd: Path) -> None:
+
+    # ip netns pids net0 | xargs kill
+    cmd = ["sudo", "ip", "netns", "pids", name, "|", "xargs", "kill"]
+    if not run_command_sync(
+        cmd, env=env, cwd=cwd, check=False
+    ):  # No namespace, don't check exit code strictly
+        logger.warning(
+            "Failed to kill proces in network namespace '%s' (they may already be gone).",
+            name,
+        )
+
+    """Delete the namespace and with it all the process running in it."""
     logger.info("Deleting network namespace: %s", name)
     cmd = ["sudo", "ip", "netns", "delete", name]
     if not run_command_sync(
@@ -552,7 +569,7 @@ def delete_netns(name: str, env: Dict[str, str], cwd: Path):
         logger.debug("Successfully deleted network namespace '%s'.", name)
 
 
-def main():
+def main() -> None:
     global final_exit_code, background_processes, output_threads
 
     args, sde_install_path, sde_path = parse_arguments()
