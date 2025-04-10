@@ -290,7 +290,7 @@ do
 	    continue
 	fi
 	echo "------------------------------------------------------------"
-        echo ${ARCH} ${expected_result} ${p4_variant} ${estimated_duration_sec} ${P4_NAME} ${comment}
+        echo ${ARCH} expected_result:${expected_result} ${p4_variant} ${estimated_duration_sec} ${P4_NAME} ${comment}
 	if [ ${expected_result} == "fail" ]
 	then
 	    continue
@@ -309,9 +309,11 @@ do
 	fi
 	if [ ${time_category} == "long" ]
 	then
+	    # Normally skip the long tests, since they take several
+	    # additional hours to complete.
 	    continue
 	fi
-	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-one-test.sh -p ${P4_NAME} --arch ${ARCH}
+	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-test.py --arch ${ARCH} --sde `pwd` --sde-install "`pwd`/isntall" ${P4_NAME}
 	test_exit_status=$?
         echo "Test ARCH=${ARCH} exit_status=${test_exit_status} ${p4_variant} ${P4_NAME}"
     done

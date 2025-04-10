@@ -61,4 +61,4 @@ jobs:
         run: |
           # FIXME: Move these into a separate test suite.
           make -C build tna_counter install
-          ./ci/run-test.py --sde `pwd` --sde-install "`pwd`/install" tna_counter
+          ./ci/run-multiple-tests.sh

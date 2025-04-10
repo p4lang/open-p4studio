@@ -442,6 +442,7 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
+    parser.add_argument("arch", help="Chip architecture to test.")
     parser.add_argument(
         "--sde-install",
         default=os.getenv("SDE_INSTALL"),
@@ -474,6 +475,7 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         logger.critical("SDE dir not found: %s", sde_path)
         sys.exit(1)
     logger.info("Using P4 Program: %s", args.p4_program)
+    logger.info("Using architecture: %s", args.arch)
     logger.info("Using SDE Install Path: %s", sde_install_path)
     logger.info("Using SDE Path: %s", sde_path)
     if args.keep_temp_dir:
@@ -652,7 +654,7 @@ def main() -> None:
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
             "-q",
         ]
         model_proc = start_background_process(
@@ -666,7 +668,7 @@ def main() -> None:
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
         ]
         switchd_proc = start_background_process(
             switchd_cmd,
@@ -699,7 +701,7 @@ def main() -> None:
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
         ]
         tests_exit_code = run_tests(
             tests_cmd,
