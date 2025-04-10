@@ -33,10 +33,6 @@ Some things not included, that one must get from Intel:
   after they have been compiled.
   + Note: P4.org personnel are in communication with Intel to see if this
     can be released as open source soon.
-+ Some bfrt_python code is included, but it is not yet clear if all of
-  the pieces required to use it are included yet.  Follow this issue
-  if you are interested:
-  https://github.com/p4lang/open-p4studio/issues/23
 + BSPs (Board Support Packages) that enable the SDE to access and
   configure hardware on a physical board, e.g. configuring physical
   Ethernet ports and manage related components, such as repeaters,
