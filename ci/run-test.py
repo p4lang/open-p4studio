@@ -442,7 +442,11 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
-    parser.add_argument("arch", help="Chip architecture to test.")
+    parser.add_argument(
+        "--arch",
+        default="tofino",
+        help="Chip architecture to test.",
+    )
     parser.add_argument(
         "--sde-install",
         default=os.getenv("SDE_INSTALL"),

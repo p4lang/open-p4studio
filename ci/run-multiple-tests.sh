@@ -313,7 +313,7 @@ do
 	    # additional hours to complete.
 	    continue
 	fi
-	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-test.py --arch ${ARCH} --sde `pwd` --sde-install "`pwd`/isntall" ${P4_NAME}
+	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-test.py --arch ${ARCH} --sde `pwd` --sde-install "`pwd`/install" ${P4_NAME}
 	test_exit_status=$?
         echo "Test ARCH=${ARCH} exit_status=${test_exit_status} ${p4_variant} ${P4_NAME}"
     done
