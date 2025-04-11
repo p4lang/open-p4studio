@@ -20,6 +20,8 @@ THIS_SCRIPT_FILE_MAYBE_RELATIVE="$0"
 THIS_SCRIPT_DIR_MAYBE_RELATIVE="${THIS_SCRIPT_FILE_MAYBE_RELATIVE%/*}"
 THIS_SCRIPT_DIR_ABSOLUTE=`readlink -f "${THIS_SCRIPT_DIR_MAYBE_RELATIVE}"`
 
+final_exit_status=0
+
 ARCH="tofino"
 for ARCH in tofino tofino2
 do
@@ -307,14 +309,20 @@ do
 	else
 	    time_category="long"
 	fi
-	if [ ${time_category} == "long" ]
+	if [ ${time_category} != "short" ]
 	then
-	    # Normally skip the long tests, since they take several
-	    # additional hours to complete.
+	    # Normally only run the short tests.  The medium and
+	    # long ones add lots of test time.
 	    continue
 	fi
 	time ${THIS_SCRIPT_DIR_ABSOLUTE}/run-test.py --arch ${ARCH} --sde `pwd` --sde-install "`pwd`/install" ${P4_NAME}
 	test_exit_status=$?
         echo "Test ARCH=${ARCH} exit_status=${test_exit_status} ${p4_variant} ${P4_NAME}"
+        if [ ${test_exit_status} -ne 0 ]
+        then
+            final_exit_status=${test_exit_status}
+        fi
     done
 done
+
+exit $final_exit_status
