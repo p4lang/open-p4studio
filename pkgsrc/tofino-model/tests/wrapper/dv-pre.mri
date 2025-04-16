@@ -1,0 +1,12 @@
+; used in the top level CMakeLists.txt to create a single library
+;  for rsvd1 PRE DV
+create libdv-pre.a
+addlib tests/wrapper/libftrwrapper.a
+addlib libftr.a
+addlib libmodelcore.a
+addlib mimic/hw/ftr/libhw-ftr-bundle.a
+; these are now part of libhw-ftr-bundle.a
+; addlib mimic/framework/libframework.a
+; addlib mimic/utility/libutility.a
+save
+end
