@@ -1,5 +1,6 @@
 # Introduction
 
+
 Intel® P4 Studio Software Development Environment (SDE) is a set of packages for programming Intel’s line of programmable Ethernet Switches. The package also contains scripts for building and installing SDE. The fully automated script (`install.sh`) introduced in this release internally invokes the existing command line interface tool (`p4studio`) to ease the build and installation process. The following sections describe how to build, install, and run the Intel P4 Studio SDE.
 
 # What is included
