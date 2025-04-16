@@ -45,10 +45,7 @@ find_program(PDSPLIT split_pd_thrift.py REQUIRED)
 
 include_directories(api/include)
 include_directories(third-party/libcrafter/include)
-# FIXME: Port libcrafter to C++17.
-set(CMAKE_CXX_STANDARD 11)
 add_subdirectory(third-party/libcrafter)
-set(CMAKE_CXX_STANDARD 17)
 
 
 set(P4_NAME "diag")

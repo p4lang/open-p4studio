@@ -62,7 +62,7 @@ def try_execute(command: Union[str, Sequence[str]], working_dir: Optional[PathLi
         while process.poll() is None:
             while True:
                 stdout = process.stdout
-                line = stdout.readline().decode().rstrip() if stdout else ""
+                line = stdout.readline().decode('latin-1').rstrip() if stdout else ""
                 if line:
                     compact_log().log(line)
                 else:
