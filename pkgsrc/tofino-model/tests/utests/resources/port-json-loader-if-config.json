@@ -1,0 +1,72 @@
+{
+  "PortToIf": [
+    {
+      "device_port": 0,
+      "if": "one"
+    },
+    {
+      "device_port": 1,
+      "if": "two"
+    },
+    {
+      "device_port": 2,
+      "if": "four"
+    },
+    {
+      "device_port": 3,
+      "if": "six"
+    },
+    {
+      "device_port": 4,
+      "if": "eight"
+    },
+    {
+      "device_port": 5,
+      "if": "ten"
+    },
+    {
+      "device_port": 6,
+      "if": "twelve"
+    },
+    {
+      "device_port": 7,
+      "if": "fourteen"
+    },
+    {
+      "device_port": 8,
+      "if": "sixteen"
+    },
+    {
+      "device_port": 9,
+      "if": "eighteen"
+    },
+    {
+      "device_port": 128,
+      "if": "twenty"
+    },
+    {
+      "device_port": 129,
+      "if": "twenty-two"
+    },
+    {
+      "device_port": 256,
+      "if": "twenty-four"
+    },
+    {
+      "device_port": 257,
+      "if": "twenty-six"
+    },
+    {
+      "device_port": 384,
+      "if": "twenty-eight"
+    },
+    {
+      "device_port": 385,
+      "if": "thirty"
+    },
+    {
+      "device_port": 64,
+      "if": "one-hundred"
+    }
+  ]
+}

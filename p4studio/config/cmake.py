@@ -63,6 +63,9 @@ class CmakeArg:
     def __str__(self) -> str:
         return "{}={}".format(self.arg, self.value)
 
+    def __repr__(self) -> str:
+        return str(self)
+
     @staticmethod
     def from_str(string: str) -> "CmakeArg":
         regex = r"(?P<name>-D[^=]+)=(?P<value>.*)"
