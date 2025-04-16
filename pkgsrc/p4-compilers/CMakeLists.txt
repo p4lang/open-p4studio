@@ -1,11 +1,10 @@
 # First, check whether the repository needs to be initialized.
-
 # Check if the submodule directory exists.
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/p4c/CMakeLists.txt")
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/p4c/CMakeLists.txt")
     message(STATUS "Initializing P4C submodule...")
     execute_process(
         COMMAND git submodule update --init --recursive
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE GIT_SUBMODULE_RESULT
     )
 
@@ -17,10 +16,6 @@ else()
 endif()
 
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS ON)
-set(ENABLE_BF_ASM TRUE)
 add_definitions("-DBAREFOOT_INTERNAL=1")
 add_definitions("-DHAVE_JBAY=1")
 set (P4C_USE_PREINSTALLED_ABSEIL ON CACHE BOOL "")
@@ -42,12 +37,10 @@ set (ENABLE_P4FMT OFF CACHE BOOL "")
 set (ENABLE_P4TEST OFF CACHE BOOL "")
 set (ENABLE_P4C_GRAPHS OFF CACHE BOOL "")
 # set (ENABLE_LTO ON CACHE BOOL "")
-# Enable Unity builds for the compiler and bf-asm to speed up compilation.
+# Enable Unity builds for the compiler to speed up compilation.
 set(CMAKE_UNITY_BUILD_PREV ${CMAKE_UNITY_BUILD})
 set(CMAKE_UNITY_BUILD ON)
 add_subdirectory(p4c)
-
-add_subdirectory(bf-asm)
 set(CMAKE_UNITY_BUILD ${CMAKE_UNITY_BUILD_PREV})
 
 
