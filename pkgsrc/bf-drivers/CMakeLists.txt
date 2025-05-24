@@ -3,12 +3,6 @@ project(libdriver VERSION 0.1 LANGUAGES C CXX)
 
 include(PythonDependencies)
 
-option(KERNEL-MODULES "Build kernel modules" OFF)
-
-if(ASIC)
-  set(KERNEL-MODULES ON CACHE BOOL "Build kernel modules while using ASIC" FORCE)
-endif()
-
 option(STANDALONE "Build outside of pkgsrc" OFF)
 
 if (STANDALONE)
