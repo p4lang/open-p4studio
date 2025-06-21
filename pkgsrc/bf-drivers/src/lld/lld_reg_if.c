@@ -41,6 +41,7 @@
 #include "lld.h"
 #include "lld_map.h"
 #include "lld_dev.h"
+#include "lld/lld_reg_if.h"
 #include "lld_subdev_reg_if.h"
 
 #ifdef DEVICE_IS_EMULATOR

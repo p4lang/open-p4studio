@@ -1485,39 +1485,9 @@ static lld_err_t lld_tof3_sku_map_log2phy_mac_block(bf_dev_id_t dev_id,
  * Return the physical mac_block associated with the given
  * logical mac_block.
  *******************************************************************/
-lld_err_t lld_sku_map_log2phy_mac_block(bf_dev_id_t dev_id,
-                                        uint32_t log_mac_block,
-                                        uint32_t *phy_mac_block) {
-  lld_dev_t *dev_p = lld_map_dev_id_to_dev_p_allow_unassigned(dev_id);
-
-  if (dev_p == NULL) {
-    lld_log("Invalid dev_p, dev %d", dev_id);
-    return LLD_ERR_BAD_PARM;
-  }
-  if (phy_mac_block == NULL) {
-    lld_log("Invalid phy_mac_block, dev %d", dev_id);
-    return LLD_ERR_BAD_PARM;
-  }
-
-  switch (dev_p->dev_family) {
-    case BF_DEV_FAMILY_TOFINO:
-      return lld_tof_sku_map_log2phy_mac_block(
-          dev_id, log_mac_block, phy_mac_block);
-    case BF_DEV_FAMILY_TOFINO2:
-      return lld_tof2_sku_map_log2phy_mac_block(
-          dev_id, log_mac_block, phy_mac_block);
-    case BF_DEV_FAMILY_TOFINO3:
-      return lld_tof3_sku_map_log2phy_mac_block(
-          dev_id, log_mac_block, phy_mac_block);
-    default:
-      lld_log("Invalid dev family, dev %d", dev_id);
-      return LLD_ERR_BAD_PARM;
-  }
-}
-
-lld_err_t lld_tof_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
-                                            uint32_t phy_mac_block,
-                                            uint32_t *log_mac_block) {
+static lld_err_t lld_tof_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
+                                                   uint32_t phy_mac_block,
+                                                   uint32_t *log_mac_block) {
   uint64_t port_lo64, port_hi64;
   uint32_t part_sku;
 
@@ -1550,9 +1520,9 @@ lld_err_t lld_tof_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
   return LLD_OK;
 }
 
-lld_err_t lld_tof2_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
-                                             uint32_t phy_mac_block,
-                                             uint32_t *log_mac_block) {
+static lld_err_t lld_tof2_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
+                                                    uint32_t phy_mac_block,
+                                                    uint32_t *log_mac_block) {
   bf_dev_pipe_t log_pipe, phy_pipe;
   lld_err_t rc;
   uint32_t mac_offset_in_pipe;
@@ -1585,9 +1555,9 @@ lld_err_t lld_tof2_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
   return LLD_OK;
 }
 
-lld_err_t lld_tof3_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
-                                             uint32_t phy_mac_block,
-                                             uint32_t *log_mac_block) {
+static lld_err_t lld_tof3_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
+                                                    uint32_t phy_mac_block,
+                                                    uint32_t *log_mac_block) {
   uint32_t pipe_log[BF_PIPE_COUNT];
   uint32_t pipe = (phy_mac_block - 1) / 8;
   uint32_t i;
@@ -1612,6 +1582,36 @@ lld_err_t lld_tof3_sku_map_phy2log_mac_block(bf_dev_id_t dev_id,
     }
   }
   return LLD_ERR_BAD_PARM;
+}
+
+lld_err_t lld_sku_map_log2phy_mac_block(bf_dev_id_t dev_id,
+                                        uint32_t log_mac_block,
+                                        uint32_t *phy_mac_block) {
+  lld_dev_t *dev_p = lld_map_dev_id_to_dev_p_allow_unassigned(dev_id);
+
+  if (dev_p == NULL) {
+    lld_log("Invalid dev_p, dev %d", dev_id);
+    return LLD_ERR_BAD_PARM;
+  }
+  if (phy_mac_block == NULL) {
+    lld_log("Invalid phy_mac_block, dev %d", dev_id);
+    return LLD_ERR_BAD_PARM;
+  }
+
+  switch (dev_p->dev_family) {
+    case BF_DEV_FAMILY_TOFINO:
+      return lld_tof_sku_map_log2phy_mac_block(
+          dev_id, log_mac_block, phy_mac_block);
+    case BF_DEV_FAMILY_TOFINO2:
+      return lld_tof2_sku_map_log2phy_mac_block(
+          dev_id, log_mac_block, phy_mac_block);
+    case BF_DEV_FAMILY_TOFINO3:
+      return lld_tof3_sku_map_log2phy_mac_block(
+          dev_id, log_mac_block, phy_mac_block);
+    default:
+      lld_log("Invalid dev family, dev %d", dev_id);
+      return LLD_ERR_BAD_PARM;
+  }
 }
 
 /*******************************************************************

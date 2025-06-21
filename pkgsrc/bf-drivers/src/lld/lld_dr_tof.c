@@ -40,6 +40,7 @@
 #include "lld.h"
 #include "lld_log.h"
 #include <lld/lld_dr_if.h>
+#include "lld_dr_tof.h"
 
 // fwd refs
 void lld_dr_tof_enable_set(bf_dev_id_t dev_id, bf_dma_dr_id_t dr_id, bool en);

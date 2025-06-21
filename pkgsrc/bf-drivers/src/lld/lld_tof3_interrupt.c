@@ -182,7 +182,7 @@ static void lld_tof3_int_handling(bf_dev_id_t dev_id,
                                   bf_subdev_id_t subdev_id,
                                   lld_tof3_blk_lvl_int_t *temp_int,
                                   int array_len);
-bf_status_t lld_tof3_read_leaf_status_cb(bf_dev_id_t dev_id,
+static bf_status_t lld_tof3_read_leaf_status_cb(bf_dev_id_t dev_id,
                                          bf_subdev_id_t subdev_id,
                                          void *blk_lvl_int_vd) {
   lld_tof3_blk_lvl_int_t *blk_lvl_int =
@@ -268,7 +268,7 @@ static bf_status_t lld_tof3_int_recursive_find_blk(
   return BF_SUCCESS;
 }
 
-bf_status_t lld_tof3_int_find_blk_lvl_int(lld_tof3_blk_lvl_int_t **array,
+static bf_status_t lld_tof3_int_find_blk_lvl_int(lld_tof3_blk_lvl_int_t **array,
                                           uint8_t *pairs,
                                           uint32_t offset) {
   int i, j;
@@ -528,7 +528,7 @@ void lld_tof3_int_set_shadow_msk_status(bf_dev_id_t dev_id,
   return;
 }
 
-void lld_tof3_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
+static void lld_tof3_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
                                      bf_subdev_id_t subdev_id,
                                      lld_tof3_blk_lvl_int_t *blk_lvl_int,
                                      bool en) {
@@ -552,7 +552,7 @@ void lld_tof3_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
   }
 }
 
-void lld_tof3_int_leaf_enable_set(bf_dev_id_t dev_id,
+static void lld_tof3_int_leaf_enable_set(bf_dev_id_t dev_id,
                                   bf_subdev_id_t subdev_id,
                                   lld_tof3_blk_lvl_int_list_t *int_list,
                                   bool en) {

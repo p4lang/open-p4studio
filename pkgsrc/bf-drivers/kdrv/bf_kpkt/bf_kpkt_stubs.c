@@ -26,6 +26,9 @@
 #include <dvm/bf_drv_intf.h>
 #include <lld/bf_dma_if.h>
 #include <lld/bf_dev_if.h>
+#include <lld/lld_spi_if.h>
+#include <lld/lld_fault.h>
+#include <lld/bf_lld_if.h>
 
 bf_status_t lld_spi_init(bf_dev_id_t dev_id, bf_subdev_id_t subdev_id) {
   (void)dev_id;
@@ -118,11 +121,18 @@ int bf_sys_log_and_trace(int module, int bf_level, const char *format, ...) {
   (void)format;
   return 0;
 }
+
+extern char *get_full_reg_path_name(bf_dev_id_t dev_id, uint32_t offset);
+
 char *get_full_reg_path_name(bf_dev_id_t dev_id, uint32_t offset) {
   (void)offset;
   (void)dev_id;
   return NULL;
 }
+
+extern char *lld_reg_parse_get_full_reg_path_name(bf_dev_family_t dev_family,
+                                                  uint32_t offset);
+
 char *lld_reg_parse_get_full_reg_path_name(bf_dev_family_t dev_family,
                                            uint32_t offset) {
   (void)dev_family;
@@ -130,8 +140,17 @@ char *lld_reg_parse_get_full_reg_path_name(bf_dev_family_t dev_family,
   return NULL;
 }
 
+extern void lld_debug_init(void);
 void lld_debug_init(void) {}
 
+extern void lld_log_dma(int dir,
+                        bf_dev_id_t dev_id,
+                        bf_subdev_id_t subdev_id,
+                        uint32_t dr,
+                        uint64_t *data,
+                        int n_wds,
+                        uint64_t head,
+                        uint64_t tail);
 void lld_log_dma(int dir,
                  bf_dev_id_t dev_id,
                  bf_subdev_id_t subdev_id,

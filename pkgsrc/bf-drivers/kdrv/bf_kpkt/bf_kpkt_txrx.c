@@ -149,7 +149,7 @@ static void bf_kpkt_enable_all_dr(bf_dev_id_t dev_id) {
  *
  * Disables all the DRs used by the pkt manager
  */
-void bf_kpkt_disable_all_dr(bf_dev_id_t dev_id) {
+static void bf_kpkt_disable_all_dr(bf_dev_id_t dev_id) {
   bf_dma_dr_id_t dr_id;
 
   /* Disable lld_dr_fm_pkt_0,1,2,3,4,5,6,7 */
@@ -176,7 +176,7 @@ void bf_kpkt_disable_all_dr(bf_dev_id_t dev_id) {
 static int bf_tbus_set_ts_offset(u8 dev_id, u16 offset) {
   u32 tbus_off; /* tbus-ts offset */
   u32 val = 0;
-  if (bf_lld_dev_is_tof1(dev_id)) {  
+  if (bf_lld_dev_is_tof1(dev_id)) {
     tbus_off = 0x180018ul; /* tbus-ts offset */
   } else if (bf_lld_dev_is_tof1(dev_id)) {
     tbus_off = 0x30001cul; /* tbus-ts offset */
@@ -188,7 +188,8 @@ static int bf_tbus_set_ts_offset(u8 dev_id, u16 offset) {
   return 0;
 }
 
-int bf_tbus_flush_dma(u8 dev_id) {
+#ifdef BF_TBUS_FLUSH_DMA_NEEDED
+static int bf_tbus_flush_dma(u8 dev_id) {
   u32 tbus_off; /* tbus-flush offset */
   u32 val = 0;
   if (dev_id >= BF_MAX_DEV_COUNT) {
@@ -210,6 +211,7 @@ int bf_tbus_flush_dma(u8 dev_id) {
   lld_write_register(dev_id, tbus_off, val);
   return 0;
 }
+#endif
 
 static int bf_tbus_int_en(u8 dev_id, int int_id, int high_prio, u32 *val,
                           int get) {
@@ -639,7 +641,7 @@ static int dma_addr_find_next(struct bf_kpkt_ring *rx_ring,
  * each error-free callback iteration.
  *
  */
-void pkt_mgr_rx_pkt_cb(
+static void pkt_mgr_rx_pkt_cb(
     bf_dev_id_t dev_id, bf_subdev_id_t subdev_id, int data_sz, bf_dma_addr_t dma_addr, int s, int e, int cos) {
   struct sk_buff *skb;
   struct bf_kpkt_adapter *adapter;
@@ -1041,16 +1043,16 @@ xmit_drop_err:
   return NETDEV_TX_OK;
 }
 
-void bf_kpkt_tx_completion_cb(bf_dev_id_t dev_id,
-                              bf_subdev_id_t subdev_id,
-                              bf_dma_dr_id_t dr,
-                              uint64_t data_sz_or_ts,
-                              u32 attr,
-                              u32 status,
-                              u32 type,
-                              u64 msg_id,
-                              int s,
-                              int e) {
+static void bf_kpkt_tx_completion_cb(bf_dev_id_t dev_id,
+                                     bf_subdev_id_t subdev_id,
+                                     bf_dma_dr_id_t dr,
+                                     uint64_t data_sz_or_ts,
+                                     u32 attr,
+                                     u32 status,
+                                     u32 type,
+                                     u64 msg_id,
+                                     int s,
+                                     int e) {
   int ring_index = dr - lld_dr_cmp_tx_pkt_0;
   struct sk_buff *skb;
   struct bf_kpkt_adapter *adapter;

@@ -452,7 +452,7 @@ static void bf_kpkt_napi_sched(struct bf_kpkt_adapter *adapter) {
  *
  * This function will clean all queues associated with a q_vector.
  **/
-int bf_kpkt_poll(struct napi_struct *napi, int budget) {
+static int bf_kpkt_poll(struct napi_struct *napi, int budget) {
   struct bf_kpkt_adapter *adapter =
       container_of(napi, struct bf_kpkt_adapter, napi);
   int temp_budget;
@@ -842,7 +842,7 @@ int bf_kpkt_dev_del(struct bf_kpkt_adapter *adapter) {
  * bf_kpkt_update_stats - Update the board statistics counters.
  * @adapter: board private structure
  **/
-void bf_kpkt_update_stats(struct bf_kpkt_adapter *adapter) {
+static void bf_kpkt_update_stats(struct bf_kpkt_adapter *adapter) {
   struct net_device_stats *net_stats = &adapter->netdev->stats;
   u64 bytes, packets, drops, errors, aborts;
   int i;
@@ -1096,10 +1096,10 @@ static void bf_get_drvinfo(struct net_device *netdev, struct ethtool_drvinfo *dr
   if (!adapter) {
     return;
   }
-  strlcpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
-  strlcpy(drvinfo->version, DRV_VERSION, sizeof(drvinfo->version));
-  strlcpy(drvinfo->bus_info, pci_name(adapter->pdev), sizeof(drvinfo->bus_info));
-  strlcpy(drvinfo->fw_version, DRV_FW_VER, sizeof(drvinfo->fw_version));
+  strscpy(drvinfo->driver, DRV_NAME, sizeof(drvinfo->driver));
+  strscpy(drvinfo->version, DRV_VERSION, sizeof(drvinfo->version));
+  strscpy(drvinfo->bus_info, pci_name(adapter->pdev), sizeof(drvinfo->bus_info));
+  strscpy(drvinfo->fw_version, DRV_FW_VER, sizeof(drvinfo->fw_version));
 }
 
 static const struct ethtool_ops bf_ethtool_ops = {
