@@ -38,6 +38,7 @@
 
 #include <dvm/bf_drv_intf.h>
 #include <lld/bf_dev_if.h>
+#include "lld_subdev_reg_if.h"
 #include "lld.h"
 #include "lld_map.h"
 #include "lld_dev.h"

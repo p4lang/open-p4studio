@@ -28,6 +28,7 @@
 #include "lld_tof3_interrupt.h"
 #include "lld.h"
 #include "lld_dev.h"
+#include "lld_dev_tof3.h"
 #include "lld_map.h"
 #include "lld_log.h"
 #include <tof3_regs/tof3_reg_drv.h>

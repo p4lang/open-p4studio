@@ -47,9 +47,9 @@ static const char *bf_kpkt_sysfs_st_name[BF_KPKT_ST_MAX] = {"uninit",
 
 typedef int (*bf_kpkt_sysfs_fn)(struct bf_kpkt_adapter *adapter, const char *buf);
 
-int fn_none(struct bf_kpkt_adapter *adapter, const char *buf) { return 0; }
+static int fn_none(struct bf_kpkt_adapter *adapter, const char *buf) { return 0; }
 
-int fn_m_init(struct bf_kpkt_adapter *adapter, const char *buf) {
+static int fn_m_init(struct bf_kpkt_adapter *adapter, const char *buf) {
   printk(KERN_WARNING "bf_m_init %x\n", buf[0]);
   if (bf_kpkt_lld_master_init(adapter->dev_id, adapter, buf) != 0) {
     return -EIO;
@@ -59,7 +59,7 @@ int fn_m_init(struct bf_kpkt_adapter *adapter, const char *buf) {
   }
 }
 
-int fn_dev_add(struct bf_kpkt_adapter *adapter, const char *buf) {
+static int fn_dev_add(struct bf_kpkt_adapter *adapter, const char *buf) {
   (void)buf;
   printk(KERN_WARNING "bf_dev_add\n");
   if (bf_kpkt_dev_add(adapter) != 0) {
@@ -69,7 +69,7 @@ int fn_dev_add(struct bf_kpkt_adapter *adapter, const char *buf) {
   }
 }
 
-int fn_dev_del(struct bf_kpkt_adapter *adapter, const char *buf) {
+static int fn_dev_del(struct bf_kpkt_adapter *adapter, const char *buf) {
   (void)buf;
   printk(KERN_WARNING "bf_dev_del\n");
   if (bf_kpkt_dev_del(adapter) != 0) {
@@ -79,7 +79,7 @@ int fn_dev_del(struct bf_kpkt_adapter *adapter, const char *buf) {
   }
 }
 
-int fn_dev_to_m(struct bf_kpkt_adapter *adapter, const char *buf) {
+static int fn_dev_to_m(struct bf_kpkt_adapter *adapter, const char *buf) {
   int rc;
   rc = fn_dev_del(adapter, buf);
   rc |= fn_m_init(adapter, buf);
@@ -87,7 +87,7 @@ int fn_dev_to_m(struct bf_kpkt_adapter *adapter, const char *buf) {
   return rc;
 }
 
-int fn_m_to_m(struct bf_kpkt_adapter *adapter, const char *buf) {
+static int fn_m_to_m(struct bf_kpkt_adapter *adapter, const char *buf) {
   int rc;
   printk(KERN_WARNING "bf: bf_m_init invoked while in m_init state %x\n", buf[0]);
   bf_kpkt_lld_master_deinit(adapter);

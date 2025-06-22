@@ -54,6 +54,8 @@ bf_status_t bf_lld_init(bool is_master, bf_reg_wr_fn wr_fn, bf_reg_rd_fn rd_fn);
 // legacy APIs
 bf_status_t bf_bind_wr_fn(bf_reg_wr_fn fn);
 bf_status_t bf_bind_rd_fn(bf_reg_rd_fn fn);
+char *bf_lld_dbg_get_full_reg_path_name(bf_dev_family_t dev_family,
+                                        uint32_t offset);
 char *bf_dbg_get_full_reg_path_name(uint32_t offset);
 bool bf_lld_dev_is_tof1(bf_dev_id_t dev_id);
 bool bf_lld_dev_is_tof2(bf_dev_id_t dev_id);

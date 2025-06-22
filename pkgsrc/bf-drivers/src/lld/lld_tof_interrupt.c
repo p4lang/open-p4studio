@@ -2348,7 +2348,7 @@ blk_lvl_int_list_t all_blk_lvl_ints[] = {
      sizeof(mbus_blk_lvl_mbc_int) / sizeof(mbus_blk_lvl_mbc_int[0])},
 };
 
-lld_blk_lvl_int_t *lld_int_find_blk_lvl_int(uint32_t offset) {
+static lld_blk_lvl_int_t *lld_int_find_blk_lvl_int(uint32_t offset) {
   int i, j;
 
   for (i = 0; i < (int)(sizeof(all_blk_lvl_ints) / sizeof(all_blk_lvl_ints[0]));
@@ -3489,7 +3489,7 @@ void lld_tof_int_gbl_en_set(bf_dev_id_t dev_id, bool en) {
         en ? 0 : 0xffffffff);
   }
 }
-void lld_tof_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
+static void lld_tof_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
                                     lld_blk_lvl_int_t *blk_lvl_int,
                                     bool en) {
   if (blk_lvl_int->enable_hi_reg != 0xffffffff) {
@@ -3499,7 +3499,7 @@ void lld_tof_int_leaf_enable_set_cb(bf_dev_id_t dev_id,
   }
 }
 
-void lld_tof_int_leaf_enable_set(bf_dev_id_t dev_id,
+static void lld_tof_int_leaf_enable_set(bf_dev_id_t dev_id,
                                  lld_blk_lvl_int_t *blk_lvl_int,
                                  int n_entries,
                                  bool en) {

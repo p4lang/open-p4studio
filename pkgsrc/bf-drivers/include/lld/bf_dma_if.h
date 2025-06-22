@@ -72,10 +72,16 @@ bf_status_t bf_dma_service_diag(bf_dev_id_t devId,
                                 bf_subdev_id_t subdev_id,
                                 int max_work);
 
+bf_status_t bf_dma_dr_ptr_mode_set(bf_dev_id_t dev_id,
+                                   bf_subdev_id_t subdev_id,
+                                   bf_dma_dr_id_t dr_id,
+                                   bf_dma_ptr_mode_t mode);
+
 bf_status_t bf_dma_dr_get_max_depth(bf_dev_id_t devId,
                                     bf_dma_type_t type,
                                     unsigned int *tx_depth,
                                     unsigned int *rx_depth);
+
 int bf_dma_dr_get_mem_requirement(bf_dev_family_t dev_family,
                                   bf_dma_type_t type,
                                   int tx_depth,

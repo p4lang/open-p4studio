@@ -341,4 +341,15 @@ void bf_kpkt_timer_init(struct bf_kpkt_adapter *adapter);
 void bf_kpkt_timer_add(struct bf_kpkt_adapter *adapter, u32 ms);
 void bf_kpkt_timer_del(struct bf_kpkt_adapter *adapter);
 void bf_kpkt_lld_init(struct bf_kpkt_adapter *adapter);
+void bf_kpkt_set_pci_error(void *adapter_ptr, u8 pci_error);
+int bf_kpkt_init(struct pci_dev *pdev,
+                 u8 *bar0_vaddr,
+                 void **adapter_ptr,
+                 bf_dev_id_t dev_id,
+                 bf_dev_id_t subdev_id,
+                 int pci_use_highmem,
+                 unsigned long head_room,
+                 int kpkt_dr_int_en,
+                 unsigned long rx_desc_count);
+void bf_kpkt_remove(void *adapter_ptr);
 #endif /* _BF_KPKT_H_ */
