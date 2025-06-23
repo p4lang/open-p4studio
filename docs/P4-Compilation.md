@@ -43,14 +43,14 @@ $SDE/run_switchd.sh [ --arch tofino2] -p my_program
 
 they look for the config file `my_program.conf` in the directory `$SDE_INSTALL/share/p4/targets/tofino/` (or `tofino2`), read it and then load the rest. It _is_ possible to run these scripts while having the config file located in another place (and pass its location via an additional `-c` parameter), but that's more complicated and still requires correctly composed config file.
 
-Therefore, after compiling the P4 program it is important to also **install** the compilation artifacts into the proper locatons, specifically:
+Therefore, after compiling the P4 program it is important to also **install** the compilation artifacts into the proper locations, specifically:
 
-1. Install both `tofino.bin` and `context.json` into the director(ies) named `$SDE_INSTALL/tofinopd/my_program/<pipeline_package_instance_name>/`
-   a. For Tofino2 the names will be `tofino2.bin`, `context.json` and `$SDE_INSTALL/tofino2pd/my_program/<pipeline_package_instance_name>/`
+1. Install both `tofino.bin` and `context.json` into the director(ies) named `$SDE_INSTALL/share/tofinopd/my_program/<pipeline_package_instance_name>/`
+   a. For Tofino2 the names will be `tofino2.bin`, `context.json` and `$SDE_INSTALL/share/tofino2pd/my_program/<pipeline_package_instance_name>/`
    b. The typical pipeline package instance name is `pipe`, but it is under the ultimate control of the P4 programmer
    c. The files are produced per `Pipeline()` package. Thus, multi-pipeline programs (such as `tna_32q_multipipe`) might contain more than one pipeline directory
-2. Install the file `bf_rt.json` into the directory `$SDE_INSTALL/tofinopd/my_program/`
-   a. In Tofino2 case, the directory name will be `$SDE_INSTALL/tofino2pd/my_program/`
+2. Install the file `bf_rt.json` into the directory `$SDE_INSTALL/share/tofinopd/my_program/`
+   a. In Tofino2 case, the directory name will be `$SDE_INSTALL/share/tofino2pd/my_program/`
 3. Create and install the file `my_program.conf`, containing the proper paths to the files above into the directory `$SDE_INSTALL/share/p4/targets/tofino/`
    a. In Tofino2 case the directory name will be `$SDE_INSTALL/share/p4/targets/tofino2/`
 
@@ -64,7 +64,7 @@ The standard P4 program build and installation process is `cmake`-based and cons
    a. **Important note** If the directory already exists and is going to be re-used, it is highly recommended to wipe it clean. `cmake` caches its parameters and if the directory is not wiped, there is a very good chance that at least some of your new settings (especially compiler flags, etc.) will not take effect
 3. CD into that new directory
 4. Invoke the `cmake` as will be shown below
-5. Invoke `make` and `make install` as shown below to perform the actual compilation and installation
+5. Invoke `make install` as shown below to perform the actual compilation and installation
 
 Below is an example:
 
@@ -111,7 +111,7 @@ Some programs are designed to be compiled for both Tofino and Tofino2. The build
 
 While in theory the build directories for P4 programs' compilation can be located anywhere, it is quite common to keep them under `$SDE/build/p4-build`.
 
-During the program optimization, it is not uncommon to try various variants of the same program, different compiler options or different pre-processor settings and then compare them. In this case, it is customary to name a build directory as `$SDE/build/p4-build/my_program.variant1` or similar. This way you can keep as many compilation variants of the same program side-by-side if you want.
+During the program optimization, it is not uncommon to try multiple variants of the same program, different compiler options or different pre-processor settings and then compare them. In this case, it is customary to name a build directory as `$SDE/build/p4-build/my_program.variant1` or similar. This way you can keep as many compilation variants of the same program side-by-side if you want.
 
 ### P4_14 program compilation
 
