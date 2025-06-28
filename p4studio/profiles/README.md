@@ -35,6 +35,7 @@ features:
     p4rt: false
     pi: false
     thrift-driver: true
+    kernel-modules: true
   p4-examples:
     - tna_exact_match
   switch:

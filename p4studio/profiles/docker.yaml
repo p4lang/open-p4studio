@@ -1,0 +1,9 @@
+global-options: { build_model: true }
+features:
+  drivers:
+    kernel-modules: false
+  p4-examples:
+    - p4-16-programs
+architectures:
+  - tofino
+  - tofino2
