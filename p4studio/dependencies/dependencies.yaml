@@ -326,10 +326,6 @@ packages:
         attributes: {flags: --with-thread --with-test --with-filesystem --with-system --with-graph --with-iostreams install, url: 'https://archives.boost.io/release/1.67.0/source/boost_1_67_0.tar.bz2', version: 1.67.0}
         tags: [source]
         type: source
-    bridge:
-        attributes: {mode: wget, url: 'https://www.kernel.org/pub/linux/utils/net/bridge-utils/bridge-utils-1.6.tar.xz', version: '1.6'}
-        tags: [default, source]
-        type: source
     grpc:
         attributes:
             32b:
@@ -350,7 +346,7 @@ packages:
         tags: [default, source]
         type: source
     thrift:
-        attributes: {flags: -DWITH_CPP=ON -DWITH_QT5=OFF -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_CL=OFF -DWITH_JAVA=OFF -DWITH_JAVASCRIPT=OFF -DWITH_KOTLIN=OFF -DWITH_RUBY=OFF -DWITH_HASKELL=OFF -DWITH_HAXE=OFF -DWITH_NETSTD=OFF -DWITH_PERL=OFF -DWITH_PHP=OFF -DWITH_PHP_EXTENSION=OFF -DWITH_DART=OFF -DWITH_ERLANG=OFF -DWITH_GO=OFF -DWITH_D=OFF -DWITH_NODEJS=OFF -DWITH_NODETS=OFF -DWITH_LUA=OFF -DWITH_RS=OFF -DWITH_SWIFT=OFF -DBUILD_TESTING=OFF, url: 'https://archive.apache.org/dist/thrift/0.21.0/thrift-0.21.0.tar.gz', version: 0.21.0}
+        attributes: {flags: -DWITH_CPP=ON -DWITH_QT5=OFF -DWITH_PYTHON=ON -DWITH_PYTHON3=ON -DWITH_CL=OFF -DWITH_JAVA=OFF -DWITH_JAVASCRIPT=OFF -DWITH_KOTLIN=OFF -DWITH_RUBY=OFF -DWITH_HASKELL=OFF -DWITH_HAXE=OFF -DWITH_NETSTD=OFF -DWITH_PERL=OFF -DWITH_PHP=OFF -DWITH_PHP_EXTENSION=OFF -DWITH_DART=OFF -DWITH_ERLANG=OFF -DWITH_GO=OFF -DWITH_D=OFF -DWITH_NODEJS=OFF -DWITH_NODETS=OFF -DWITH_LUA=OFF -DWITH_RS=OFF -DWITH_SWIFT=OFF -DBUILD_TESTING=OFF, url: 'https://github.com/apache/thrift/archive/refs/tags/v0.21.0.tar.gz', version: 0.21.0}
         tags: [default, source]
         dependencies: [boost]
         type: source

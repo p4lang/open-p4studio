@@ -33,7 +33,6 @@ _DEP_TO_FUNC = {
     "boost": install_boost,
     "grpc": install_grpc,
     "thrift": install_thrift,
-    "bridge": install_bridge_utils
 }
 
 
