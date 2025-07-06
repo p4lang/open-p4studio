@@ -93,8 +93,6 @@ class Workspace:
     def package_installation_script(self, name: str) -> Path:
         if name in ['boost', 'grpc', 'libcli', 'libcrafter', 'pi', 'thrift']:
             return self.p4studio_path / 'dependencies/source/install_{}.py'.format(name)
-        elif name == 'bridge':
-            return self.p4studio_path / 'dependencies/source/install_bridge_utils.py'
         else:
             raise Exception('Package {} is not supported'.format(name))
 
