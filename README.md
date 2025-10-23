@@ -29,6 +29,9 @@ and simulating its execution on the model.
 
 Some things not included, that one must get from Intel:
 
++ **Open source members who submit requests to Intel for BSP and driver
+  software for running the SDE on hardware before January 1, 2026 will
+  be granted access. Intel will discontinue granting requests on January 1, 2026.**
 + P4Insight GUI for visualizing the hardware resources used by P4 programs
   after they have been compiled.
   + Note: P4.org personnel are in communication with Intel to see if this
