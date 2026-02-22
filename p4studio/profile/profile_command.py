@@ -197,6 +197,9 @@ def calculate_jobs_from_available_cpus_and_memory() -> int:
               metavar="[CONFIG|^CONFIG]", help="Override any option in a profile")
 @click.option("--jobs", default=None, help="Allow specific number of jobs to be used")
 @click.option("--bsp-path", type=click.Path(exists=True), help="BSP to be used and installed")
+@click.option("--dependencies-working-dir", default=None, metavar="DIR",
+              type=click.Path(file_okay=False, writable=True, resolve_path=True),
+              help="Use specific working directory for temporary dependency build files")
 @click.option('--skip-dependencies', default=False, is_flag=True, help="Do not install dependencies")
 @click.option('--skip-system-check', default=False, is_flag=True, help="Do not check system")
 @click.pass_context
@@ -204,6 +207,7 @@ def profile_apply_command(context: Context,
                           file: LazyFile,
                           jobs: Optional[int],
                           bsp_path: Optional[str],
+                          dependencies_working_dir: Optional[str],
                           skip_dependencies: bool,
                           skip_system_check: bool,
                           override_options: List[str]
@@ -213,7 +217,7 @@ def profile_apply_command(context: Context,
     """
     if jobs is None:
         jobs = calculate_jobs_from_available_cpus_and_memory()
-    plan = create_plan(file, bsp_path, jobs, override_options)
+    plan = create_plan(file, bsp_path, jobs, override_options, dependencies_working_dir)
 
     if not skip_system_check:
         check_system(context, plan)
@@ -242,7 +246,8 @@ def execute_plan(context: Context, plan: ProfileExecutionPlan, skip_dependencies
 
 
 def create_plan(file: LazyFile, bsp_path: Optional[str] = None, jobs: Optional[int] = None,
-                overriden_options: Sequence[str] = []) -> ProfileExecutionPlan:
+                overriden_options: Sequence[str] = [],
+                dependencies_working_dir: Optional[str] = None) -> ProfileExecutionPlan:
     print_green("Loading profile from {} file...", file.name)
     profile = load_profile_from_file(file)
 
@@ -255,7 +260,7 @@ def create_plan(file: LazyFile, bsp_path: Optional[str] = None, jobs: Optional[i
     if bsp_path:
         profile.enable("bsp")
 
-    plan = ProfileExecutionPlan(profile, bsp_path, jobs)
+    plan = ProfileExecutionPlan(profile, bsp_path, jobs, dependencies_working_dir)
     print_green("Profile is correct.")
     print_separator()
     return plan

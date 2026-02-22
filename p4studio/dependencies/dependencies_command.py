@@ -164,6 +164,9 @@ def describe_source_packages_option() -> str:
               type=click.Path(file_okay=False, writable=True, resolve_path=True))
 @click.option("--download-cache-dir", default=None, metavar="DIR", help="Cache downloaded files in specific location",
               type=click.Path(file_okay=False, writable=True, resolve_path=True))
+@click.option("--working-dir", default=None, metavar="DIR",
+              help="Use specific working directory for temporary dependency build files",
+              type=click.Path(file_okay=False, writable=True, resolve_path=True))
 @click.option("--source-packages", default=None, metavar="PKG1,PKG2,...",
               help=describe_source_packages_option())
 @click.option("--types",
@@ -182,6 +185,7 @@ def install_command(
         source_packages: Optional[str],
         install_dir: Optional[str],
         download_cache_dir: Optional[str],
+        working_dir: Optional[str],
         jobs: int,
         force: bool
 ) -> None:
@@ -209,6 +213,7 @@ def install_command(
     print_green("Installing {} dependencies...", current_workspace().name)
     install_dir_path = Path(install_dir) if install_dir else current_workspace().default_install_dir
     download_cache_path = Path(download_cache_dir) if download_cache_dir else None
+    working_dir_path = Path(working_dir) if working_dir else None
 
     manager = dependency_manager(os_name, os_version)
     installer = DependencyInstaller(
@@ -218,6 +223,7 @@ def install_command(
         manager.os_package_manager,
         install_dir_path,
         download_cache_path,
+        working_dir_path,
         force)
 
     if source_packages is None:
