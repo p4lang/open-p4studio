@@ -24,23 +24,10 @@ endif()
 message(STATUS "Kernel release (uname -r): ${KERNELRELEASE}")
 message(STATUS "Kernel headers: ${KERNELDIR}")
 
-# Ubuntu 24.04 kernels (and newer upstream versions) are not fully supported
-# by these out-of-tree modules yet.
-string(REGEX MATCH "^[0-9]+\\.[0-9]+" KERNEL_VERSION_SHORT "${KERNELRELEASE}")
-set(KDRV_MODULES_SUPPORTED ON)
-if(KERNEL_VERSION_SHORT VERSION_GREATER_EQUAL "6.8")
-  set(KDRV_MODULES_SUPPORTED OFF)
-  message(WARNING
-    "Skipping bf kernel module build on kernel ${KERNELRELEASE}. "
-    "Kernel module support is currently limited to kernels older than 6.8.")
-endif()
-
-if(KDRV_MODULES_SUPPORTED)
-  add_subdirectory(bf_kdrv)
-  add_subdirectory(bf_knet)
-  add_subdirectory(bf_kpkt)
-  add_dependencies(bf_kpkt bf_kdrv)
-endif()
+add_subdirectory(bf_kdrv)
+add_subdirectory(bf_knet)
+add_subdirectory(bf_kpkt)
+add_dependencies(bf_kpkt bf_kdrv)
 
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bf_kdrv_mod_load DESTINATION bin)
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bf_kdrv_mod_unload DESTINATION bin)
