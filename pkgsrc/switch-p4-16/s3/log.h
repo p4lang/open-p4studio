@@ -72,6 +72,7 @@ static inline const char *switch_verbosity_to_string(
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <sstream>
 #include "third_party/fmtlib/fmt/format.h"
 #include "third_party/fmtlib/fmt/ostream.h"
 
@@ -108,6 +109,13 @@ namespace logging {
 template <typename T>
 std::string formatNumber(T number) {
   return fmt::format("{:n}", number);
+}
+
+template <typename T>
+std::string stream_to_string(const T &value) {
+  std::ostringstream ss;
+  ss << value;
+  return ss.str();
 }
 
 // LCOV_EXCL_START
