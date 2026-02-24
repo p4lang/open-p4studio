@@ -259,6 +259,10 @@ void MauSnapshotCommon::harvest_match_subword_changes() {
       // or mocha PHV words - we need to map to the
       // appropriate full PHV word (only diff on JBay)
       int mapbit = RmtDefs::map_mausnap_phv_index(bit);
+      if ((mapbit < 0) || (mapbit >= kPhvWords)) {
+        bit = copy_w0w1_change_vector.get_first_bit_set(bit);
+        continue;
+      }
       // Get latest values subwords
       uint64_t mask = get_mask(Phv::which_width(mapbit));
       w0_[mapbit] = get_match_subword(bit, 0) & mask;
