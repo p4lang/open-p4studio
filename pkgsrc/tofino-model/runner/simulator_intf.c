@@ -344,7 +344,7 @@ void simulator_reg_write(unsigned int asic, unsigned int addr,
 * simulator_reg_read
 ***************************************************************************/
 unsigned int simulator_reg_read(unsigned int asic, unsigned int addr) {
-  unsigned int model_val;
+  unsigned int model_val = 0;
 
   /* trap the read access to func_fuse registers
    * and return the hard coded values
