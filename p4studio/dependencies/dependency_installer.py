@@ -38,7 +38,6 @@ class DependencyInstaller:
         'grpc': ['boost'],
         'thrift': ['boost'],
     }
-
     def __init__(
             self,
             os_name: str,
@@ -47,6 +46,7 @@ class DependencyInstaller:
             os_package_manager: str,
             install_dir: Path,
             download_cache_dir: Optional[Path],
+            working_dir: Optional[Path],
             force: bool
     ):
         self.os_name = os_name
@@ -54,7 +54,11 @@ class DependencyInstaller:
         self.jobs = jobs
         self.os_package_manager = os_package_manager
         self.install_dir = install_dir
-        self.common_working_dir = Path(tempfile.mkdtemp(prefix="dependencies-"))
+        if working_dir:
+            self.common_working_dir = working_dir
+            self.common_working_dir.mkdir(parents=True, exist_ok=True)
+        else:
+            self.common_working_dir = Path(tempfile.mkdtemp(prefix="dependencies-"))
         self.download_cache_dir = download_cache_dir or self.common_working_dir / 'download'
         self.force = force
 

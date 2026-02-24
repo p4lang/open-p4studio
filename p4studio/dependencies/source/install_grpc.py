@@ -17,6 +17,7 @@
 
 import os
 import re
+import shutil
 import subprocess
 from collections import OrderedDict
 from pathlib import Path
@@ -26,6 +27,12 @@ from dependencies.source.source_dependency_config import SourceDependencyConfig
 from utils.git import git_clone, git_update_submodules
 from utils.pkg_config import check_pkg_config
 from utils.processes import execute
+
+
+def cmake_ccache_flags() -> str:
+    if shutil.which("ccache"):
+        return "-DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+    return ""
 
 
 def download_grpc(config: SourceDependencyConfig) -> None:
@@ -82,28 +89,38 @@ def install_grpc_third_party(config: SourceDependencyConfig) -> None:
     if install_lib not in ld_run_path:
         override_env['LD_RUN_PATH'] = "{}:{}".format(install_lib, ld_run_path)
     grpc_dependencies = OrderedDict()
+    ccache_flags = cmake_ccache_flags()
     grpc_dependencies['abseil-cpp'] = 'cmake -DCMAKE_CXX_FLAGS=\"-std=c++17\" \
                                       -DBUILD_SHARED_LIBS=ON \
                                       -DCMAKE_INSTALL_PREFIX={install_dir} \
                                       -DCMAKE_INSTALL_RPATH={rpath} .. \
-                                      -DABSL_PROPAGATE_CXX_STD=ON '\
-                                      .format(install_dir=config.install_dir, rpath=install_lib)
+                                      -DABSL_PROPAGATE_CXX_STD=ON \
+                                      {ccache_flags} '\
+                                      .format(install_dir=config.install_dir, rpath=install_lib,
+                                              ccache_flags=ccache_flags)
     grpc_dependencies['zlib'] = 'cmake -DCMAKE_INSTALL_PREFIX={install_dir} \
                                 -DCMAKE_INSTALL_RPATH={rpath} .. \
-                                -DCMAKE_POLICY_VERSION_MINIMUM=3.12' \
-                                .format(install_dir=config.install_dir, rpath=install_lib)
+                                -DCMAKE_POLICY_VERSION_MINIMUM=3.12 \
+                                {ccache_flags}' \
+                                .format(install_dir=config.install_dir, rpath=install_lib,
+                                        ccache_flags=ccache_flags)
     grpc_dependencies['cares'] = 'cmake -DCARES_SHARED=on \
                                  -DCMAKE_INSTALL_PREFIX={install_dir} \
                                  -DCMAKE_INSTALL_RPATH={rpath} \
                                  -DCMAKE_POLICY_VERSION_MINIMUM=3.12 \
+                                 {ccache_flags} \
                                  ../cares' \
-                                 .format(install_dir=config.install_dir, rpath=install_lib)
+                                 .format(install_dir=config.install_dir, rpath=install_lib,
+                                         ccache_flags=ccache_flags)
     grpc_dependencies['re2'] = 'cmake -DBUILD_SHARED_LIBS=on \
                                -DCMAKE_BUILD_TYPE=RELEASE \
                                -DCMAKE_INSTALL_PREFIX={install_dir} \
                                -DCMAKE_POLICY_VERSION_MINIMUM=3.12 \
-                               -DCMAKE_INSTALL_RPATH={rpath} ..' \
-                               .format(install_dir=config.install_dir, rpath=install_lib)
+                               -DCMAKE_INSTALL_RPATH={rpath} \
+                               {ccache_flags} \
+                               ..' \
+                               .format(install_dir=config.install_dir, rpath=install_lib,
+                                       ccache_flags=ccache_flags)
 
     build_dir = config.build_dir()
     for lib, install_cmd in grpc_dependencies.items():
@@ -171,6 +188,7 @@ def install_grpc(config: SourceDependencyConfig) -> None:
 
     # P4C requires static and dynamic libraries. Install protobuf from source.
     protobuf_build_dir = (build_dir / 'third_party/protobuf')
+    ccache_flags = cmake_ccache_flags()
     if protobuf_version == '25.0.0':
         execute("""cmake . -DCMAKE_INSTALL_PREFIX={install_path} -Dprotobuf_WITH_ZLIB=ON """
                 """ -DZLIB_INCLUDE_DIR={install_path}/include -DZLIB_LIB={install_path}/lib """
@@ -179,8 +197,9 @@ def install_grpc(config: SourceDependencyConfig) -> None:
                 """ -DBUILD_SHARED_LIBS=ON """
                 """ -DGRPC_BUILD_ENABLE_CCACHE=ON """
                 """ -Dprotobuf_ALLOW_CCACHE=ON """
+                """ {ccache_flags} """
                 """ -DCMAKE_POSITION_INDEPENDENT_CODE=ON"""
-                .format(install_path=config.install_dir, rpath=rpath), protobuf_build_dir)
+                .format(install_path=config.install_dir, rpath=rpath, ccache_flags=ccache_flags), protobuf_build_dir)
         execute("cmake --build . --parallel {jobs}".format(jobs=config.jobs), protobuf_build_dir)
         execute("make install -j{jobs}".format(jobs=config.jobs), protobuf_build_dir)
         execute("sudo ldconfig", protobuf_build_dir)
@@ -200,7 +219,7 @@ def install_grpc(config: SourceDependencyConfig) -> None:
                 -DgRPC_BUILD_TESTS=OFF \
                 -DCMAKE_PREFIX_PATH={install_dir} \
                 -DCMAKE_INSTALL_PREFIX={install_dir} \
-                -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+                {ccache_flags} \
                 -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
                 -DgRPC_PROTOBUF_PROVIDER=package \
                 -DgRPC_BUILD_GRPC_CSHARP_PLUGIN=off \
@@ -212,7 +231,8 @@ def install_grpc(config: SourceDependencyConfig) -> None:
                 -DCMAKE_BUILD_TYPE=Release \
                 {sp} \
                 -DCMAKE_INSTALL_RPATH={rpath} \
-                {src_dir}'.format(install_dir=config.install_dir, sp=submodule_packages, rpath=rpath, src_dir=build_dir)
+                {src_dir}'.format(install_dir=config.install_dir, ccache_flags=ccache_flags,
+                                  sp=submodule_packages, rpath=rpath, src_dir=build_dir)
     execute(cmake_command, grpc_build_dir, override_env)
 
     execute('make -j{} install'.format(config.jobs), grpc_build_dir, override_env)

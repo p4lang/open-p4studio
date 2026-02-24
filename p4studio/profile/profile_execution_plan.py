@@ -27,10 +27,12 @@ from typing import Optional, Dict, Union, cast
 
 
 class ProfileExecutionPlan:
-    def __init__(self, profile: Profile, bsp_path: Optional[str], jobs: Optional[int]):
+    def __init__(self, profile: Profile, bsp_path: Optional[str], jobs: Optional[int],
+                 dependencies_working_dir: Optional[str] = None):
         self.profile = profile
         self.bsp_path = bsp_path or profile.bsp_path
         self.jobs = jobs
+        self.dependencies_working_dir = dependencies_working_dir
 
     def describe_profile(self) -> None:
         print_green('Source packages to install: ')
@@ -65,6 +67,8 @@ class ProfileExecutionPlan:
 
         if self.jobs:
             result['jobs'] = self.jobs
+        if self.dependencies_working_dir:
+            result['working_dir'] = self.dependencies_working_dir
         return result
 
     def configure_args(self) -> Dict[str, object]:

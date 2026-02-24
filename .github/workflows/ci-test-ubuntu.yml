@@ -49,8 +49,15 @@ jobs:
           max-size: 2000M
 
       - name: Build
+        env:
+          # Keep dependency build paths stable (under /tmp/p4studio-dependencies) so ccache keys
+          # are reproducible across CI runs. Random temp dirs cause frequent cache misses.
+          CCACHE_BASEDIR: /tmp/p4studio-dependencies
+          CCACHE_NOHASHDIR: "1"
         run: |
-          ./p4studio/p4studio profile apply --jobs $(nproc) ./p4studio/profiles/testing.yaml
+          ccache -z
+          ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
+          ccache -s
 
       - name: Show build logs
         if: success() || failure()
@@ -62,4 +69,3 @@ jobs:
           # FIXME: Move these into a separate test suite.
           make -C build tna_counter install
           ./ci/run-test.py --sde `pwd` --sde-install "`pwd`/install" tna_counter
-
