@@ -50,6 +50,8 @@ jobs:
 
       - name: Build
         env:
+          # Keep dependency build paths stable (under /tmp/p4studio-dependencies) so ccache keys
+          # are reproducible across CI runs. Random temp dirs cause frequent cache misses.
           CCACHE_BASEDIR: /tmp/p4studio-dependencies
           CCACHE_NOHASHDIR: "1"
         run: |
