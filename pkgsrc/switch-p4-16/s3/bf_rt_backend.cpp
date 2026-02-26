@@ -1338,9 +1338,9 @@ switch_status_t _ActionEntry::set_arg(const bf_rt_field_id_t field_id,
   SWITCH_DEBUG_LOG(switch_log(
       SWITCH_API_LEVEL_DEBUG,
       SWITCH_OT_NONE,
-      "arg: {} -> {}",
+      "arg: {} (vector size {})",
       dataFieldNameGetInternal(table, field_id, _action_id, indirect),
-      key));
+      key.size()));
   return status;
 }
 
@@ -1421,7 +1421,7 @@ switch_status_t _ActionEntry::set_arg(const bf_rt_field_id_t field_id,
                bf_err_str(rc),
                tableNameGetInternal(table),
                dataFieldNameGetInternal(table, field_id, _action_id, indirect),
-               key);
+               smi::logging::stream_to_string(key));
     return bf_rt_status_xlate(rc);
   }
   return status;

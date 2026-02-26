@@ -201,14 +201,18 @@ static void bf_msix_mask_irq(struct msi_desc *desc, int32_t state) {
 #else
   u32 mask_bits = desc->pci.msix_ctrl;
   u32 *desc_mask_bits = &desc->pci.msix_ctrl;
-#if defined(NEW_RHEL) && RHEL_RELEASE_CODE == RHEL_RELEASE_VERSION(9, 2)
+#if defined(NEW_RHEL)
+#if RHEL_RELEASE_CODE == RHEL_RELEASE_VERSION(9, 2)
   unsigned offset = desc->pci.msi_attrib.entry_nr * PCI_MSIX_ENTRY_SIZE +
 #else
   unsigned offset = desc->msi_index * PCI_MSIX_ENTRY_SIZE +
 #endif
+#else
+  unsigned offset = desc->msi_index * PCI_MSIX_ENTRY_SIZE +
+#endif /*NEW_RHEL */
                     PCI_MSIX_ENTRY_VECTOR_CTRL;
   void __iomem *mask_base = desc->pci.mask_base;
-#endif
+#endif /* LINUX_VERSION_CODE >= 5.17.0 */
   if (state != 0) {
     mask_bits &= ~PCI_MSIX_ENTRY_CTRL_MASKBIT;
   } else {
@@ -508,7 +512,7 @@ static int bf_fasync(int fd, struct file *filep, int mode) {
   if (minor >= BF_MAX_DEVICE_CNT) {
     return (-EINVAL);
   }
-  if (mode == 0 && &bf_global[minor].async_queue == NULL) {
+  if (mode == 0 && bf_global[minor].async_queue == NULL) {
     bf_global[minor].pending_signal = false;
     return 0; /* nothing to do */
   }
@@ -950,7 +954,7 @@ static int bf_tof3_register_device(struct device *parent,
  *
  * returns zero on success or a negative error code.
  */
-int bf_register_device(struct device *parent, struct bf_pci_dev *bfdev) {
+static int bf_register_device(struct device *parent, struct bf_pci_dev *bfdev) {
   struct bf_dev_info *info = &bfdev->info;
   int i, j, ret = 0;
   int minor = 0;
@@ -1092,7 +1096,7 @@ static int bf_tof3_unregister_device(struct bf_pci_dev *bfdev) {
  *
  * returns none
  */
-void bf_unregister_device(struct bf_pci_dev *bfdev) {
+static void bf_unregister_device(struct bf_pci_dev *bfdev) {
   struct bf_dev_info *info = &bfdev->info;
   int i, ret;
 

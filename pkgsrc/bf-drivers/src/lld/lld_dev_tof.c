@@ -35,6 +35,7 @@
 #include "lld_map.h"
 #include "lld_log.h"
 #include <tofino_regs/tofino.h>
+#include "lld_dev_tof.h"
 
 // fwd refs
 static lld_err_t lld_dev_tof_set_core_clk_1_25G(bf_dev_id_t dev_id,

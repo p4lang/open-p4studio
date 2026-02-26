@@ -1544,11 +1544,14 @@ switch_status_t create_keys(switch_object_id_t object_id,
                  "{}: key already exists for {}, key {}",
                  __func__,
                  object_info->get_object_name(),
-                 key_attrs);
+                 smi::logging::stream_to_string(key_attrs));
       return SWITCH_STATUS_ITEM_ALREADY_EXISTS;
     }
     SWITCH_DETAIL_LOG(switch_log(
-        SWITCH_API_LEVEL_DETAIL, object_type, "create_keys: {}", key_attrs));
+        SWITCH_API_LEVEL_DETAIL,
+        object_type,
+        "create_keys: {}",
+        smi::logging::stream_to_string(key_attrs)));
   }
 
   return status;
@@ -1581,7 +1584,7 @@ switch_status_t update_keys(
                    "{}.{}: failed to insert key {}, object_id {}",
                    __func__,
                    __LINE__,
-                   key_attrs,
+                   smi::logging::stream_to_string(key_attrs),
                    object_id.data);
         return SWITCH_STATUS_FAILURE;
       }
@@ -1593,8 +1596,8 @@ switch_status_t update_keys(
                    "{}.{}: failed to erase key {}, object_id {}",
                    __func__,
                    __LINE__,
-                   object_id.data,
-                   key_attrs);
+                   smi::logging::stream_to_string(key_attrs),
+                   object_id.data);
         return SWITCH_STATUS_FAILURE;
       }
     }
@@ -1602,7 +1605,7 @@ switch_status_t update_keys(
                                  object_type,
                                  "update_keys: {}: {}",
                                  is_add,
-                                 key_attrs));
+                                 smi::logging::stream_to_string(key_attrs)));
   }
 
   return status;
@@ -1681,7 +1684,7 @@ switch_status_t get_wkey(switch_object_type_t object_type,
                                SMI_GET_OPERATION,
                                "{}: key used {}, result={:#x}",
                                __func__,
-                               key_attrs,
+                               smi::logging::stream_to_string(key_attrs),
                                object_id.data));
 
   return status;
@@ -3313,7 +3316,7 @@ exit:
                __NS__,
                __func__,
                __LINE__,
-               attrs);
+               smi::logging::stream_to_string(attrs));
   }
   if (trigger) {
     const auto num_erased = trigger_context.erase(object_type);

@@ -23,6 +23,8 @@
 
 #include "dvm/bf_drv_intf.h"
 #include "lld/lld_err.h"
+#include "lld/lld_dr_if.h"
+#include "lld/lld_dr_descriptors.h"
 
 // un-comment to read head/tail ptrs directly from hw
 // and not configure pushed ptr mode
@@ -178,4 +180,27 @@ int lld_dr_cfg_depth_get(bf_dev_id_t dev_id,
 int lld_validate_dr_id(bf_dev_id_t dev_id, bf_dma_dr_id_t dr_id);
 
 bf_dma_dr_id_t lld_dr_get_max_dr(bf_dev_id_t dev_id, bf_subdev_id_t subdev_id);
+lld_dr_bus_t lld_dr_host_bus(bf_dev_family_t dev_family, bf_dma_dr_id_t dr_id);
+int lld_dr_desc_area_sz(bf_dev_id_t dev_id, bf_subdev_id_t subdev_id);
+int dr_push_1(struct lld_dr_view_s *view, uint64_t *desc);
+int dr_push_2(struct lld_dr_view_s *view, uint64_t *desc);
+int dr_push_4(struct lld_dr_view_s *view, uint64_t *desc);
+int dr_pull(struct lld_dr_view_s *view, dr_descr_value_t *desc_val);
+void lld_dr_ring_timeout_set(bf_dev_id_t dev_id,
+                             bf_subdev_id_t subdev_id,
+                             bf_dma_dr_id_t dr_id,
+                             uint16_t timeout);
+int lld_subdev_register_dr_callback(bf_dev_id_t dev_id,
+                                    bf_subdev_id_t subdev_id,
+                                    bf_dma_dr_id_t dr_id,
+                                    lld_cb_fn_u cb);
+void *lld_subdev_get_dr_callback(bf_dev_id_t dev_id,
+                                 bf_subdev_id_t subdev_id,
+                                 bf_dma_dr_id_t dr_id);
+void dr_process_completion(lld_dr_view_t *view, dr_descr_value_t *descr_value);
+void dr_process_rx_lrt(lld_dr_view_t *view, dr_descr_value_t *descr_value);
+void dr_process_rx_idle(lld_dr_view_t *view, dr_descr_value_t *descr_value);
+void dr_process_rx_learn(lld_dr_view_t *view, dr_descr_value_t *descr_value);
+void dr_process_rx_diag(lld_dr_view_t *view, dr_descr_value_t *descr_value);
+void dr_process_rx_pkt(lld_dr_view_t *view, dr_descr_value_t *descr_value);
 #endif

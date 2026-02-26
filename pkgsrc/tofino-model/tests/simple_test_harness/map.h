@@ -55,12 +55,15 @@ inline const V *getref(const std::map<K, V, Comp, Alloc> *m, T key) {
 /* iterate over the values in a map */
 template<class PairIter>
 class IterValues {
-    class iterator : public std::iterator<
-        typename std::iterator_traits<PairIter>::iterator_category,
-        typename std::iterator_traits<PairIter>::value_type,
-        typename std::iterator_traits<PairIter>::difference_type,
-        typename std::iterator_traits<PairIter>::pointer,
-        typename std::iterator_traits<PairIter>::reference> {
+    class iterator {
+        using traits = std::iterator_traits<PairIter>;
+     public:
+        using iterator_category = typename traits::iterator_category;
+        using value_type = typename traits::value_type;
+        using difference_type = typename traits::difference_type;
+        using pointer = typename traits::pointer;
+        using reference = typename traits::reference;
+     private:
         PairIter                it;
     public:
         explicit iterator(PairIter i) : it(i) {}

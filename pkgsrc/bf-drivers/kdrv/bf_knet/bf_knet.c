@@ -679,8 +679,8 @@ static const struct net_device_ops bf_knet_ndev_ops = {
 static void knet_get_drvinfo(struct net_device *dev,
                              struct ethtool_drvinfo *info)
 {
-	strlcpy(info->driver, DRV_NAME, sizeof(info->driver));
-	strlcpy(info->version, DRV_VERSION, sizeof(info->version));
+	strscpy(info->driver, DRV_NAME, sizeof(info->driver));
+	strscpy(info->version, DRV_VERSION, sizeof(info->version));
 }
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 12, 0)

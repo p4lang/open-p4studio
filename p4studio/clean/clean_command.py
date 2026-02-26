@@ -118,6 +118,6 @@ def remove_temporary_files_from_dependencies_python_package() -> None:
 def files_to_remove() -> Generator[Path, None, None]:
     package_dir = os.path.dirname(os.path.abspath(source.__file__))
 
-    for pattern in ['PI*', 'boost*', 'bridge*', 'grpc*', 'thrift*', 'libcli*', 'Libcli*']:
+    for pattern in ['PI*', 'boost*', 'grpc*', 'thrift*', 'libcli*', 'Libcli*']:
         for file in glob.glob(package_dir + '/' + pattern):
             yield Path(file)

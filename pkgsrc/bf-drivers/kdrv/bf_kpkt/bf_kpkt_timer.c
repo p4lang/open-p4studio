@@ -32,6 +32,12 @@
 #include "bf_kpkt_priv.h"
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+#ifndef from_timer
+#define from_timer(var, timer, timer_field) container_of(timer, typeof(*(var)), timer_field)
+#endif
+#endif
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 static void bf_kpkt_timer_fn(struct timer_list *timer) {
   struct bf_kpkt_adapter *adapter = from_timer(adapter, timer, timer);;
   if (!adapter) {
@@ -75,5 +81,9 @@ void bf_kpkt_timer_add(struct bf_kpkt_adapter *adapter, u32 ms) {
 }
 
 void bf_kpkt_timer_del(struct bf_kpkt_adapter *adapter) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
+  timer_delete_sync(&adapter->timer);
+#else
   del_timer_sync(&adapter->timer);
+#endif
 }

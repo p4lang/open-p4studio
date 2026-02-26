@@ -38,6 +38,7 @@
 #include <lld/lld_err.h>
 #include <lld/lld_sku.h>
 #include "lld_dr.h"
+#include "lld_dr_tof3.h"
 #include "lld.h"
 #include "lld_log.h"
 #include <lld/lld_dr_if.h>

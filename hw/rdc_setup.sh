@@ -29,7 +29,8 @@ rdc_setup(){
     fi
 
     SUBDIR="bf_switchd"
-    cp $RDC_BFD/$SUBDIR/CMakeLists.txt $OS_BFD/$SUBDIR/CMakeLists.txt
+    FILES=("CMakeLists.txt" "bf_switchd.c")
+    replace "$SUBDIR" 0 "${FILES[@]}"
 
     SUBDIR="src"
     DIRS=("alphawave" "credo" "avago" "microp")

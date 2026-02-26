@@ -192,8 +192,6 @@ find_package(Boost 1.67.0 REQUIRED)
 # target unless explicitly overridden for specific source files by a
 # set_source_files_properties command
 add_definitions(
-        # Use cinttypes in rapidjson
-        -DRAPIDJSON_NO_INT64DEFINE
         # Use std::string in rapidjson
         -DRAPIDJSON_HAS_STDSTRING
         )

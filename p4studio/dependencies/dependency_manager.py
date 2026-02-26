@@ -45,7 +45,6 @@ ALL_SOURCE_PACKAGES = [
     'boost',
     'grpc',
     'thrift',
-    'bridge',
     'libcli',
     'pi',
 ]

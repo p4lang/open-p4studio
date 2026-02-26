@@ -135,7 +135,8 @@ namespace MODEL_CHIP_NAMESPACE {
     inline void incr(const int8_t incr) {
       if (DUMP) dump(" PreIncr",incr);
       if (n_entries_ <= 0) return;
-      for (size_t i = 0; i < n_entries_; i++) {
+      size_t entries = (n_entries_ > STACK_ENTRIES) ? STACK_ENTRIES : n_entries_;
+      for (size_t i = 0; i < entries; i++) {
         if (!propagate_incr_[i]) break;
         stack_entries_[i] += incr;
       }

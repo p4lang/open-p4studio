@@ -407,7 +407,7 @@ void record_file_replay(std::string replay_file) {
                      SWITCH_OT_NONE,
                      "Create failed for {} {} status {}",
                      object_type,
-                     attrs,
+                     smi::logging::stream_to_string(attrs),
                      status);
         }
       } break;
@@ -418,7 +418,7 @@ void record_file_replay(std::string replay_file) {
                      SWITCH_OT_NONE,
                      "Set failed for {} {} {}",
                      object_id,
-                     *attrs.begin(),
+                     smi::logging::stream_to_string(*attrs.begin()),
                      status);
         }
       } break;
@@ -442,7 +442,7 @@ void record_file_replay(std::string replay_file) {
                      "Get failed for {} {} {} status {}",
                      object_id,
                      attr_id,
-                     attr,
+                     smi::logging::stream_to_string(attr),
                      status);
         }
       } break;

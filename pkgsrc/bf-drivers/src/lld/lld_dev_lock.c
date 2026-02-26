@@ -28,7 +28,7 @@
 #endif
 
 #include <dvm/bf_drv_intf.h>
-
+#include "lld_dev_lock.h"
 // "locked" indicates the device should not be modified
 // Used during upgrade sequences.
 static bool lld_dev_locked[BF_MAX_DEV_COUNT][BF_MAX_SUBDEV_COUNT] = {0};

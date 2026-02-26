@@ -56,7 +56,7 @@ static void lld_dev_tlp_set(bf_dev_id_t dev_id,
                             bf_subdev_id_t subdev_id,
                             bf_dev_family_t dev_family,
                             bool en);
-extern void lld_register_default_handler_for_all_ints(bf_dev_id_t dev_id);
+
 static bf_status_t lld_dev_spi_idcode_get(lld_dev_t *dev_p,
                                           uint32_t *spi_idcode);
 
@@ -238,7 +238,7 @@ static bf_status_t lld_dev_add_subdev(bf_dev_id_t dev_id,
 
 #ifndef __KERNEL__
   // set default handler for interrupts
-  lld_register_default_handler_for_all_ints(dev_id);
+  lld_register_default_handler_for_all_ints(dev_id, subdev_id);
 
   /* Mask all interrupts at the shadow regs */
   bf_int_msk_all(dev_id, subdev_id);

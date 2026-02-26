@@ -16,6 +16,7 @@ The modifications are listed by subdirectory.
 
 bf_switchd
 1. Replace CMakelists.txt with the version in RDC.
+2. Replace bf_switchd.c with the version in RDC. If there are modifications made to the file by the open source community, it is up to the user to merge them.
 
 src
 1. Replace CMakeLists.txt with the version in RDC.

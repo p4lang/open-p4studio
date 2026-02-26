@@ -97,6 +97,7 @@ extern lld_context_t *lld_ctx;
 void lld_init(bool is_master, bf_reg_wr_fn wr_fn, bf_reg_rd_fn rd_fn);
 void lld_set_wr_fn(bf_reg_wr_fn fn);
 void lld_set_rd_fn(bf_reg_rd_fn fn);
+void lld_set_is_master(bool is_master);
 bool lld_is_master(void);
 void lld_print_dr_stats(void);
 void lld_print_dr_contents(bf_dev_id_t dev_id,

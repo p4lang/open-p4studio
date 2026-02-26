@@ -90,6 +90,8 @@ uint32_t lld_efuse_get_package_id(bf_dev_id_t dev_id);
 uint64_t lld_subdev_efuse_get_chip_id(bf_dev_id_t dev_id,
                                       bf_subdev_id_t subdev_id);
 uint64_t lld_efuse_get_chip_id(bf_dev_id_t dev_id);
+uint32_t lld_subdev_efuse_get_silent_spin(bf_dev_id_t dev_id,
+                                          bf_subdev_id_t subdev_id);
 uint32_t lld_efuse_get_silent_spin(bf_dev_id_t dev_id);
 uint32_t lld_efuse_get_voltage_scaling(bf_dev_id_t dev_id);
 uint32_t lld_subdev_efuse_get_die_config(bf_dev_id_t dev_id,

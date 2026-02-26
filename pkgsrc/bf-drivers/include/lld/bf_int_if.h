@@ -186,6 +186,9 @@ bf_status_t bf_int_msix_map_set(bf_dev_id_t dev_id,
                                 bf_int_nbr_t int_nbr,
                                 int msix_num);
 bf_status_t bf_msix_map_view_init(bf_dev_id_t dev_id, int irq, int msix);
+bf_status_t bf_int_svc_common(bf_dev_id_t dev_id,
+                              bf_subdev_id_t subdev_id,
+                              bool msk);
 // MSI
 bf_status_t bf_int_msi_svc(bf_dev_id_t dev_id,
                            bf_subdev_id_t subdev_id,
