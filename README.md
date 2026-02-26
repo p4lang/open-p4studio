@@ -6,7 +6,8 @@ Intel® P4 Studio Software Development Environment (SDE) is a set of packages fo
 
 The following things are included in this repository:
 
-+ Driver software sufficient for running with the simulation model.
++ Buildable source code for the Tofino simulation model, and driver
+  software sufficient for running tests on it.
 + The Barefoot Runtime Interface (BRI), which consists of:
   + The locally callable BfRt API, with bindings in C and C++.
   + The gRPC-based protocol, called BF Runtime, together with the
@@ -15,9 +16,6 @@ The following things are included in this repository:
     + The additional bfrt_grpc.client Python module provides
       easier-to-use, simplified interface to BF Runtime (used for most
       PTF tests).
-+ An x86_64 binary of the simulation model
-  + Note: Source code for the simulation model is in the process of
-    being released to open source, but that is not yet complete.
 + Example P4_16 programs and PTF tests
 + Git submodule referring to the latest version of the P4 compiler
   in the repository https://github.com/p4lang/p4c tested with this code.
@@ -48,6 +46,11 @@ Some things not included, that one must get from Intel:
   those with authorization to access it.
 
 # Setup
+
+Note: At least the bf-drivers component of this software depends upon
+a pre-compiled x86_64 binary for some functions, for which no source
+code is available.  Thus building fails unless your system has an
+x86_64 processor.
 
 The installation scripts for these programs attempt to enable installing
 multiple versions of it, in different directories, on the same system.
