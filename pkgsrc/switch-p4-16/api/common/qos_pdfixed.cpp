@@ -3026,12 +3026,11 @@ static void update_internal_ppg(const switch_object_id_t object_id,
   if (temp_status != SWITCH_STATUS_SUCCESS) {
     switch_log(SWITCH_API_LEVEL_ERROR,
                SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
-               "{}.{}: Failure to update internal ppg {} attr {}"
-               "status {}",
+               "{}.{}: Failure to update internal ppg {} attr {} status {}",
                __func__,
                __LINE__,
                object_id,
-               attr,
+               smi::logging::stream_to_string(attr),
                temp_status);
   }
   status.set_value(temp_status);
@@ -3155,12 +3154,12 @@ switch_status_t before_ppg_create_add_internal_ports_ppg(
       switch_log(SWITCH_API_LEVEL_ERROR,
                  SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
                  "{}:{}: Failed to add internal ppg for port {} corresponding "
-                 "to external port {} with attrs {}",
+                 "to external port {} with attrs {} status {}",
                  __func__,
                  __LINE__,
                  port,
                  port_handle,
-                 attrs,
+                 smi::logging::stream_to_string(attrs),
                  status);
       goto cleanup;
     }
@@ -3239,11 +3238,10 @@ switch_status_t before_ppg_update_update_internal_ports_ppg(
     switch_log(SWITCH_API_LEVEL_ERROR,
                SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
                "{}.{}: Failure to update attr {} for internal ppgs "
-               "corresponding to external port {} ppg {}"
-               "status {}",
+               "corresponding to external port {} ppg {} status {}",
                __func__,
                __LINE__,
-               attr,
+               smi::logging::stream_to_string(attr),
                port_handle,
                object_id,
                status);
@@ -3262,11 +3260,10 @@ switch_status_t before_ppg_update_update_internal_ports_ppg(
     switch_log(SWITCH_API_LEVEL_ERROR,
                SWITCH_OBJECT_TYPE_PORT_PRIORITY_GROUP,
                "{}.{}: Failure to update attr {} for internal ppgs "
-               "corresponding to external port {} ppg {}"
-               "status {}",
+               "corresponding to external port {} ppg {} status {}",
                __func__,
                __LINE__,
-               attr,
+               smi::logging::stream_to_string(attr),
                port_handle,
                object_id,
                status);
@@ -3300,11 +3297,10 @@ switch_status_t after_scheduler_added_to_queue(
       switch_log(SWITCH_API_LEVEL_ERROR,
                  SWITCH_OBJECT_TYPE_QUEUE,
                  "{}.{}: Failure to update attr {} for a queue {} "
-                 "corresponding to port {}"
-                 "status {}",
+                 "corresponding to port {} status {}",
                  __func__,
                  __LINE__,
-                 attr,
+                 smi::logging::stream_to_string(attr),
                  queue_handle,
                  port_handle,
                  status);
@@ -3364,8 +3360,7 @@ switch_status_t before_scheduler_removed_from_queue(
         switch_log(SWITCH_API_LEVEL_ERROR,
                    SWITCH_OBJECT_TYPE_QUEUE,
                    "{}.{}: Failure to detach scheduler from a queue {} "
-                   "corresponding to port {}"
-                   "status {}",
+                   "corresponding to port {} status {}",
                    __func__,
                    __LINE__,
                    queue_handle,

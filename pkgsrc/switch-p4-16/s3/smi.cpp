@@ -106,7 +106,7 @@ switch_status_t smi_object_create_attr_check(
                  __func__,
                  __LINE__,
                  model_info->get_object_name_from_type(object_type),
-                 attrs);
+                 smi::logging::stream_to_string(attrs));
       switch_log(SWITCH_API_LEVEL_ERROR,
                  object_type,
                  "{}:{}: ot={}, incorrect flags status={} attr {} "

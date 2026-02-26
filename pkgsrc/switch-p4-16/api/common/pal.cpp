@@ -1805,11 +1805,11 @@ switch_status_t speed_set(switch_object_id_t port_handle,
   if (status != SWITCH_STATUS_SUCCESS) {
     switch_log(SWITCH_API_LEVEL_ERROR,
                SWITCH_OBJECT_TYPE_PORT,
-               "{}.{}: lane_list failure port_handle {} speed {} status {}",
+               "{}.{}: lane_list failure port_handle {} lane_list {} status {}",
                __func__,
                __LINE__,
                port_handle,
-               port_lane_list,
+               smi::logging::stream_to_string(lane_list),
                status);
   }
 
@@ -3528,11 +3528,11 @@ switch_status_t after_port_create(const switch_object_id_t object_id,
   if (status != SWITCH_STATUS_SUCCESS) {
     switch_log(SWITCH_API_LEVEL_ERROR,
                SWITCH_OBJECT_TYPE_PORT,
-               "{}.{}: lane_list failure port_handle {} speed {} status {}",
+               "{}.{}: lane_list failure port_handle {} lane_list {} status {}",
                __func__,
                __LINE__,
                object_id,
-               port_lane_list,
+               smi::logging::stream_to_string(lane_list),
                status);
   }
 
