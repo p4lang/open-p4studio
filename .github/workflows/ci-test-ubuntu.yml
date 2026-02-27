@@ -55,6 +55,10 @@ jobs:
           CCACHE_NOHASHDIR: "1"
         run: |
           ccache -z
+          echo "python3 --version"
+          python3 --version
+          echo "pip3 --version"
+          pip3 --version
           ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
           ccache -s
 
