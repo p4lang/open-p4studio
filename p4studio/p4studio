@@ -85,4 +85,6 @@ if [ -n "$MISSING_TOOLS" ]; then
   done
 fi
 
+${MY_DIR}/install-cc-used-by-kernel-build.sh
+
 exec python3 "$MY_DIR" "$@"
