@@ -49,7 +49,8 @@ Some things not included, that one must get from Intel:
 Note: At least the bf-drivers component of this software depends upon
 a pre-compiled x86_64 binary for some functions, for which no source
 code is available.  Thus building fails unless your system has an
-x86_64 processor.
+x86_64 processor.  Details about these files can be found
+[here](docs/processor-specific-binary-files.md).
 
 The installation scripts for these programs attempt to enable installing
 multiple versions of it, in different directories, on the same system.
