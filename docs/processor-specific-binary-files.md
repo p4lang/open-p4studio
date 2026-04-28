@@ -18,10 +18,6 @@ while running the BPF tool
 to track all files that were opened.  This can be useful in
 determining whether a file might be unnecessary.
 
-All of the files above _are_ accessed during the build.
-The files are also mentioned in some CMakeLists.txt files and other
-source files, so keeping them in the repository seems wise.
-
 
 ## Files with suffix `.gz`
 
