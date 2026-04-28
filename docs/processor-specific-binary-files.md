@@ -7,6 +7,22 @@ x86_64, amd64, or i686.  Below is a complete list of those files known
 at this time, from a fairly thorough search.
 
 
+## Procedure used to determine whether a build of open-p4studio accesses particular files
+
+On 2026-Apr-27 I used this command to build open-p4studio:
+```
+./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
+```
+while running the BPF tool
+[`opensnoop`](https://manpages.debian.org/unstable/bpfcc-tools/opensnoop-bpfcc.8.en.html)
+to track all files that were opened.  This can be useful in
+determining whether a file might be unnecessary.
+
+All of the files above _are_ accessed during the build.
+The files are also mentioned in some CMakeLists.txt files and other
+source files, so keeping them in the repository seems wise.
+
+
 ## Files with suffix `.gz`
 
 + File: `pkgsrc/p4o/p4o-1.0.x86_64.tar.gz`
@@ -19,6 +35,10 @@ When Intel published open-p4studio, they did not include any source
 code for the `p4obfuscator` program, only the pre-compiled x86_64
 binary.
 
+Using the method described in the section "Procedure used to determine
+...", the file above is definitely accessed during a build of
+open-p4studio.
+
 
 ## `libport_mgr_hw` compiled libraries
 
@@ -27,6 +47,10 @@ binary.
 + File `pkgsrc/bf-drivers/src/port_mgr/port_mgr_lib/libport_mgr_hw.a`
   + when unpacked with command `ar x ...`, it contains 63 files with `.o` suffix
     + `file` utility reports all 63 files contents as: `ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped`
+
+Using the method described in the section "Procedure used to determine
+...", the files above are definitely accessed during a build of
+open-p4studio.
 
 When Intel published open-p4studio, they did not include any source
 code for the compiled object files in `libport_mgr_hw`, perhaps
@@ -109,10 +133,11 @@ All of the files in this directory are empty.
 + `tof2_A0_grp_0_7_serdes.bin`
 + `tof2_A0_grp_8_serdes.bin`
 
-TODO: Can the empty files be removed from open-p4studio?  They are
-currently mentioned in CMakeLists.txt files and other source files, so
-probably not.  Confirm whether removing them and attempting to build
-causes problems, and if so, document it here.
+Using the method described in the section "Procedure used to determine
+...", all of the files above are accessed while building
+open-p4studio.  The files are also mentioned in some CMakeLists.txt
+files and other source files, so keeping them in the repository seems
+wise.
 
 
 ## Other files with suffix `.rom`
@@ -127,10 +152,19 @@ There are none, other than those listed in an earlier section.
 + `pkgsrc/tofino-model/bin/tofino-model.x86_64.bin`
   + `ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=ca0ee1b6a2c780ef0bb6c9a8bb11b965ff5d7b42, not stripped`
 
-TODO: Is it reasonable to remove the `tofino-model.*` files from the
-repository, now that the Tofino model source code is included in
-open-p4studio?  Note that their names are still mentioned in the top
-level CMakeLists.txt file.
+If you build open-p4studio using the `p4studio` command with a YAML
+file containing this line:
+```
+global-options: { build_model: true }
+```
+then a significant fraction of the source code files in the directory
+`pkgsrc/tofino-model` and its subdirectories are used during the build
+to create the executable program for the Tofino simulation model, but
+the two files above are not accessed.
+
+If you do not use appropriate options to build the Tofino model from
+source code, then one of the two `.bin` files above is copied to the
+place where the Tofino simulation model is installed.
 
 
 ## Other files with suffix `.so`
@@ -138,10 +172,13 @@ level CMakeLists.txt file.
 + File: `p4studio/third_party/_yaml.cpython-35m-x86_64-linux-gnu.so`
   + `ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=5b67f5cf630d08c2490517119c45570ae76fb012, with debug_info, not stripped`
 
-TODO: It seems likely that the `yaml` file above was created during a
-build of open-p4studio code and added to this repository by accident.
-Test builds after removing the file to check whether they succeed, and
-if no problems, remove it.
+Using the method described in the section "Procedure used to determine
+...", the `.so` file above was _not_ accessed during the build.
+
+TODO: It seems likely that this file above was created during a build
+of open-p4studio code and added to this repository by accident.  Given
+that it was not accessed at all during the build, it seems reasonable
+to remove it from the repository.
 
 
 ## Other files with suffix `.a`
@@ -156,8 +193,12 @@ if no problems, remove it.
 These files are in the original repository
 https://github.com/amadvance/tommyds from which all of the files in
 directory `pkgsrc/target-utils/third-party/tommyds` were copied from.
-May as well leave them there.  They are probably only ever used if you
-do benchmark performance testing of the tommyds project code.
+It seems reasonable to leave them there, so that the vendored copy of
+this repository is complete.
+
+Using the method described in the section "Procedure used to determine
+...", none of the files in the `tommyds/benchmark` directory are
+accessed during an open-p4studio build.
 
 
 ## Files with suffix `.zip`
@@ -170,3 +211,6 @@ https://github.com/pypa/setuptools from which all of the files in
 directory `p4studio/third_party/pkg_resources` were copied from.  Thus
 it seems best to leave it there.  Also the files inside the zip
 archive do not contain any compiled object code.
+
+Using the method described in the section "Procedure used to determine
+...", the `.zip` file is not accessed during an open-p4studio build.
