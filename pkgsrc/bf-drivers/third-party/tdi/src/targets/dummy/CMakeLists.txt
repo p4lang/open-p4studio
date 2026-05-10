@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 project(libtdi_dummy VERSION 0.1 LANGUAGES CXX)
 
 set(TDI_DUMMY_SRCS
