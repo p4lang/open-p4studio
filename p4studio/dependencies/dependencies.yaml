@@ -351,7 +351,7 @@ packages:
         dependencies: [boost]
         type: source
     libcrafter:
-        attributes: {url: 'https://github.com/pellegre/libcrafter.git', version: master}
+        attributes: {url: 'https://github.com/pellegre/libcrafter.git', version: eb3a120b6650a4cada9e00055c56ec35f3360e13}
         tags: [default, source]
         dependencies: [libcli]
         type: source
