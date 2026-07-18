@@ -55,6 +55,20 @@ jobs:
           CCACHE_NOHASHDIR: "1"
         run: |
           ccache -z
+          echo "uname -a"
+          uname -a
+          echo "cat /etc/os-release"
+          cat /etc/os-release
+          echo "gcc --version"
+          gcc --version
+          echo "grep '^HOSTCC' /usr/src/linux-headers-*/Makefile"
+          grep '^HOSTCC' /usr/src/linux-headers-*/Makefile
+          echo "which gcc-12"
+          which gcc-12
+          echo "python3 --version"
+          python3 --version
+          echo "pip3 --version"
+          pip3 --version
           ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
           ccache -s
 
