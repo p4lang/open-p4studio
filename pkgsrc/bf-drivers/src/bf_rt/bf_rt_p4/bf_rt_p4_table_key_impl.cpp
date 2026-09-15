@@ -368,7 +368,7 @@ bf_status_t BfRtMatchActionKey::setValueOptional(const bf_rt_id_t &field_id,
   auto size_bytes = (field_size + 7) / 8;
   uint64_t mask = 0;
   if (is_valid) {
-    mask = (2 ^ field_size) - 1;
+    mask = (field_size < 64) ? ((1ULL << field_size) - 1) : UINT64_MAX;
   }
 
   // endianness conversion

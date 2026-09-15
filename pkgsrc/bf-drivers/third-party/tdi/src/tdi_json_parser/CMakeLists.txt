@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
+
 project(libtdi_json_parser VERSION 0.1 LANGUAGES CXX)
 
 set(TDI_JSON_PARSING_SRCS

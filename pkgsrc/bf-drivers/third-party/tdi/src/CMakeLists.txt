@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 Intel Corporation
+#
+# SPDX-License-Identifier: Apache-2.0
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
