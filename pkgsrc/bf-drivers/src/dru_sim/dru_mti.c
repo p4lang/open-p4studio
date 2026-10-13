@@ -25,6 +25,7 @@
 //
 //
 #include <errno.h>
+#include <sys/mman.h>
 #include <time.h>
 #ifdef TARGET_IS_MODEL
 #include <assert.h>
@@ -178,15 +179,26 @@ int dru_init_mti() {
   memset(mti, 0, sizeof(mti_fifo_t *) * BF_MAX_DEV_COUNT);
 
   for (dev_id = 0; dev_id < BF_MAX_DEV_COUNT; dev_id++) {
-    mti[dev_id] = (mti_fifo_t *)bf_sys_malloc(sizeof(mti_fifo_t) * MTI_TYP_NUM);
-
-    if (mti[dev_id] == NULL) {
+    /*
+     * Each device needs MTI_TYP_NUM fifos of MTI_FIFO_DEPTH entries
+     * (~180 MB per device, ~1.4 GB for BF_MAX_DEV_COUNT devices).
+     * malloc + memset made all of it resident at startup even though a
+     * model setup normally uses a single device. Anonymous mmap memory is
+     * zero-filled by the kernel and only backed by RAM when touched, so
+     * fifos of unused devices cost (almost) nothing.
+     */
+    void *p = mmap(NULL,
+                   sizeof(mti_fifo_t) * MTI_TYP_NUM,
+                   PROT_READ | PROT_WRITE,
+                   MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE,
+                   -1,
+                   0);
+    if (p == MAP_FAILED) {
       printf("ERROR: Memory allocation failed for DRU MTI, dev_id =%d\n",
              dev_id);
       return -1;
     }
-
-    memset(mti[dev_id], 0, sizeof(mti_fifo_t) * MTI_TYP_NUM);
+    mti[dev_id] = (mti_fifo_t *)p;
   }
 
   printf("INFO: DRU sim MTI initialized successfully\n");
