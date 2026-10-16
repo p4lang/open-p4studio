@@ -61,6 +61,7 @@ Linux, to see if that helps.
 ```bash
 git clone https://github.com/p4lang/open-p4studio.git
 cd open-p4studio
+git submodule update --init --recursive
 ```
 
 Proceed by choosing one of the following options:
@@ -80,8 +81,6 @@ sufficient RAM and free disk space, and then installs the SDE using a
 default choice for options.
 
 ```bash
-# If you have not already done so, update submodules
-git submodule update --init --recursive
 ./p4studio/p4studio profile apply ./p4studio/profiles/testing.yaml
 ```
 
@@ -92,6 +91,9 @@ When that script completes, proceed by following the steps in section
 # Installation with customization of options
 
 1. Run the `install.sh` script
+```bash
+./install.sh
+```
 
    **Note**: The `install.sh` script initially evaluates system capabilities such as free space and OS support to build and install SDE.
 
