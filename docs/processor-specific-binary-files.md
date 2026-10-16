@@ -165,16 +165,18 @@ place where the Tofino simulation model is installed.
 
 ## Other files with suffix `.so`
 
+Before 2026-Sep the following file was part of the open-p4studio
+repository:
+
 + File: `p4studio/third_party/_yaml.cpython-35m-x86_64-linux-gnu.so`
   + `ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, BuildID[sha1]=5b67f5cf630d08c2490517119c45570ae76fb012, with debug_info, not stripped`
 
 Using the method described in the section "Procedure used to determine
 ...", the `.so` file above was _not_ accessed during the build.
 
-TODO: It seems likely that this file above was created during a build
-of open-p4studio code and added to this repository by accident.  Given
-that it was not accessed at all during the build, it seems reasonable
-to remove it from the repository.
+Since it is unused, it seems likely that this file above was created
+during a build of open-p4studio code and added to this repository by
+accident.  The file was removed from the repo.
 
 
 ## Other files with suffix `.a`
