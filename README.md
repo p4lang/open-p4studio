@@ -107,7 +107,6 @@ When that script completes, proceed by following the steps in section
 
     b)	Script installs the following source packages:
     
-      * bridge
       * libcli
       * libcrafter
       * thrift
@@ -118,7 +117,6 @@ When that script completes, proceed by following the steps in section
      * tofino
      * tofino2
      * tofino2m
-     * tofino3
 
     d)	Script installs the p4-16-programs.
 
