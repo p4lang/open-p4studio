@@ -18,8 +18,9 @@ for i in $veths; do
     if ! ip link show $intf0 &> /dev/null; then
         ip link add name $intf0 type veth peer name $intf1 &> /dev/null
     fi
-    ip link set dev $intf0 mtu 10240 up
-    ip link set dev $intf1 mtu 10240 up
+    # Prevent IPv6 control packets on test ports even when sysctls are read-only.
+    ip link set dev $intf0 addrgenmode none mtu 10240 up
+    ip link set dev $intf1 addrgenmode none mtu 10240 up
     in_docker=$(cat /proc/1/cgroup| egrep -i docker || true)
 
     if [ -z "$in_docker" ]; then
