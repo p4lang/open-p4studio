@@ -895,6 +895,16 @@ if __name__ == "__main__":
         else:
             result = runner.run(t)
 
+        if not result.wasSuccessful():
+            outcome = "FAIL"
+        elif result.skipped:
+            outcome = "SKIP"
+        elif result.expectedFailures:
+            outcome = "XFAIL"
+        else:
+            outcome = "PASS"
+        print("PTF result: %s %s" % (outcome, t.id()), flush=True)
+
         run_failures.extend(result.failures)
         run_errors.extend(result.errors)
 

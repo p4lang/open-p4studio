@@ -55,16 +55,32 @@ jobs:
           CCACHE_NOHASHDIR: "1"
         run: |
           ccache -z
-          ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
+          ./p4studio/p4studio profile apply --jobs "$(nproc)" --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
           ccache -s
 
-      - name: Show build logs
-        if: success() || failure()
+      - name: Collect build diagnostics
+        if: failure()
         run: |
-          ./ci/show-build-logs.sh
+          ./ci/show-build-logs.sh > "$RUNNER_TEMP/build-diagnostics.log" 2>&1 || true
+          tail -n 80 "$RUNNER_TEMP/build-diagnostics.log"
 
       - name: Run tests
+        shell: bash
         run: |
-          # FIXME: Move these into a separate test suite.
-          make -C build tna_counter install
-          ./ci/run-test.py --sde `pwd` --sde-install "`pwd`/install" tna_counter
+          # The testing profile already builds and installs tna_counter.
+          log="$RUNNER_TEMP/tna_counter.log"
+          if ! ./ci/run-test.py --sde "$PWD" --sde-install "$PWD/install" tna_counter 2>&1 \
+            | tee "$log" | sed -un 's/^.* - tests: PTF result: //p'; then
+            cat "$log"
+            exit 1
+          fi
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-logs-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/build-diagnostics.log
+            ${{ runner.temp }}/tna_counter.log
+            p4studio/logs/*.log
