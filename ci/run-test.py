@@ -365,12 +365,6 @@ def run_tests(
         if proc and proc.poll() is None:
             terminate_process(proc, "Tests (after error)")
         return 1
-    finally:
-        if proc and proc.stdout and not proc.stdout.closed:
-            try:
-                proc.stdout.close()
-            except Exception:
-                pass
 
 
 def cleanup() -> None:
@@ -406,7 +400,7 @@ def signal_handler(signum: int, frame: Any) -> None:
     logger.warning(">>> Received %s. Initiating cleanup and exit...", signame)
     if final_exit_code == 0:
         final_exit_code = 128 + signum
-    # Let finally block handle cleanup order and exit
+    raise SystemExit(final_exit_code)
 
 
 def join_output_threads(timeout: int = 2) -> None:
@@ -545,28 +539,18 @@ def create_netns(name: str, env: Dict[str, str], cwd: Path) -> bool:
 
 
 def delete_netns(name: str, env: Dict[str, str], cwd: Path) -> None:
-
-    # ip netns pids net0 | xargs kill
-    cmd = ["sudo", "ip", "netns", "pids", name, "|", "xargs", "kill"]
-    if not run_command_sync(
-        cmd, env=env, cwd=cwd, check=False
-    ):  # No namespace, don't check exit code strictly
-        logger.warning(
-            "Failed to kill proces in network namespace '%s' (they may already be gone).",
-            name,
+    """Stop any descendants of the launch scripts before removing their namespace."""
+    try:
+        result = subprocess.run(
+            ["sudo", "ip", "netns", "pids", name], capture_output=True, text=True,
+            check=True, env=env, cwd=cwd,
         )
-
-    """Delete the namespace and with it all the process running in it."""
-    logger.info("Deleting network namespace: %s", name)
-    cmd = ["sudo", "ip", "netns", "delete", name]
-    if not run_command_sync(
-        cmd, env=env, cwd=cwd, check=False
-    ):  # No namespace, don't check exit code strictly
-        logger.warning(
-            "Failed to delete network namespace '%s' (may already be gone).", name
-        )
-    else:
-        logger.debug("Successfully deleted network namespace '%s'.", name)
+        pids = result.stdout.split()
+        if pids:
+            # A process may exit between the lookup and the signal.
+            subprocess.run(["sudo", "kill", "-KILL", *pids], env=env, cwd=cwd)
+    finally:
+        run_command_sync(["sudo", "ip", "netns", "delete", name], env, cwd)
 
 
 def main() -> None:
@@ -587,6 +571,7 @@ def main() -> None:
     switchd_proc: Optional[subprocess.Popen] = None
     temp_dir_path: Optional[Path] = None
     netns_name: Optional[str] = None
+    namespace_created = False
 
     try:
         signal.signal(signal.SIGINT, signal_handler)
@@ -623,6 +608,7 @@ def main() -> None:
                 "Failed to create network namespace '%s'. Aborting.", netns_name
             )
             raise SystemExit(final_exit_code or 1)  # Trigger cleanup
+        namespace_created = True
 
         # --- Run veth_setup (in namespace) ---
         logger.info(
@@ -743,10 +729,9 @@ def main() -> None:
     finally:
         # --- Cleanup Order: Processes -> Namespace -> Temp Dir ---
         cleanup()
-        join_output_threads()
 
         # Delete network namespace (if name was generated)
-        if netns_name:
+        if namespace_created:
             try:
                 # Need env and cwd. Ensure they exist if main try block failed early.
                 current_env = locals().get("augmented_env")
@@ -763,6 +748,9 @@ def main() -> None:
                 delete_netns(netns_name, current_env, current_cwd)
             except Exception as e:
                 logger.error("Error during netns deletion logic: %s", e)
+                final_exit_code = final_exit_code or 1
+
+        join_output_threads()
 
         # Conditional Temp Dir Cleanup
         if temp_dir_path and temp_dir_path.exists():

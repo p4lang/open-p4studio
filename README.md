@@ -258,6 +258,18 @@ To run just a specific test from the suite:
 ./run_p4_tests.sh -p tna_counter --arch tofino -s test.DirectCounterTest
 ```
 
+To run several programs concurrently, run the suite with `SDE` and `SDE_INSTALL`
+set and sudo access for creating network namespaces:
+
+```bash
+./ci/run-model-tests.py -j 2 tna_counter tna_checksum
+```
+
+Each program gets its own model, switch daemon, network namespace and log. The
+runner defaults to one worker per available CPU. Workers share the host's huge
+pages. If `bf_switchd` cannot allocate a DMA pool, reduce `-j` or reserve more
+2 MiB huge pages on the host.
+
 For users who acquired the private RDC software release and want to adapt the existing open source code to run on Tofino hardware, follow the RDC_README instructions within the `open-p4studio/hw` directory. The script `open-p4studio/hw/rdc_setup.sh` automates the transfer of the RDC files necessary in the open source repository for running on hardware.
 
 # P4Studio
