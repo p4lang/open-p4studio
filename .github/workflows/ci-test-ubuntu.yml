@@ -22,6 +22,8 @@ jobs:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
+    env:
+      CI_PROFILE: ./p4studio/profiles/testing.yaml
     steps:
       - name: Remove unused software
         run: |
@@ -47,15 +49,52 @@ jobs:
           key: test-${{ matrix.os }}
           max-size: 2000M
 
-      - name: Build
+      - name: Install OS dependencies
+        run: python3 p4studio dependencies install --profile "$CI_PROFILE" --types os
+
+      - name: Identify native dependency build
+        id: native
+        run: |
+          # Some installed files embed the absolute install prefix.
+          signature=$({
+            echo "$GITHUB_WORKSPACE/install"
+            gcc -v 2>&1
+            python3 -VV
+            dpkg-query -W -f='${binary:Package} ${Version}\n' '*-dev' cmake
+          } | sha256sum | cut -d' ' -f1)
+          echo "signature=$signature" >> "$GITHUB_OUTPUT"
+
+      - name: Restore native dependencies
+        id: deps
+        uses: actions/cache/restore@v4
+        with:
+          path: install
+          key: native-v1-${{ matrix.os }}-${{ runner.arch }}-${{ steps.native.outputs.signature }}-${{ hashFiles('p4studio/dependencies/**/*.py', 'p4studio/dependencies/*.yaml', 'p4studio/utils/*.py', 'p4studio/profile/*.py', 'p4studio/profiles/testing.yaml') }}
+
+      - name: Build native dependencies
+        if: steps.deps.outputs.cache-hit != 'true'
         env:
-          # Keep dependency build paths stable (under /tmp/p4studio-dependencies) so ccache keys
-          # are reproducible across CI runs. Random temp dirs cause frequent cache misses.
           CCACHE_BASEDIR: /tmp/p4studio-dependencies
           CCACHE_NOHASHDIR: "1"
         run: |
+          python3 p4studio dependencies install --profile "$CI_PROFILE" --types source \
+            --jobs "$(nproc)" --working-dir "$CCACHE_BASEDIR"
+
+      # Save before pip or the SDE writes into the same installation directory.
+      - name: Save native dependencies
+        if: steps.deps.outputs.cache-hit != 'true' && github.event_name != 'merge_group'
+        uses: actions/cache/save@v4
+        with:
+          path: install
+          key: ${{ steps.deps.outputs.cache-primary-key }}
+
+      - name: Install Python dependencies
+        run: python3 p4studio dependencies install --profile "$CI_PROFILE" --types pip3
+
+      - name: Build
+        run: |
           ccache -z
-          ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
+          ./p4studio/p4studio profile apply --skip-dependencies --jobs "$(nproc)" "$CI_PROFILE"
           ccache -s
 
       - name: Show build logs
@@ -67,4 +106,4 @@ jobs:
         run: |
           # FIXME: Move these into a separate test suite.
           make -C build tna_counter install
-          ./ci/run-test.py --sde `pwd` --sde-install "`pwd`/install" tna_counter
+          ./ci/run-test.py --sde "$PWD" --sde-install "$PWD/install" tna_counter

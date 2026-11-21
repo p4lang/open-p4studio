@@ -19,7 +19,7 @@
 import os
 from collections import OrderedDict
 from pathlib import Path
-from typing import List, Tuple, Dict, cast, Optional
+from typing import List, Tuple, Dict, cast, Optional, TextIO
 
 import click
 from click import Context, ParamType, BadParameter
@@ -168,7 +168,8 @@ def describe_source_packages_option() -> str:
               help="Use specific working directory for temporary dependency build files",
               type=click.Path(file_okay=False, writable=True, resolve_path=True))
 @click.option("--source-packages", default=None, metavar="PKG1,PKG2,...",
-              help=describe_source_packages_option())
+               help=describe_source_packages_option())
+@click.option("--profile", type=click.File("r"), help="Select dependencies as for 'profile apply FILE'.")
 @click.option("--types",
               default=None,
               metavar="TYPE1,TYPE2,...",
@@ -183,6 +184,7 @@ def install_command(
         matchers: Tuple[DependencyMatcher],
         types: List[str],
         source_packages: Optional[str],
+        profile: Optional[TextIO],
         install_dir: Optional[str],
         download_cache_dir: Optional[str],
         working_dir: Optional[str],
@@ -226,7 +228,13 @@ def install_command(
         working_dir_path,
         force)
 
-    if source_packages is None:
+    if profile is not None:
+        if source_packages is not None or matchers:
+            raise click.UsageError("--profile cannot be combined with --source-packages or dependency matchers")
+        # Profile commands also import this module.
+        from profile.profile import load_profile_from_file
+        source_packages_list = load_profile_from_file(profile).source_packages()
+    elif source_packages is None:
         source_packages_list = None
     elif source_packages == "":
         source_packages_list = []
