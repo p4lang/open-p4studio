@@ -164,7 +164,7 @@ class TestIterator(pd_base_tests.ThriftInterfaceDataPlane):
                     hdls[iter_dt.dev_pipe_id].add(hdl)
                 all_hdls.add(hdl)
 
-            to_del = random.sample(all_hdls, min(30, len(all_hdls)))
+            to_del = random.sample(sorted(all_hdls), min(30, len(all_hdls)))
             for h in to_del:
                 del_entry(shdl, dev_id, h)
                 all_hdls.remove(h)
@@ -944,7 +944,7 @@ class TestPlcmtGetAll(pd_base_tests.ThriftInterfaceDataPlane):
             all_keys = list(range(30))
             to_mod = random.sample(all_keys, 15)
             to_del = random.sample(to_mod, 5)
-            to_del += random.sample(set(all_keys) - set(to_mod), 5)
+            to_del += random.sample(sorted(set(all_keys) - set(to_mod)), 5)
 
             # Issue the adds, mods, and deletes to the virtual device.
             key_to_ms = dict()
@@ -1635,7 +1635,7 @@ class TestPlcmtGetAll(pd_base_tests.ThriftInterfaceDataPlane):
                 hdl_to_act[h] = ('e', None)
 
             # Modify a few of the entries
-            to_mod = random.sample(hdl_to_act.keys(), len(hdl_to_act)//3)
+            to_mod = random.sample(list(hdl_to_act), len(hdl_to_act)//3)
             for h in to_mod:
                 act,old_aspec = hdl_to_act[h]
                 if act == 'a':

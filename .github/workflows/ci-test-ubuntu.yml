@@ -55,16 +55,15 @@ jobs:
           CCACHE_NOHASHDIR: "1"
         run: |
           ccache -z
-          ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
+          ./p4studio/p4studio profile apply --jobs "$(nproc)" --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
           ccache -s
 
-      - name: Show build logs
-        if: success() || failure()
-        run: |
-          ./ci/show-build-logs.sh
+      - name: Show build diagnostics
+        if: failure()
+        run: ./ci/show-build-logs.sh 2>&1 | tail -n 80
 
       - name: Run tests
         run: |
-          # FIXME: Move these into a separate test suite.
-          make -C build tna_counter install
-          ./ci/run-test.py --sde `pwd` --sde-install "`pwd`/install" tna_counter
+          jobs=$(nproc)
+          sudo sysctl -w "vm.nr_hugepages=$((196 * jobs))"
+          ./ci/run-model-tests.py --all --jobs "$jobs" --summary "$GITHUB_STEP_SUMMARY"

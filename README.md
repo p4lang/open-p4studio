@@ -270,6 +270,23 @@ runner defaults to one worker per available CPU. Workers share the host's huge
 pages. If `bf_switchd` cannot allocate a DMA pool, reduce `-j` or reserve more
 2 MiB huge pages on the host.
 
+To list and run all installed P4 example programs with PTF tests:
+
+```bash
+./ci/run-model-tests.py --list
+./ci/run-model-tests.py --all -j 2
+```
+
+The runner matches test directories to installed pipelines, including custom
+configs, and uses the first available architecture (Tofino first). It lists
+individual PTF cases. A failed case includes its full traceback and captured
+stdout and stderr. If the runner fails outside a case, it prints the output of
+the failed stage, such as network setup or switchd startup. Use `--log-dir DIR`
+to keep the logs and xUnit reports under a chosen directory. Pass
+`--arch tofino2` to test only the Tofino 2 configs. Failed programs are
+reported in the summary without stopping the others. To debug one failure
+with live output, run `./ci/run-test.py --verbose --keep-temp-dir <program>`.
+
 For users who acquired the private RDC software release and want to adapt the existing open source code to run on Tofino hardware, follow the RDC_README instructions within the `open-p4studio/hw` directory. The script `open-p4studio/hw/rdc_setup.sh` automates the transfer of the RDC files necessary in the open source repository for running on hardware.
 
 # P4Studio

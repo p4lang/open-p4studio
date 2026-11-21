@@ -7,7 +7,7 @@
 #  - Added __str__ and __repr__ methods
 #  - Added random_key_samples() method
 
-from collections import MutableMapping
+from collections.abc import MutableMapping
 from collections import OrderedDict
 import random
 
@@ -112,4 +112,3 @@ class RandomDict(MutableMapping):
         if not self:
             return '%s()' % (self.__class__.__name__,)
         return '%s(%r)' % (self.__class__.__name__, list(self.items()))
-

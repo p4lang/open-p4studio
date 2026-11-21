@@ -14,6 +14,8 @@ import re
 from pathlib import Path
 from typing import Optional, List, Dict, Tuple, IO, Any
 
+from model_test_log import PTF_STAGE, begin_stage, fail_stage
+
 # --- Configuration ---
 TESTS_TIMEOUT_SECONDS = 10800
 STARTUP_WAIT_SECONDS = 1
@@ -436,6 +438,9 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
+    parser.add_argument("--xunit-dir", type=Path, help="Write PTF case reports to a new directory.")
+    parser.add_argument("--arch", choices=("tofino", "tofino2", "tofino2m", "tofino3"),
+                        default="tofino", help="Model architecture (default: tofino)")
     parser.add_argument(
         "--sde-install",
         default=os.getenv("SDE_INSTALL"),
@@ -603,6 +608,7 @@ def main() -> None:
         scripts = check_prerequisites(root_dir, sde_install_path)  # Gets absolute paths
 
         # --- Create Network Namespace ---
+        begin_stage("network setup")
         if not create_netns(netns_name, augmented_env, temp_dir_path):
             logger.critical(
                 "Failed to create network namespace '%s'. Aborting.", netns_name
@@ -633,12 +639,13 @@ def main() -> None:
         logger.info("veth_setup complete in netns '%s'.", netns_name)
 
         # --- Start Background Processes (in namespace) ---
+        begin_stage("model startup")
         model_cmd = [
             str(scripts["run_tofino_model"]),
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
             "-q",
         ]
         model_proc = start_background_process(
@@ -647,12 +654,13 @@ def main() -> None:
         if not model_proc:
             raise SystemExit(final_exit_code or 1)
 
+        begin_stage("switchd startup")
         switchd_cmd = [
             str(scripts["run_switchd"]),
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
         ]
         switchd_proc = start_background_process(
             switchd_cmd,
@@ -679,14 +687,21 @@ def main() -> None:
             raise SystemExit(final_exit_code or 1)
 
         # --- Run Tests (in namespace) ---
+        begin_stage(PTF_STAGE)
         logger.info("Starting P4 tests in netns '%s'...", netns_name)
         tests_cmd = [
             str(scripts["run_p4_tests"]),
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
         ]
+        if args.xunit_dir:
+            # PTF replaces its output directory. Never pass an existing directory.
+            reports = args.xunit_dir.resolve()
+            if reports.exists():
+                raise ValueError(f"xUnit output directory already exists: {reports}")
+            tests_cmd.extend(["--", "--xunit", "--xunit-dir", str(reports)])
         tests_exit_code = run_tests(
             tests_cmd,
             TESTS_TIMEOUT_SECONDS,
@@ -706,6 +721,8 @@ def main() -> None:
             final_exit_code = tests_exit_code
 
         # --- Final Liveness Check ---
+        if final_exit_code == 0:
+            begin_stage("service health check")
         logger.info("Checking background process status after tests.")
         model_alive_after = check_process_liveness(model_proc, "model")
         switchd_alive_after = check_process_liveness(switchd_proc, "switchd")
@@ -728,6 +745,9 @@ def main() -> None:
         final_exit_code = 1
     finally:
         # --- Cleanup Order: Processes -> Namespace -> Temp Dir ---
+        if final_exit_code:
+            fail_stage()
+        begin_stage("cleanup")
         cleanup()
 
         # Delete network namespace (if name was generated)

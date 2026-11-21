@@ -55,7 +55,7 @@ int n_things_between_updates = 100;
 int next_char = 0;
 char clock_thingy[4] = {'|', '/', '-', '\\'};
 void pipeline_cfg_progress_bar(void) {
-  if ((n_things++ % n_things_between_updates) == 0) {
+  if ((n_things++ % n_things_between_updates) == 0 && isatty(STDOUT_FILENO)) {
     printf("\r%c", clock_thingy[++next_char % 4]);
     fflush(stdout);
   }
