@@ -2,7 +2,11 @@ global-options: { build_model: true }
 features:
   drivers:
     kernel-modules: false
+    bfrt: true
+    grpc: true
+    thrift-driver: true
   p4-examples:
+    - p4-14-programs
     - p4-16-programs
 architectures:
   - tofino

@@ -1,0 +1,22 @@
+name: Publish release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [Version.txt]
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: publish-studio-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.repository == 'p4lang/open-p4studio' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/docker-image-sde.yml
+    with:
+      release: true

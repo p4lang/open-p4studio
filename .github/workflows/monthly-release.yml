@@ -1,0 +1,20 @@
+name: Monthly release PR
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '27 12 1 * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  monthly-release:
+    if: github.repository == 'p4lang/open-p4studio'
+    uses: p4lang/.github/.github/workflows/monthly-release.yml@main
+    with:
+      version_file: Version.txt
+      reviewers: fruffy
+    secrets:
+      RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
