@@ -6,12 +6,13 @@ on:
   pull_request:
     branches: [main]
   merge_group:
+    types: [checks_requested]
     branches: [main]
 
-# Cancel any preceding run on the pull request.
+# Superseded PR runs can be cancelled. Let queue checks finish for each candidate.
 concurrency:
-  group: test-ubuntu-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: test-ubuntu-${{ github.event.pull_request.number || github.event.merge_group.head_sha || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   # Build with GCC and test P4C on different Ubuntu distributions.
