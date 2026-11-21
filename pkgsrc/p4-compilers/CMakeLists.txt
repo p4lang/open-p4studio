@@ -19,6 +19,8 @@ endif()
 add_definitions("-DBAREFOOT_INTERNAL=1")
 add_definitions("-DHAVE_JBAY=1")
 set (P4C_USE_PREINSTALLED_ABSEIL ON CACHE BOOL "")
+# Use Multiprecision from the same Boost installation as the Tofino backend.
+set (P4C_USE_PREINSTALLED_MULTIPRECISION ON CACHE BOOL "")
 set (P4C_USE_PREINSTALLED_PROTOBUF ON CACHE BOOL "")
 set (ENABLE_PROTOBUF_STATIC ON CACHE BOOL "")
 
