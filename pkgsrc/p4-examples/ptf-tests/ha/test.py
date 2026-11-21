@@ -758,6 +758,7 @@ class TestRange(pd_base_tests.ThriftInterfaceDataPlane):
             # Add entries in the tcam range table
             self.addEntries(sess_hdl, dev_tgt, maxEntries)
 
+            self.conn_mgr.complete_operations(sess_hdl)
             self.verifyAllAddedEntries()
 
             self.devport_mgr.devport_mgr_warm_init_begin(dev_id, dev_init_mode.DEV_WARM_INIT_HITLESS, dev_serdes_upgrade_mode.DEV_SERDES_UPD_NONE, True)

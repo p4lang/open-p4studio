@@ -341,7 +341,7 @@ class ActionProfileSelectorIteratorTest(BfRuntimeTest):
         # Get test on selector table
         # remove random number of groups from the existing groups
         grps_removed = random.sample(sel_grp_ids,
-                                     random.randint(1, 0.25 * num_sel_grps))
+                                     random.randint(1, num_sel_grps // 4))
 
         logger.info("Deleting %d groups from selector table", len(grps_removed))
         for grp_id in grps_removed:

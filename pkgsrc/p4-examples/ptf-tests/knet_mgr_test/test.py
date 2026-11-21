@@ -29,8 +29,14 @@ import os
 import pd_base_tests
 
 from ptf import config
+from ptf.packet import Ether, Packet
 from ptf.testutils import *
 from ptf.thriftutils import *
+
+if config.get("packet_manipulation_module") == "bf_pktpy.ptf.packet_pktpy":
+    from bf_pktpy.library.fields import BitField, XByteField, XShortField
+else:
+    from scapy.fields import BitField, XByteField, XShortField
 
 from knet_mgr_test.p4_pd_rpc.ttypes import *
 from knet_mgr_pd_rpc.ttypes import *
@@ -537,6 +543,8 @@ class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
         port_tbl_handles.append(entry_hdl)
 
     def runTest(self):
+        self.assertTrue(self.knet_mgr.knet_module_is_inited(),
+                        "The bf_knet control interface must be available in the test namespace")
         self.baseApiTest()
         port_tbl_handles = []
 

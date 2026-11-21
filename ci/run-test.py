@@ -695,6 +695,9 @@ def main() -> None:
             args.p4_program,
             "--arch",
             args.arch,
+            "--test-params",
+            f"base_pick_path='{sde_install_path}/share/{args.arch}pd';"
+            f"base_put_path='{temp_dir_path}/forwarding'",
         ]
         if args.xunit_dir:
             # PTF replaces its output directory. Never pass an existing directory.

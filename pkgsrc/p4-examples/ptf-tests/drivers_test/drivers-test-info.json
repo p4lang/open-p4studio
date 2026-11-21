@@ -1,0 +1,20 @@
+{
+    "Virtual_device": false,
+    "Hitless_HA": false,
+    "Txn": "On",
+    "Template": "default",
+    "Action_funcs": ["tcp_sport_modify", "tcp_dport_modify", "ipsa_modify", "ipda_modify", "ipds_modify", "ipttl_modify"],
+    "Match": {
+        "name": "match_tbl",
+        "match_type": "tcam",
+        "has_idle": false,
+        "size": 10000,
+        "action_funcs": ["tcp_sport_modify", "tcp_dport_modify", "ipsa_modify", "ipda_modify", "ipds_modify", "ipttl_modify"]
+    },
+    "Action": {
+        "name": "selector_profile",
+        "ref_type": "INDIRECT",
+        "size": 5000,
+        "action_funcs": ["tcp_sport_modify", "tcp_dport_modify", "ipsa_modify", "ipda_modify", "ipds_modify", "ipttl_modify"]
+    }
+}

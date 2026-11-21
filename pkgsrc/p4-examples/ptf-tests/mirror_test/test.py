@@ -604,7 +604,7 @@ class TestBatching(pd_base_tests.ThriftInterfaceDataPlane):
             # Disable the sessions with another session and check again
             for sid in self.sids:
                 self.mirror.mirror_session_disable(shdl2, Direction_e.PD_DIR_INGRESS, dt, sid)
-            self.conn_mgr.complete_operations(shdl)
+            self.conn_mgr.complete_operations(shdl2)
 
             pkt = simple_eth_packet(pktlen=110)
             for port in swports:

@@ -35,7 +35,7 @@ def take_port_down(port_num):
     veth_num = int(veth_idx)
     veth_pair = "veth%d" % (veth_num - 1)
     six.print_(port_num, veth, veth_pair)
-    subprocess.call(['port_ifdown', str(veth_pair)])
+    subprocess.check_call(['port_ifdown', veth_pair])
 
 def bring_port_up(port_num):
     device = 0
@@ -44,4 +44,4 @@ def bring_port_up(port_num):
     veth_idx = veth.strip('veth')
     veth_num = int(veth_idx)
     veth_pair = "veth%d" % (veth_num - 1)
-    subprocess.call(['port_ifup', str(veth_pair)])
+    subprocess.check_call(['port_ifup', veth_pair])

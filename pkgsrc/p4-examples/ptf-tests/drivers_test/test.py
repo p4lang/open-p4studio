@@ -1522,7 +1522,10 @@ class Test(pd_base_tests.ThriftInterfaceDataPlane):
         v_dev_id = 0
 
         test_info_file = test_param_get('drivers_test_info')
-        if test_info_file == 'None': test_info_file = 'drivers-test-info.json'
+        if test_info_file == 'None':
+            test_info_file = 'drivers-test-info.json'
+            if not os.path.isfile(test_info_file):
+                test_info_file = os.path.join(os.path.dirname(__file__), test_info_file)
         with open(test_info_file) as test_file:
             resource_map = json.load(test_file)
 

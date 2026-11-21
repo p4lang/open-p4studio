@@ -167,7 +167,7 @@ class TestNegativeDuplicate(BfRuntimeTest):
         duplicate_add_error = False
         duplicate_add_error_p4_table = False
         try:
-            ports = random.sample(set(swports), len(swports)//2)
+            ports = random.sample(swports, len(swports)//2)
             logger.info("swports: %s", swports)
             logger.info("selected ports: %s ", ports)
             sid = BASE_SID_NORM
@@ -253,7 +253,7 @@ class TestMCast(BfRuntimeTest):
         try:
             # programming the multicast group
             # Group a will use at most half of the swports
-            ports_a = random.sample(set(swports), len(swports)//2)
+            ports_a = random.sample(swports, len(swports)//2)
             logger.info("swports: %s ", swports)
             logger.info("ports_a: %s ", ports_a)
 

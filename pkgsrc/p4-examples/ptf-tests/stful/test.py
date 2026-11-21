@@ -4703,7 +4703,7 @@ class TestSnapshot(pd_base_tests.ThriftInterfaceDataPlane):
             #egr_ifid <-- Must be a miss
             #egr_port
 
-            test_sips = random.sample(sips, 100)
+            test_sips = random.sample(sorted(sips), 100)
             test_routes = routes
             for sip, (dip, _, nh, eifid) in zip(test_sips, test_routes):
                 pkt = simple_tcp_packet(ip_src=sip, ip_dst=dip)
