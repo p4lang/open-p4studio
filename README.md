@@ -270,11 +270,22 @@ runner defaults to one worker per available CPU. Workers share the host's huge
 pages. If `bf_switchd` cannot allocate a DMA pool, reduce `-j` or reserve more
 2 MiB huge pages on the host.
 
-To list and run all installed P4 example programs with PTF tests:
+Choose a suite based on what you are testing:
+
+- **Sanity** runs short packet tests for forwarding, checksums, action profiles,
+  range matches, and Tofino 2 egress counters. `--suite sanity --list` prints
+  the required program and architecture pairs even before installation.
+  For a p4c change, build these pipelines with the compiler under test and point `--sde-install` at that
+  installation. The runner tests installed binaries; it does not compile P4.
+  A missing sanity pipeline is an error.
+- **Thorough** runs every installed example with PTF tests, including sanity,
+  so Open P4Studio CI only needs to run this suite. New installed examples
+  enter the thorough suite automatically. `--all` is an alias for it.
 
 ```bash
-./ci/run-model-tests.py --list
-./ci/run-model-tests.py --all -j 2
+./ci/run-model-tests.py --suite sanity --list
+./ci/run-model-tests.py --suite sanity -j 2
+./ci/run-model-tests.py --suite thorough -j 2
 ```
 
 `knet_mgr_test` needs the `bf_knet` module built for the running kernel.

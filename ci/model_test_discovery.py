@@ -39,13 +39,16 @@ def pipeline_binaries(config: Path) -> Iterator[str]:
                 yield pipeline["config"]
 
 
-def discover_programs(sde: Path, install: Path, architectures: Sequence[str]) -> dict[str, str]:
+def discover_programs(sde: Path, install: Path, architectures: Sequence[str],
+                      required: dict[str, str] | None = None) -> dict[str, str]:
     """Choose the first installed architecture for each example that has tests."""
     targets = install / "share/p4/targets"
     programs = {}
     for directory in example_directories(sde):
+        if required is not None and directory.name not in required:
+            continue
         name = config_name(directory)
-        for arch in architectures:
+        for arch in (architectures if required is None else (required[directory.name],)):
             config = targets / arch / name
             if not config.is_file():
                 continue
@@ -60,4 +63,8 @@ def discover_programs(sde: Path, install: Path, architectures: Sequence[str]) ->
                 f"{', '.join(architectures)}",
                 file=sys.stderr,
             )
+    if required is not None:
+        missing = [f"{p} ({a})" for p, a in required.items() if p not in programs]
+        if missing:
+            raise FileNotFoundError("missing required PTF programs or pipelines: " + ", ".join(missing))
     return programs

@@ -16,6 +16,15 @@ from model_test_log import print_failed_stage
 
 RUNNER = Path(__file__).with_name("run-test.py")
 
+# Keep these short and use real packets on both generations of the model.
+SANITY_PROGRAMS = {
+    "basic_switching": "tofino",
+    "chksum": "tofino",
+    "tna_action_profile": "tofino",
+    "tna_range_match": "tofino",
+    "t2na_counter_true_egress_accounting": "tofino2",
+}
+
 
 def positive(value: str) -> int:
     number = int(value)
@@ -132,7 +141,8 @@ async def run_suite(args: argparse.Namespace, programs: dict[str, str]) -> int:
         print("Failed:", ", ".join(failed))
     if args.summary:
         with args.summary.open("a") as output:
-            print(f"### Model tests: {summary}\n", file=output)
+            title = f"Model tests ({args.suite})" if args.suite else "Model tests"
+            print(f"### {title}: {summary}\n", file=output)
             print("| Program | Result |\n| --- | --- |", file=output)
             for name, status in zip(programs, statuses):
                 print(f"| `{name}` | {'FAIL' if status else 'PASS'} |", file=output)
@@ -143,8 +153,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("programs", metavar="PROGRAM", nargs="*")
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--all", action="store_true", help="run all installed PTF example programs")
-    mode.add_argument("--list", action="store_true", help="list discovered programs and architectures")
+    mode.add_argument("--suite", choices=("sanity", "thorough"),
+                      help="run the fixed compiler checks or every installed PTF program")
+    mode.add_argument("--all", dest="suite", action="store_const", const="thorough",
+                      help="alias for --suite thorough")
+    parser.add_argument("--list", action="store_true", help="list the suite's programs and architectures")
     parser.add_argument("--use-knet", action="store_true",
                         help="Give knet_mgr_test exclusive use of the loaded bf_knet module.")
     parser.add_argument(
@@ -165,10 +178,10 @@ def parse_args() -> argparse.Namespace:
     for name in args.programs:
         if not name or Path(name).name != name or name in (".", ".."):
             parser.error(f"invalid program name: {name!r}")
-    if args.programs and (args.all or args.list):
+    if args.programs and (args.suite or args.list):
         parser.error("choose either named programs or discovery")
-    if not (args.programs or args.all or args.list):
-        parser.error("specify PROGRAM names, --all, or --list")
+    if not (args.programs or args.suite or args.list):
+        parser.error("specify PROGRAM names, --suite, --all, or --list")
     return args
 
 
@@ -178,11 +191,21 @@ def main() -> int:
         programs = dict.fromkeys(args.programs, args.arch or "tofino")
     else:
         architectures = (args.arch,) if args.arch else ARCHITECTURES
-        try:
-            programs = discover_programs(args.sde, args.sde_install, architectures)
-        except OSError as error:
-            print(f"{Path(__file__).name}: {error}", file=sys.stderr)
-            return 2
+        required = None
+        if args.suite == "sanity":
+            required = {p: a for p, a in SANITY_PROGRAMS.items() if a in architectures}
+            if not required:
+                print(f"no sanity programs defined for {args.arch}", file=sys.stderr)
+                return 2
+        if args.list and required is not None:
+            # A compiler job can use this list to build the pipelines before running them.
+            programs = required
+        else:
+            try:
+                programs = discover_programs(args.sde, args.sde_install, architectures, required)
+            except OSError as error:
+                print(f"{Path(__file__).name}: {error}", file=sys.stderr)
+                return 2
         if not programs:
             print(f"no installed PTF programs found in {args.sde_install}", file=sys.stderr)
             return 2

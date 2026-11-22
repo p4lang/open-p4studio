@@ -62,10 +62,10 @@ jobs:
         if: failure()
         run: ./ci/show-build-logs.sh 2>&1 | tail -n 80
 
-      - name: Run tests
+      - name: Run thorough model tests
         run: |
           jobs=$(nproc)
           sudo sysctl -w "vm.nr_hugepages=$((196 * jobs))"
           sudo insmod install/lib/modules/bf_knet.ko
           trap 'sudo rmmod bf_knet' EXIT
-          ./ci/run-model-tests.py --all --use-knet --jobs "$jobs" --summary "$GITHUB_STEP_SUMMARY"
+          ./ci/run-model-tests.py --suite thorough --use-knet --jobs "$jobs" --summary "$GITHUB_STEP_SUMMARY"
