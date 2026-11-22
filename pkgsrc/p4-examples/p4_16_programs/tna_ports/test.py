@@ -521,6 +521,28 @@ def CfgPortTableClearTest(self, port):
         logger.info("Cleared port cfg table successfully")
 
 
+class ForwardTableTest(BfRuntimeTest):
+    def setUp(self):
+        BfRuntimeTest.setUp(self, 0, "tna_ports")
+
+    def runTest(self):
+        table = self.interface.bfrt_info_get().table_get("SwitchIngress.forward")
+        target = client.Target(device_id=0, pipe_id=0xffff)
+        ingress, egress = get_sw_ports()[:2]
+        dst = "00:11:22:33:44:55"
+        table.info.key_field_annotation_add("hdr.ethernet.dst_addr", "mac")
+        key = table.make_key([client.KeyTuple("hdr.ethernet.dst_addr", dst)])
+        data = table.make_data([client.DataTuple("port", egress)], "SwitchIngress.hit")
+        table.entry_add(target, [key], [data])
+        try:
+            pkt = testutils.simple_tcp_packet(eth_dst=dst)
+            testutils.send_packet(self, ingress, pkt)
+            testutils.verify_packet(self, pkt, egress)
+        finally:
+            table.entry_del(target, [key])
+
+
+@testutils.group("thorough")
 class PortsTest(BfRuntimeTest):
     def setUp(self):
         client_id = 0
@@ -547,6 +569,7 @@ class PortsTest(BfRuntimeTest):
         PortHdlInfoTest(self, ports[2])
 
 
+@testutils.group("thorough")
 class PortsWithProgramTest(BfRuntimeTest):
     def setUp(self):
         client_id = 0

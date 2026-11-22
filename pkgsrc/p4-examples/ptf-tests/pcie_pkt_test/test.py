@@ -58,6 +58,12 @@ def match_pkt_string(test, to_pkt, str1):
         logging.debug("not matched")
         return False
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "pcie_pkt_test"
+    table = "port_tbl"
+
+
+@group("thorough")
 class TestPG(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["pcie_pkt_test"])

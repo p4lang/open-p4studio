@@ -1763,6 +1763,7 @@ class TestEcmp(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestLag(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2282,6 +2283,7 @@ class TestEcmpDynamicTree(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestBackup(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2795,6 +2797,7 @@ class TestRegAccess(pd_base_tests.ThriftInterfaceDataPlane):
             sys.stdout.flush()
 
 
+@group("thorough")
 class TestLongTree(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2912,6 +2915,7 @@ class TestLongTree(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestLongTree2(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])

@@ -262,3 +262,20 @@ class ThriftInterfaceDataPlane(ThriftInterface):
         if config["log_dir"] != None:
             self.dataplane.stop_pcap()
         ThriftInterface.tearDown(self)
+
+
+class EmptyTableTest(ThriftInterfaceDataPlane):
+    """Check the generated PD service and its match table on a loaded pipeline."""
+
+    def __init__(self):
+        super().__init__([self.program])
+
+    def runTest(self):
+        from res_pd_rpc.ttypes import DevTarget_t
+
+        session = self.conn_mgr.client_init()
+        try:
+            get_count = getattr(self.client, self.table + "_get_entry_count")
+            self.assertEqual(get_count(session, DevTarget_t(0, -1)), 0, self.table)
+        finally:
+            self.conn_mgr.client_cleanup(session)

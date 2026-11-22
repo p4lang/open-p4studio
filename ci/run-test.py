@@ -438,6 +438,8 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
+    parser.add_argument("--sanity", action="store_true",
+                        help="Exclude PTF cases in the thorough group.")
     parser.add_argument("--use-knet", action="store_true",
                         help="Move the bf_knet control device into the knet_mgr_test namespace.")
     parser.add_argument("--xunit-dir", type=Path, help="Write PTF case reports to a new directory.")
@@ -709,6 +711,8 @@ def main() -> None:
             f"base_pick_path='{sde_install_path}/share/{args.arch}pd';"
             f"base_put_path='{temp_dir_path}/forwarding'",
         ]
+        if args.sanity:
+            tests_cmd.extend(["-s", "standard ^thorough"])
         if args.xunit_dir:
             # PTF replaces its output directory. Never pass an existing directory.
             reports = args.xunit_dir.resolve()

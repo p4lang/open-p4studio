@@ -1326,6 +1326,7 @@ class TestDMA(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 
+@group("thorough")
 class TestFastReconfig(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["mirror_test"])

@@ -1288,6 +1288,7 @@ class ExactMatchConstDefaultEntryTest(BfRuntimeTest):
         forward_table.entry_del(target)
 
 
+@testutils.group("thorough")
 class ExactMatchTimeoutTest(BfRuntimeTest):
     '''@brief This test tries to add entries such that the RPC request will timeout before the server can service all the entries
     '''

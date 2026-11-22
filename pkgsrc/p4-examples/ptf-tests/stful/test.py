@@ -1287,6 +1287,7 @@ class TestOneBit(pd_base_tests.ThriftInterfaceDataPlane):
             self.client.register_write_ob2(sess_hdl, dev_tgt, 2, 0)
             self.conn_mgr.client_cleanup(hex_to_i32(sess_hdl))
 
+@group("thorough")
 class TestDirectHashCounter(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -2728,6 +2729,7 @@ def fast_reconfig_verify(test, ip_addrs, test_ports_in, port_tbl, ifid_tbl, smpl
     egr_port_tbl.verify_cntrs()
 
 
+@group("thorough")
 class TestFastReconfig(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -3022,6 +3024,7 @@ def set_lag_map(indicies):
         bit_map[i//8] = (bit_map[i//8] | (1 << (i%8))) & 0xFF
     return bytes_to_string(bit_map)
 
+@group("thorough")
 class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -3500,6 +3503,7 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 
+@group("thorough")
 class TestStfulSelTbl2(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -4021,6 +4025,7 @@ class TestGetEntry(pd_base_tests.ThriftInterfaceDataPlane):
 
             self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class TestDirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -4229,6 +4234,7 @@ class TestDirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
             self.conn_mgr.complete_operations(sess_hdl)
             self.conn_mgr.client_cleanup( sess_hdl )
 
+@group("thorough")
 class TestIndirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])

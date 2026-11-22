@@ -2508,6 +2508,7 @@ class TestEcmp(BfRuntimeTest):
             t.cleanUp()
 
 
+@group("thorough")
 class TestLag(BfRuntimeTest, pd_base_tests.ThriftInterfaceDataPlane):
     # Tests many different cases for LAG table
     def __init__(self):

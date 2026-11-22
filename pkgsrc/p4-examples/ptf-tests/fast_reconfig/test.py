@@ -383,6 +383,12 @@ class McastClass():
         mcast_dmac_entry_hdls = []
         ports_in_tree = {}
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "fast_reconfig"
+    table = "ing_port"
+
+
+@group("thorough")
 class TestProfileChangeMcast(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["fast_reconfig"])
@@ -484,6 +490,7 @@ class TestProfileChangeMcast(pd_base_tests.ThriftInterfaceDataPlane):
         mcObj.cleanup(self)
 
 
+@group("thorough")
 class TestWarmInitQuick(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["fast_reconfig"])

@@ -51,6 +51,12 @@ random.seed(seed)
 print('Seed used %d' % seed)
 sys.stdout.flush()
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "perf_test"
+    table = "perf_exm_immediate_action"
+
+
+@group("thorough")
 class TestExmPerfImmediateAction(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["perf_test"])

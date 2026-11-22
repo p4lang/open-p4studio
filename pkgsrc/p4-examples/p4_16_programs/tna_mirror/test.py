@@ -1190,6 +1190,7 @@ class TestMirInfoGet(BfRuntimeTest):
                     target,
                     [mirror_cfg_table.make_key([gc.KeyTuple('$sid', sid)])])
 
+@group("thorough")
 class TestIngEgrMirrorHA(BfRuntimeTest):
     """
     Check that we can ingress/egress mirror a packet out the port it came in on.
@@ -1321,6 +1322,7 @@ class TestIngEgrMirrorHA(BfRuntimeTest):
                 self.cleanupState(port, sid)
                 sid=sid+1
 
+@group("thorough")
 class TestNegativeMirrorHA(BfRuntimeTest):
     """
     Test negative cases during mirror HA: Invalid config replay, no config replay

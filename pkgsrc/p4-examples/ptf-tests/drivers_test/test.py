@@ -1489,6 +1489,12 @@ class BFTest():
             # Install this resource in LLP as well
             action_tbl.install_resource_in_llp(self.sess_hdl, rdata, self.p_dev_id)
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "drivers_test"
+    table = "match_tbl"
+
+
+@group("thorough")
 class Test(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["drivers_test"])

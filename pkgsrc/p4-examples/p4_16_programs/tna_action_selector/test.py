@@ -413,6 +413,7 @@ class ActionProfileSelectorIteratorTest(BfRuntimeTest):
                     num_act_prof_entries)
 
 
+@testutils.group("thorough")
 class ActionProfileSelectorTestMany(BfRuntimeTest):
     """@brief Fill the selector table, randomly shuffle its content and send
     100 randomized IPv4 packets to be processed by the table. Verify the the
@@ -969,6 +970,7 @@ class ActionProfileWeightSelectorTest(BfRuntimeTest):
         self.action_table.entry_del(self.target)
         BfRuntimeTest.tearDown(self)
 
+@testutils.group("thorough")
 class SelectorRandomADTOffset(BfRuntimeTest):
     """@brief Basic adt offset test. Adds and removes selector entries at random, valid
     offsets. Sends traffic to check if all members work. Maximum tested size depends on

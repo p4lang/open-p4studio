@@ -345,6 +345,12 @@ def InjectPktVerifyForPipesMultiplePVS(self, pipes, inj_port, vlan, exp_asic_por
             print("Sent on", inj_port, "expected no packet on ", exp_asic_port)
             raise
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "pvs"
+    table = "p0"
+
+
+@group("thorough")
 class Config(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["pvs"])

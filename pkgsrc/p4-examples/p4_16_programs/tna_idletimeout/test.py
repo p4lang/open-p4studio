@@ -1216,6 +1216,7 @@ class IdleTimeoutIndirectAsymmetricTest(BfRuntimeTest):
     def runTest(self):
         self.runCustomTest()
 
+@testutils.group("thorough")
 class IdleTimeoutEnableDisable(BfRuntimeTest):
     """@brief Test table with added entries before table is enabled.
     1. Set table to notify mode.
@@ -1498,6 +1499,7 @@ class IdleTimeoutEnableDisable(BfRuntimeTest):
     def runTest(self):
         self.runCustomTest()
 
+@testutils.group("thorough")
 class IdleTimeoutBoundaryTest(BfRuntimeTest):
     """@Test of the boundary idle timeout configuration parameters and
     their usage.
@@ -1669,6 +1671,7 @@ class IdleTimeoutBoundaryTest(BfRuntimeTest):
                 assert d["enable"] == False
 
 
+@testutils.group("thorough")
 class IdleTimeoutMultiEntryTest(BfRuntimeTest):
     """@brief Simple test of the basic idle timeout configuration parameters and
     their usage.

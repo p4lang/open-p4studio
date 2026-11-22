@@ -410,6 +410,12 @@ def verify_list(plist,list_res):
         return False
     return True
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "knet_mgr_test"
+    table = "port_tbl"
+
+
+@group("thorough")
 class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(

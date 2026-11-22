@@ -63,6 +63,12 @@ def clean_up_tables(test, sess_hdl, dev_tgt):
         test.client.tcam_range_table_delete(sess_hdl, dev_id, h)
     test.client.tcam_range_table_reset_default_entry(sess_hdl, dev_tgt)
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "ha"
+    table = "port_tbl"
+
+
+@group("thorough")
 class TestExmHashActionHA(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["ha"])
@@ -313,6 +319,7 @@ class TestExmHashActionHA(pd_base_tests.ThriftInterfaceDataPlane):
             self.conn_mgr.complete_operations(sess_hdl)
             self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class Phase0HA(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["ha"])
@@ -607,6 +614,7 @@ class Phase0HA(pd_base_tests.ThriftInterfaceDataPlane):
             self.conn_mgr.complete_operations(sess_hdl)
             self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class TestRange(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["ha"])

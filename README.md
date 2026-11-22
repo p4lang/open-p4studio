@@ -272,15 +272,19 @@ pages. If `bf_switchd` cannot allocate a DMA pool, reduce `-j` or reserve more
 
 Choose a suite based on what you are testing:
 
-- **Sanity** runs short packet tests for forwarding, checksums, action profiles,
-  range matches, and Tofino 2 egress counters. `--suite sanity --list` prints
-  the required program and architecture pairs even before installation.
-  For a p4c change, build these pipelines with the compiler under test and point `--sde-install` at that
-  installation. The runner tests installed binaries; it does not compile P4.
-  A missing sanity pipeline is an error.
-- **Thorough** runs every installed example with PTF tests, including sanity,
-  so Open P4Studio CI only needs to run this suite. New installed examples
-  enter the thorough suite automatically. `--all` is an alias for it.
+- **Sanity** starts every discovered program and runs its standard PTF cases
+  except those tagged `thorough`. For example, `stful` tests register instructions
+  without cycling every port. For benchmark-only programs, sanity queries a
+  match table through the program's generated PD service. To test a p4c change,
+  first build the pipelines with that compiler.
+- **Thorough** runs the same programs with their complete default PTF suites,
+  including port flapping, warm reconfiguration, and performance tests. This is
+  the Open P4Studio CI mode. `--all` is an alias for it.
+
+New standard cases run in both suites. Mark an expensive case with PTF's
+`@group("thorough")` decorator (`from ptf.testutils import group`) to run it
+only in the thorough suite. Keep at least one standard, untagged case per
+program. `--list` shows the same installed pipelines for either suite.
 
 ```bash
 ./ci/run-model-tests.py --suite sanity --list
@@ -288,7 +292,7 @@ Choose a suite based on what you are testing:
 ./ci/run-model-tests.py --suite thorough -j 2
 ```
 
-`knet_mgr_test` needs the `bf_knet` module built for the running kernel.
+The thorough `knet_mgr_test` needs the `bf_knet` module built for the running kernel.
 On a test VM with the module loaded, pass `--use-knet` to give that test
 exclusive use of the `bf_knet` control interface. The runner moves the
 interface into the test namespace and returns it during cleanup.
