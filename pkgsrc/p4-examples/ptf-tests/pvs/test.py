@@ -1876,6 +1876,7 @@ class Config(pd_base_tests.ThriftInterfaceDataPlane):
             prsr_tgt = DevParserTarget_t(0, hex_to_byte(0xFF), hex_to_i16(0xFFFF), hex_to_byte(0xFF))
             pvs_handle = self.client.pvs_pvs5_entry_add(self.sess_hdl, prsr_tgt, 0x8100, 0xffff)
             mirr_pvs_handle_arr.append(pvs_handle)
+            self.conn_mgr.complete_operations(self.sess_hdl)
 
             # Now the packets coming out of egress ports should have the modified vid
             for in_port in mirr_ports:
