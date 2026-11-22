@@ -4,6 +4,10 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-22.04
@@ -25,6 +29,9 @@ jobs:
 
     - name: Checkout repo
       uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        persist-credentials: false
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3

@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /open-p4studio
 COPY . .
 
-RUN ./p4studio/p4studio profile apply --jobs $(nproc) ./p4studio/profiles/docker.yaml
+# This model-only profile does not need the launcher's host kernel compiler setup.
+RUN python3 p4studio profile apply ./p4studio/profiles/docker.yaml
 
 # Set environment variables
 ENV SDE=/open-p4studio
