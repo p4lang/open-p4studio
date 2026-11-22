@@ -25,6 +25,8 @@ $(krn)-y +=  bf_kpkt_net.o bf_kpkt_txrx.o bf_kpkt_sysfs.o bf_kpkt_timer.o bf_kpk
 ccflags-y := -I$(src)
 ccflags-y += -I$(src)/../../include
 ccflags-y += -I$(inc)
+ccflags-y += -DBF_INCLUDE_KPKT -Werror
+ccflags-y += $(call cc-option,-Wimplicit-fallthrough=2)
 
 else
 
@@ -33,7 +35,7 @@ KDIR ?= /lib/modules/$$(uname -r)/build
 all: default
 
 default:
-	            $(MAKE) EXTRA_CFLAGS='-DBF_INCLUDE_KPKT -Werror' -C $(KDIR) M=$$BUILD_DIR src=$$PWD inc=$$INCLUDE modules
+	            $(MAKE) -C $(KDIR) M=$$BUILD_DIR src=$$PWD inc=$$INCLUDE modules
 
 clean:
 	            $(MAKE) -C $(KDIR) M=$$BUILD_DIR src=$$PWD inc=$$include clean
