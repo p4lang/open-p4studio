@@ -277,6 +277,11 @@ To list and run all installed P4 example programs with PTF tests:
 ./ci/run-model-tests.py --all -j 2
 ```
 
+`knet_mgr_test` needs the `bf_knet` module built for the running kernel.
+On a test VM with the module loaded, pass `--use-knet` to give that test
+exclusive use of the `bf_knet` control interface. The runner moves the
+interface into the test namespace and returns it during cleanup.
+
 The runner matches test directories to installed pipelines, including custom
 configs, and uses the first available architecture (Tofino first). It lists
 individual PTF cases. A failed case includes its full traceback and captured

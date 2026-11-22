@@ -67,6 +67,8 @@ async def run_program(program: str, arch: str, args: argparse.Namespace, log_dir
         "--sde-install", str(args.sde_install), "--arch", arch,
         "--xunit-dir", str(reports), program,
     ]
+    if args.use_knet and program == "knet_mgr_test":
+        command.append("--use-knet")
     print(f"START {program}", flush=True)
     with log.open("w") as output:
         process = await asyncio.create_subprocess_exec(
@@ -143,6 +145,8 @@ def parse_args() -> argparse.Namespace:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--all", action="store_true", help="run all installed PTF example programs")
     mode.add_argument("--list", action="store_true", help="list discovered programs and architectures")
+    parser.add_argument("--use-knet", action="store_true",
+                        help="Give knet_mgr_test exclusive use of the loaded bf_knet module.")
     parser.add_argument(
         "--arch", choices=ARCHITECTURES,
         help="use this model architecture (discovery prefers tofino by default)",

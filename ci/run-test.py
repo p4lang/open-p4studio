@@ -438,6 +438,8 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
+    parser.add_argument("--use-knet", action="store_true",
+                        help="Move the bf_knet control device into the knet_mgr_test namespace.")
     parser.add_argument("--xunit-dir", type=Path, help="Write PTF case reports to a new directory.")
     parser.add_argument("--arch", choices=("tofino", "tofino2", "tofino2m", "tofino3"),
                         default="tofino", help="Model architecture (default: tofino)")
@@ -456,6 +458,8 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         help="Do not delete the temporary directory.",
     )
     args = parser.parse_args()
+    if args.use_knet and args.p4_program != "knet_mgr_test":
+        parser.error("--use-knet requires knet_mgr_test")
     log_level = logging.DEBUG if args.verbose else DEFAULT_LOG_LEVEL
     setup_logging(log_level)
     if not args.sde_install:
@@ -577,6 +581,7 @@ def main() -> None:
     temp_dir_path: Optional[Path] = None
     netns_name: Optional[str] = None
     namespace_created = False
+    knet_moved = False
 
     try:
         signal.signal(signal.SIGINT, signal_handler)
@@ -615,6 +620,11 @@ def main() -> None:
             )
             raise SystemExit(final_exit_code or 1)  # Trigger cleanup
         namespace_created = True
+        if args.use_knet:
+            if not run_command_sync(["sudo", "ip", "link", "set", "bf_knet", "netns", netns_name],
+                                    augmented_env, temp_dir_path):
+                raise SystemExit(final_exit_code or 1)
+            knet_moved = True
 
         # --- Run veth_setup (in namespace) ---
         logger.info(
@@ -768,6 +778,10 @@ def main() -> None:
                         tempfile.gettempdir()
                     )  # Fallback cwd for delete cmd
 
+                if knet_moved:
+                    # The runner remains in the namespace that supplied the control device.
+                    run_command_sync(["ip", "link", "set", "bf_knet", "netns", str(os.getpid())],
+                                     current_env, current_cwd, namespace=netns_name)
                 delete_netns(netns_name, current_env, current_cwd)
             except Exception as e:
                 logger.error("Error during netns deletion logic: %s", e)

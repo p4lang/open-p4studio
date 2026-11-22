@@ -739,7 +739,8 @@ static struct net_device *bf_knet_kndev_create(const char *name)
 		return NULL;
 	}
 
-	strncpy(knetdev->name, name, IFNAMSIZ - 1);
+	strscpy(knetdev->name, name, IFNAMSIZ);
+	dev_net_set(knetdev, dev_net(bf_knet));
 
 	knetdev->netdev_ops = &bf_knet_ndev_ops;
 	knetdev->ethtool_ops = &bf_knet_ethtool_ops;
@@ -961,7 +962,7 @@ void bf_knet_cpuif_ndev_add(bf_knet_msg_cpuif_ndev_add_t *msg)
 
 	// Call to dev_get_by_name inc refcnt for cpuif_netdev. This reference
 	// is released when this interface is removed from KNET
-	cpuif_netdev = dev_get_by_name(&init_net, msg->cpuif_netdev_name);
+	cpuif_netdev = dev_get_by_name(dev_net(bf_knet), msg->cpuif_netdev_name);
 	if (!cpuif_netdev) {
 		knet_debug(KERN_ERR, &bf_knet->dev,
 			   "%s:%s:%d::Failed to add cpuif_netdev: No "
@@ -983,7 +984,7 @@ void bf_knet_cpuif_ndev_add(bf_knet_msg_cpuif_ndev_add_t *msg)
 	}
 
 	memset(kndev_name, 0, IFNAMSIZ);
-	strncpy(kndev_name, BF_KNET_CPU_INTF_PREFIX, IFNAMSIZ - 1);
+	strscpy(kndev_name, BF_KNET_CPU_INTF_PREFIX, IFNAMSIZ);
 	strncat(kndev_name, msg->cpuif_netdev_name,
                 IFNAMSIZ - sizeof(BF_KNET_CPU_INTF_PREFIX));
 
@@ -2269,12 +2270,21 @@ int bf_knet_handle_cmd_req(bf_knet_msg_t *kmsg)
 	return err;
 }
 
-int _bf_knet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
+static int _bf_knet_ioctl(struct net_device *dev, struct ifreq *ifr,
+			  void __user *addr, int cmd)
+#else
+static int _bf_knet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
+#endif
 {
 	bf_knet_msg_t kmsg;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0)
 	void __user *addr = (void __user *)ifr->ifr_ifru.ifru_data;
+#endif
 	int err = -EFAULT;
 
+	if (!capable(CAP_NET_ADMIN))
+		return -EPERM;
 	if (!atomic_read(&module_initialized)) {
 		return -EFAULT;
 	}
@@ -2307,7 +2317,11 @@ void bf_knet_setup(struct net_device *dev) {}
 
 /* Operations for the bf_knet module */
 static const struct net_device_ops bf_knet_ops = {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
+    .ndo_siocdevprivate = _bf_knet_ioctl,
+#else
     .ndo_do_ioctl = _bf_knet_ioctl,
+#endif
 };
 
 static void knet_set_msglevel(struct net_device *dev, u32 value)
@@ -2337,7 +2351,7 @@ bf_knet_change_host_mtu(struct net_device *netdev)
 
     list_for_each_entry_rcu(cpuif_info, &_device_list, list)
     {
-        if (!strcmp(cpuif_info->cpuif_netdev->name, netdev->name)) {
+        if (cpuif_info->cpuif_netdev == netdev) {
             list_for_each_entry_rcu(priv, &cpuif_info->hostif_kndev_list, list)
             {
                 if (priv->hostif_knetdev->mtu > priv->cpuif_netdev->mtu) {

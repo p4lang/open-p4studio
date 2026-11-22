@@ -66,4 +66,6 @@ jobs:
         run: |
           jobs=$(nproc)
           sudo sysctl -w "vm.nr_hugepages=$((196 * jobs))"
-          ./ci/run-model-tests.py --all --jobs "$jobs" --summary "$GITHUB_STEP_SUMMARY"
+          sudo insmod install/lib/modules/bf_knet.ko
+          trap 'sudo rmmod bf_knet' EXIT
+          ./ci/run-model-tests.py --all --use-knet --jobs "$jobs" --summary "$GITHUB_STEP_SUMMARY"
