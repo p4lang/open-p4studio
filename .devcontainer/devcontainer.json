@@ -1,0 +1,12 @@
+{
+  "name": "Open P4Studio model tests",
+  "build": { "dockerfile": "Dockerfile" },
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,readonly",
+  "workspaceFolder": "${localWorkspaceFolder}",
+  "containerEnv": {
+    "SDE": "${localWorkspaceFolder}",
+    "SDE_INSTALL": "${localWorkspaceFolder}/install"
+  },
+  "capAdd": ["NET_ADMIN", "SYS_ADMIN"],
+  "securityOpt": ["apparmor=unconfined"]
+}
