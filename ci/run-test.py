@@ -492,6 +492,7 @@ def check_prerequisites(root_dir: Path, sde_install_path: Path) -> Dict[str, Pat
         "veth_setup": sde_install_path / "bin" / "veth_setup.sh",
         "run_tofino_model": root_dir / "run_tofino_model.sh",
         "run_switchd": root_dir / "run_switchd.sh",
+        "dev_status": root_dir / "pkgsrc/bf-drivers/tools/bf_switchd_dev_status.py",
         "run_p4_tests": root_dir / "run_p4_tests.sh",
     }
     all_ok = True
@@ -502,7 +503,7 @@ def check_prerequisites(root_dir: Path, sde_install_path: Path) -> Dict[str, Pat
         if not abs_path.is_file():
             logger.critical("Script not found: %s", abs_path)
             all_ok = False
-        elif name != "veth_setup" and not os.access(abs_path, os.X_OK):
+        elif name not in ("veth_setup", "dev_status") and not os.access(abs_path, os.X_OK):
             logger.critical("Script not executable: %s", abs_path)
             all_ok = False
     if not all_ok:
@@ -698,11 +699,20 @@ def main() -> None:
             logger.critical("Background services died before tests could start.")
             raise SystemExit(final_exit_code or 1)
 
+        if not run_command_sync(
+            [sys.executable, str(scripts["dev_status"])],
+            augmented_env,
+            cwd=temp_dir_path,
+            namespace=netns_name,
+        ):
+            raise SystemExit(final_exit_code or 1)
+
         # --- Run Tests (in namespace) ---
         begin_stage(PTF_STAGE)
         logger.info("Starting P4 tests in netns '%s'...", netns_name)
         tests_cmd = [
             str(scripts["run_p4_tests"]),
+            "--no-status-srv",
             "-p",
             args.p4_program,
             "--arch",

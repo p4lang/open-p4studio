@@ -64,7 +64,9 @@ jobs:
 
       - name: Run thorough model tests
         run: |
-          jobs=$(nproc)
+          # Each worker starts both a switch daemon and a model process.
+          jobs=$(( $(nproc) / 2 ))
+          (( jobs > 0 )) || jobs=1
           sudo sysctl -w "vm.nr_hugepages=$((196 * jobs))"
           sudo insmod install/lib/modules/bf_knet.ko
           trap 'sudo rmmod bf_knet' EXIT
