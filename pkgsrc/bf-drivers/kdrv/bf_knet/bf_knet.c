@@ -739,7 +739,7 @@ static struct net_device *bf_knet_kndev_create(const char *name)
 		return NULL;
 	}
 
-	strscpy(knetdev->name, name, IFNAMSIZ);
+	strscpy(knetdev->name, name, sizeof(knetdev->name));
 	dev_net_set(knetdev, dev_net(bf_knet));
 
 	knetdev->netdev_ops = &bf_knet_ndev_ops;
@@ -983,10 +983,8 @@ void bf_knet_cpuif_ndev_add(bf_knet_msg_cpuif_ndev_add_t *msg)
 		goto err_long_name;
 	}
 
-	memset(kndev_name, 0, IFNAMSIZ);
-	strscpy(kndev_name, BF_KNET_CPU_INTF_PREFIX, IFNAMSIZ);
-	strncat(kndev_name, msg->cpuif_netdev_name,
-                IFNAMSIZ - sizeof(BF_KNET_CPU_INTF_PREFIX));
+	snprintf(kndev_name, sizeof(kndev_name), "%s%s",
+		 BF_KNET_CPU_INTF_PREFIX, msg->cpuif_netdev_name);
 
 	if (!dev_valid_name(kndev_name)) {
 		knet_debug(KERN_ERR, &bf_knet->dev,

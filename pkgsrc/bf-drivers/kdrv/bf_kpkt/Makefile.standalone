@@ -10,7 +10,7 @@ krn = bf_kpkt
 inc=$(PWD)
 ifneq ($(KERNELRELEASE),)
 obj-m := $(krn).o
-ccflags-y := -I$(src) -D__KERNEL__
+ccflags-y := -I$(src) -D__KERNEL__ -DBF_INCLUDE_KPKT
 
 cmn_obj := ../../src/lld/lld_map.o ../../src/lld/lld.o ../../src/lld/lld_dev.o ../../src/lld/lld_dev_lock.o ../../src/lld/lld_dr.o ../../src/lld/lld_reg_if.o ../../src/lld/lld_subdev_reg_if.o ../../src/lld/lld_dr_if.o ../../src/lld/bf_dma_if.o ../../src/lld/bf_lld_if.o ../../src/lld/bf_int_if.o ../../src/lld/lld_interrupt.o ../../src/lld/lld_sku.o ../../src/lld/lld_efuse.o ../../src/lld/lld_dr_regs.o
 tf1_obj := ../../src/lld/lld_dev_tof.o  ../../src/lld/lld_dr_tof.o  ../../src/lld/lld_dr_regs_tof.o  ../../src/lld/lld_tof_interrupt.o  ../../src/lld/lld_efuse_tof.o
@@ -32,7 +32,7 @@ PWD := $(shell 'pwd')
 all: default
 
 default:
-	            $(MAKE)  EXTRA_CFLAGS="-DBF_INCLUDE_KPKT" -C $(KDIR) M=$(PWD) modules
+	            $(MAKE) -C $(KDIR) M=$(PWD) modules
 
 clean:
 	            $(MAKE) -C $(KDIR) M=$(PWD) clean
