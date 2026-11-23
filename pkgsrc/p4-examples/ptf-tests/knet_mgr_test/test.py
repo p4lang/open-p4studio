@@ -25,12 +25,20 @@ from time import sleep
 import unittest
 import random
 import six
-import os
+import select
+import socket
+import subprocess
 import pd_base_tests
 
 from ptf import config
+from ptf.packet import Ether, Packet
 from ptf.testutils import *
 from ptf.thriftutils import *
+
+if config.get("packet_manipulation_module") == "bf_pktpy.ptf.packet_pktpy":
+    from bf_pktpy.library.fields import BitField, XByteField, XShortField
+else:
+    from scapy.fields import BitField, XByteField, XShortField
 
 from knet_mgr_test.p4_pd_rpc.ttypes import *
 from knet_mgr_pd_rpc.ttypes import *
@@ -162,8 +170,8 @@ def simple_cpu_vlan_packet(header_version=0,
 
     fabric_payload_header = FabricPayloadHeader(ether_type=eth_type)
 
-    pkt = (bytes(ether)[:14]) / VlanHeader(vlanid=vid) / \
-        fabric_header / fabric_cpu_header
+    outer = bytes(ether)[:14] + bytes(VlanHeader(vlanid=vid))
+    pkt = fabric_header / fabric_cpu_header
 
     if sflow_sid:
         pkt = pkt / FabricCpuSflowHeader(sflow_sid=sflow_sid)
@@ -178,7 +186,7 @@ def simple_cpu_vlan_packet(header_version=0,
         ip_pkt = simple_ip_only_packet()
         pkt = pkt / ip_pkt
 
-    return pkt
+    return outer + bytes(pkt)
 
 
 def simple_cpu_packet(header_version=0,
@@ -222,7 +230,8 @@ def simple_cpu_packet(header_version=0,
 
     fabric_payload_header = FabricPayloadHeader(ether_type=eth_type)
 
-    pkt = (bytes(ether)[:14]) / fabric_header / fabric_cpu_header
+    outer = bytes(ether)[:14]
+    pkt = fabric_header / fabric_cpu_header
 
     if sflow_sid:
         pkt = pkt / FabricCpuSflowHeader(sflow_sid=sflow_sid)
@@ -237,7 +246,7 @@ def simple_cpu_packet(header_version=0,
         ip_pkt = simple_ip_only_packet()
         pkt = pkt / ip_pkt
 
-    return pkt
+    return outer + bytes(pkt)
 
 
 def dumpObject(obj):
@@ -248,36 +257,14 @@ def dumpObject(obj):
 
 def socket_verify_packet(pkt, s, timeout=2):
     MAX_PKT_SIZE = 9100
-    timeout = time.time() + timeout
-    while time.time() < timeout:
-        try:
-            packet_from_tap_device = Ether(s.recv(MAX_PKT_SIZE))
-            # print("Expected packet")
-            # print(':'.join(x.encode('hex') for x in bytes(pkt)))
-            # print("packet_from_tap_device")
-            # print(':'.join(x.encode('hex') for x in bytes(packet_from_tap_device)))
-            if bytes(packet_from_tap_device) == bytes(pkt):
-                return True
-        except:
-            pass
-    return False
-
-
-def socket_verify_pkt_str(pkt, s, timeout=2):
-    MAX_PKT_SIZE = 9100
-    timeout = time.time() + timeout
-    while time.time() < timeout:
-        try:
-            packet_from_tap_device = Ether(s.recv(MAX_PKT_SIZE))
-            # print("Expected packet")
-            # print(':'.join(x.encode('hex') for x in pkt))
-            # print("packet_from_tap_device")
-            # print(':'.join(x.encode('hex') for x in bytes(packet_from_tap_device)))
-            if bytes(packet_from_tap_device) == pkt:
-                return True
-        except:
-            pass
-    return False
+    expected = bytes(pkt)
+    deadline = time.monotonic() + timeout
+    while True:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0 or not select.select([s], [], [], remaining)[0]:
+            return False
+        if s.recv(MAX_PKT_SIZE) == expected:
+            return True
 
 
 def generate_filter(dest_mac=-1,
@@ -423,6 +410,12 @@ def verify_list(plist,list_res):
         return False
     return True
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "knet_mgr_test"
+    table = "port_tbl"
+
+
+@group("thorough")
 class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(
@@ -537,6 +530,8 @@ class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
         port_tbl_handles.append(entry_hdl)
 
     def runTest(self):
+        self.assertTrue(self.knet_mgr.knet_module_is_inited(),
+                        "The bf_knet control interface must be available in the test namespace")
         self.baseApiTest()
         port_tbl_handles = []
 
@@ -744,9 +739,8 @@ class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
             action_res = self.knet_mgr.knet_tx_action_add(
                 cpuif_ndev.knet_cpuif_id, hostif_ndev.knet_hostif_id, tx_action)
 
-            os.system("sudo ifconfig test_hostif1 up")
-            os.system("sudo ifconfig test_hostif2 up")
-            os.system("sudo ifconfig test_hostif3 up")
+            for interface in ("test_hostif1", "test_hostif2", "test_hostif3"):
+                subprocess.run(["ip", "link", "set", interface, "up"], check=True)
 
             s = open_packet_socket("test_hostif1")
             try:
@@ -777,7 +771,7 @@ class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
                 print("Sending Packet on Port2, fabric_qps will be set as 1")
                 exp_pkt4 = exp_pkt[:12] + b'\x88\x88' + exp_pkt[14:]
                 send_packet(self, swports[2], pkt)
-                self.assertTrue(socket_verify_pkt_str(exp_pkt4, s))
+                self.assertTrue(socket_verify_packet(exp_pkt4, s))
 
                 # Test 6: If filter 6 hits and mutations are done then Kernel Will crash, KNET
                 # should skip these mutations by design
@@ -789,12 +783,12 @@ class TestKnet(pd_base_tests.ThriftInterfaceDataPlane):
                 exp_pkt7 = exp_pkt[:14] + vlanhdr2 + vlanhdr1 + exp_pkt[28:]
                 print("Sending Packet on Port5, reasonCode will be set as 1")
                 send_packet(self, swports[5], pkt)
-                self.assertTrue(socket_verify_pkt_str(exp_pkt7, s))
+                self.assertTrue(socket_verify_packet(exp_pkt7, s))
 
                 exp_pkt8 = exp_pkt[:14] + vlanhdr2 + vlanhdr1 + exp_pkt[28:]
                 print("Sending Packet on Port0, pad will be set as 1")
                 send_packet(self, swports[0], pkt)
-                self.assertTrue(socket_verify_pkt_str(exp_pkt8, s))
+                self.assertTrue(socket_verify_packet(exp_pkt8, s))
 
                 s.send(bytes(pkt))
 

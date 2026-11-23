@@ -167,7 +167,7 @@ class TestNegativeDuplicate(BfRuntimeTest):
         duplicate_add_error = False
         duplicate_add_error_p4_table = False
         try:
-            ports = random.sample(set(swports), len(swports)//2)
+            ports = random.sample(swports, len(swports)//2)
             logger.info("swports: %s", swports)
             logger.info("selected ports: %s ", ports)
             sid = BASE_SID_NORM
@@ -253,7 +253,7 @@ class TestMCast(BfRuntimeTest):
         try:
             # programming the multicast group
             # Group a will use at most half of the swports
-            ports_a = random.sample(set(swports), len(swports)//2)
+            ports_a = random.sample(swports, len(swports)//2)
             logger.info("swports: %s ", swports)
             logger.info("ports_a: %s ", ports_a)
 
@@ -1190,6 +1190,7 @@ class TestMirInfoGet(BfRuntimeTest):
                     target,
                     [mirror_cfg_table.make_key([gc.KeyTuple('$sid', sid)])])
 
+@group("thorough")
 class TestIngEgrMirrorHA(BfRuntimeTest):
     """
     Check that we can ingress/egress mirror a packet out the port it came in on.
@@ -1321,6 +1322,7 @@ class TestIngEgrMirrorHA(BfRuntimeTest):
                 self.cleanupState(port, sid)
                 sid=sid+1
 
+@group("thorough")
 class TestNegativeMirrorHA(BfRuntimeTest):
     """
     Test negative cases during mirror HA: Invalid config replay, no config replay

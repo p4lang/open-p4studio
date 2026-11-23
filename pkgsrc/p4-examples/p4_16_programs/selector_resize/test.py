@@ -146,6 +146,7 @@ def setup_tbls(test):
         test.act_profile[tbl_type] = test.bfrt_info.table_get(ctrl+".act_profile")
     test.target = gc.Target(device_id=0, pipe_id=0xffff)
 
+@group("thorough")
 class Resize(BfRuntimeTest):
     """ @brief This test populates action profile table and creates selector table.
         Test is divided in 3 cases:
@@ -402,6 +403,7 @@ class Negative(BfRuntimeTest):
         self.runBaseTest()
 
 
+@group("thorough")
 class Traffic(BfRuntimeTest):
     """ @brief This test populates action profile table and creates selector
         table. Idea is to check if MAT entries are properly refreshed after
@@ -534,6 +536,7 @@ class Traffic(BfRuntimeTest):
         self.runBaseTest()
 
 
+@group("thorough")
 class Members(BfRuntimeTest):
     """ @brief Resize a group with disabled members
         Verify the members are still disabled after the resize.
@@ -667,6 +670,7 @@ class Members(BfRuntimeTest):
         self.dev_cfg_table.default_entry_set(self.target, dev_data)
         self.runBaseTest()
 
+@group("thorough")
 class Shared(BfRuntimeTest):
     """ @brief Resize a group with disabled members
         Verify the members are still disabled after the resize.
@@ -768,6 +772,7 @@ class Shared(BfRuntimeTest):
         self.dev_cfg_table.default_entry_set(self.target, dev_data)
         self.runBaseTest()
 
+@group("thorough")
 class ResizeWithTrans(BfRuntimeTest):
     """ @brief This test populates action profile table and creates selector table with Transactions.
         Test is divided in 3 cases:

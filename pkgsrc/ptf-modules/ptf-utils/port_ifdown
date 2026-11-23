@@ -4,5 +4,4 @@ if [ $# -ne 1 ]; then
     exit
 fi
 veth=$1
-ifconfig $veth down
-
+exec ip link set dev "$veth" down

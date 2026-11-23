@@ -107,6 +107,12 @@ def run_tests(test, num_entries):
     print("Rate (Operations/second) : %d" % (rate))
     return rate
 
+class TestPipelineTable(pd_base_tests.EmptyTableTest):
+    program = "perf_test_alpm"
+    table = "perf_alpm_immediate_action"
+
+
+@group("thorough")
 class TestAlpmPerfImmediateActionHalf(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["perf_test_alpm"])
@@ -128,6 +134,7 @@ class TestAlpmPerfImmediateActionHalf(pd_base_tests.ThriftInterfaceDataPlane):
             self.assertGreater(rate, min_rate)
 
 
+@group("thorough")
 class TestAlpmPerfImmediateActionFull(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["perf_test_alpm"])

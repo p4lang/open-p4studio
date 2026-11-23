@@ -1157,6 +1157,7 @@ class TestYid(pd_base_tests.ThriftInterfaceDataPlane):
                 ing_src_ifid_entry_hdls.append(entry_hdl)
 
             # Send traffic again and nothing should be pruned
+            self.conn_mgr.complete_operations(sess_hdl)
             for port in port_list:
                 ifid = port_to_ifid[port]
                 yid  = ifid_to_yid[ifid]
@@ -1188,6 +1189,7 @@ class TestYid(pd_base_tests.ThriftInterfaceDataPlane):
             # Program the Global RID register to match the iRID and pruning
             # should happen again.
             self.mc.mc_set_global_rid(mc_sess_hdl, dev_id, hex_to_i16(0x4322))
+            self.mc.mc_complete_operations(mc_sess_hdl)
             for port in port_list:
                 ifid = port_to_ifid[port]
                 yid  = ifid_to_yid[ifid]
@@ -1761,6 +1763,7 @@ class TestEcmp(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestLag(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2280,6 +2283,7 @@ class TestEcmpDynamicTree(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestBackup(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2793,6 +2797,7 @@ class TestRegAccess(pd_base_tests.ThriftInterfaceDataPlane):
             sys.stdout.flush()
 
 
+@group("thorough")
 class TestLongTree(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])
@@ -2910,6 +2915,7 @@ class TestLongTree(pd_base_tests.ThriftInterfaceDataPlane):
             self.mc.mc_destroy_session(mc_sess_hdl)
 
 
+@group("thorough")
 class TestLongTree2(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["multicast_test"])

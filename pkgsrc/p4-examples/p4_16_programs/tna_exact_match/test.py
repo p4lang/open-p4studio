@@ -1288,6 +1288,7 @@ class ExactMatchConstDefaultEntryTest(BfRuntimeTest):
         forward_table.entry_del(target)
 
 
+@testutils.group("thorough")
 class ExactMatchTimeoutTest(BfRuntimeTest):
     '''@brief This test tries to add entries such that the RPC request will timeout before the server can service all the entries
     '''
@@ -1373,7 +1374,9 @@ class ExactMatchTimeoutTest(BfRuntimeTest):
                                                      "SwitchIngress.hit"))
         logger.info("Done forming entries")
 
-        client_metadata = (("deadline_sec", "1"), ("deadline_nsec", "499999999"))
+        # The deadline starts on the server, after the request arrives. Allow
+        # enough time to install some entries but not the entire batch.
+        client_metadata = (("deadline_nsec", "50000000"),)
         try:
             forward_table.entry_add(target, key_list, data_list,  metadata=client_metadata)
         except gc.BfruntimeRpcException as e:

@@ -770,6 +770,7 @@ class TestRecircAll(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 
+@group("thorough")
 class TestPortDownAll(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, mod_name, prefix)
@@ -872,6 +873,7 @@ class TestPortDownAll(pd_base_tests.ThriftInterfaceDataPlane):
                 self.client.port_tbl_table_delete(hex_to_i32(shdl), dev_id, hex_to_i32(h))
             self.conn_mgr.client_cleanup(shdl)
 
+@group("thorough")
 class TestPortDown(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, mod_name, prefix)

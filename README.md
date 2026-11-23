@@ -270,6 +270,43 @@ runner defaults to one worker per available CPU. Workers share the host's huge
 pages. If `bf_switchd` cannot allocate a DMA pool, reduce `-j` or reserve more
 2 MiB huge pages on the host.
 
+Choose a suite based on what you are testing:
+
+- **Sanity** starts every discovered program and runs its standard PTF cases
+  except those tagged `thorough`. For example, `stful` tests register instructions
+  without cycling every port. For benchmark-only programs, sanity queries a
+  match table through the program's generated PD service. To test a p4c change,
+  first build the pipelines with that compiler.
+- **Thorough** runs the same programs with their complete default PTF suites,
+  including port flapping, warm reconfiguration, and performance tests. This is
+  the Open P4Studio CI mode. `--all` is an alias for it.
+
+New standard cases run in both suites. Mark an expensive case with PTF's
+`@group("thorough")` decorator (`from ptf.testutils import group`) to run it
+only in the thorough suite. Keep at least one standard, untagged case per
+program. `--list` shows the same installed pipelines for either suite.
+
+```bash
+./ci/run-model-tests.py --suite sanity --list
+./ci/run-model-tests.py --suite sanity -j 2
+./ci/run-model-tests.py --suite thorough -j 2
+```
+
+The thorough `knet_mgr_test` needs the `bf_knet` module built for the running kernel.
+On a test VM with the module loaded, pass `--use-knet` to give that test
+exclusive use of the `bf_knet` control interface. The runner moves the
+interface into the test namespace and returns it during cleanup.
+
+The runner matches test directories to installed pipelines, including custom
+configs, and uses the first available architecture (Tofino first). It lists
+individual PTF cases. A failed case includes its full traceback and captured
+stdout and stderr. If the runner fails outside a case, it prints the output of
+the failed stage, such as network setup or switchd startup. Use `--log-dir DIR`
+to keep the logs and xUnit reports under a chosen directory. Pass
+`--arch tofino2` to test only the Tofino 2 configs. Failed programs are
+reported in the summary without stopping the others. To debug one failure
+with live output, run `./ci/run-test.py --verbose --keep-temp-dir <program>`.
+
 For users who acquired the private RDC software release and want to adapt the existing open source code to run on Tofino hardware, follow the RDC_README instructions within the `open-p4studio/hw` directory. The script `open-p4studio/hw/rdc_setup.sh` automates the transfer of the RDC files necessary in the open source repository for running on hardware.
 
 # P4Studio

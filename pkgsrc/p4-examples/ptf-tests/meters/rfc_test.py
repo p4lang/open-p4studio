@@ -487,6 +487,7 @@ def run_meter_test(self, test_params, expected_results, logfile):
         print(datetime.datetime.now(), "[INFO] closing session...")
         status = self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class TestMeterRFC(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["meters"])

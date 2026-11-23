@@ -737,6 +737,7 @@ class IndirectCounterIteratorTest(BfRuntimeTest):
             assert data_dict["$COUNTER_SPEC_PKTS"] == data_dict["$COUNTER_SPEC_BYTES"] == 0
 
 
+@testutils.group("thorough")
 class IndirectCounterLatencyTest(BfRuntimeTest):
     """@brief Verify the latency of the Thrift API.
     """

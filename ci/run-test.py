@@ -14,6 +14,8 @@ import re
 from pathlib import Path
 from typing import Optional, List, Dict, Tuple, IO, Any
 
+from model_test_log import PTF_STAGE, begin_stage, fail_stage
+
 # --- Configuration ---
 TESTS_TIMEOUT_SECONDS = 10800
 STARTUP_WAIT_SECONDS = 1
@@ -436,6 +438,13 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         description=f"{APP_NAME}: Run Tofino model, switchd, and P4 tests."
     )
     parser.add_argument("p4_program", help="Name of the P4 program.")
+    parser.add_argument("--sanity", action="store_true",
+                        help="Exclude PTF cases in the thorough group.")
+    parser.add_argument("--use-knet", action="store_true",
+                        help="Move the bf_knet control device into the knet_mgr_test namespace.")
+    parser.add_argument("--xunit-dir", type=Path, help="Write PTF case reports to a new directory.")
+    parser.add_argument("--arch", choices=("tofino", "tofino2", "tofino2m", "tofino3"),
+                        default="tofino", help="Model architecture (default: tofino)")
     parser.add_argument(
         "--sde-install",
         default=os.getenv("SDE_INSTALL"),
@@ -451,6 +460,8 @@ def parse_arguments() -> Tuple[argparse.Namespace, Path, Path]:
         help="Do not delete the temporary directory.",
     )
     args = parser.parse_args()
+    if args.use_knet and args.p4_program != "knet_mgr_test":
+        parser.error("--use-knet requires knet_mgr_test")
     log_level = logging.DEBUG if args.verbose else DEFAULT_LOG_LEVEL
     setup_logging(log_level)
     if not args.sde_install:
@@ -481,6 +492,7 @@ def check_prerequisites(root_dir: Path, sde_install_path: Path) -> Dict[str, Pat
         "veth_setup": sde_install_path / "bin" / "veth_setup.sh",
         "run_tofino_model": root_dir / "run_tofino_model.sh",
         "run_switchd": root_dir / "run_switchd.sh",
+        "dev_status": root_dir / "pkgsrc/bf-drivers/tools/bf_switchd_dev_status.py",
         "run_p4_tests": root_dir / "run_p4_tests.sh",
     }
     all_ok = True
@@ -491,7 +503,7 @@ def check_prerequisites(root_dir: Path, sde_install_path: Path) -> Dict[str, Pat
         if not abs_path.is_file():
             logger.critical("Script not found: %s", abs_path)
             all_ok = False
-        elif name != "veth_setup" and not os.access(abs_path, os.X_OK):
+        elif name not in ("veth_setup", "dev_status") and not os.access(abs_path, os.X_OK):
             logger.critical("Script not executable: %s", abs_path)
             all_ok = False
     if not all_ok:
@@ -572,6 +584,7 @@ def main() -> None:
     temp_dir_path: Optional[Path] = None
     netns_name: Optional[str] = None
     namespace_created = False
+    knet_moved = False
 
     try:
         signal.signal(signal.SIGINT, signal_handler)
@@ -603,12 +616,18 @@ def main() -> None:
         scripts = check_prerequisites(root_dir, sde_install_path)  # Gets absolute paths
 
         # --- Create Network Namespace ---
+        begin_stage("network setup")
         if not create_netns(netns_name, augmented_env, temp_dir_path):
             logger.critical(
                 "Failed to create network namespace '%s'. Aborting.", netns_name
             )
             raise SystemExit(final_exit_code or 1)  # Trigger cleanup
         namespace_created = True
+        if args.use_knet:
+            if not run_command_sync(["sudo", "ip", "link", "set", "bf_knet", "netns", netns_name],
+                                    augmented_env, temp_dir_path):
+                raise SystemExit(final_exit_code or 1)
+            knet_moved = True
 
         # --- Run veth_setup (in namespace) ---
         logger.info(
@@ -633,12 +652,13 @@ def main() -> None:
         logger.info("veth_setup complete in netns '%s'.", netns_name)
 
         # --- Start Background Processes (in namespace) ---
+        begin_stage("model startup")
         model_cmd = [
             str(scripts["run_tofino_model"]),
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
             "-q",
         ]
         model_proc = start_background_process(
@@ -647,12 +667,13 @@ def main() -> None:
         if not model_proc:
             raise SystemExit(final_exit_code or 1)
 
+        begin_stage("switchd startup")
         switchd_cmd = [
             str(scripts["run_switchd"]),
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
         ]
         switchd_proc = start_background_process(
             switchd_cmd,
@@ -678,15 +699,36 @@ def main() -> None:
             logger.critical("Background services died before tests could start.")
             raise SystemExit(final_exit_code or 1)
 
+        if not run_command_sync(
+            [sys.executable, str(scripts["dev_status"])],
+            augmented_env,
+            cwd=temp_dir_path,
+            namespace=netns_name,
+        ):
+            raise SystemExit(final_exit_code or 1)
+
         # --- Run Tests (in namespace) ---
+        begin_stage(PTF_STAGE)
         logger.info("Starting P4 tests in netns '%s'...", netns_name)
         tests_cmd = [
             str(scripts["run_p4_tests"]),
+            "--no-status-srv",
             "-p",
             args.p4_program,
             "--arch",
-            "tofino",
+            args.arch,
+            "--test-params",
+            f"base_pick_path='{sde_install_path}/share/{args.arch}pd';"
+            f"base_put_path='{temp_dir_path}/forwarding'",
         ]
+        if args.sanity:
+            tests_cmd.extend(["-s", "standard ^thorough"])
+        if args.xunit_dir:
+            # PTF replaces its output directory. Never pass an existing directory.
+            reports = args.xunit_dir.resolve()
+            if reports.exists():
+                raise ValueError(f"xUnit output directory already exists: {reports}")
+            tests_cmd.extend(["--", "--xunit", "--xunit-dir", str(reports)])
         tests_exit_code = run_tests(
             tests_cmd,
             TESTS_TIMEOUT_SECONDS,
@@ -706,6 +748,8 @@ def main() -> None:
             final_exit_code = tests_exit_code
 
         # --- Final Liveness Check ---
+        if final_exit_code == 0:
+            begin_stage("service health check")
         logger.info("Checking background process status after tests.")
         model_alive_after = check_process_liveness(model_proc, "model")
         switchd_alive_after = check_process_liveness(switchd_proc, "switchd")
@@ -728,6 +772,9 @@ def main() -> None:
         final_exit_code = 1
     finally:
         # --- Cleanup Order: Processes -> Namespace -> Temp Dir ---
+        if final_exit_code:
+            fail_stage()
+        begin_stage("cleanup")
         cleanup()
 
         # Delete network namespace (if name was generated)
@@ -745,6 +792,10 @@ def main() -> None:
                         tempfile.gettempdir()
                     )  # Fallback cwd for delete cmd
 
+                if knet_moved:
+                    # The runner remains in the namespace that supplied the control device.
+                    run_command_sync(["ip", "link", "set", "bf_knet", "netns", str(os.getpid())],
+                                     current_env, current_cwd, namespace=netns_name)
                 delete_netns(netns_name, current_env, current_cwd)
             except Exception as e:
                 logger.error("Error during netns deletion logic: %s", e)

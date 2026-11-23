@@ -489,6 +489,7 @@ class TestTcamMove(pd_base_tests.ThriftInterfaceDataPlane):
             print(('Seed used for the file %d' %(seed)))
         return
 
+@group("thorough")
 class TestManyEntries(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -835,6 +836,7 @@ class TestCoveringPrefix(pd_base_tests.ThriftInterfaceDataPlane):
             print(('Seed used for the file %d' %(seed)))
         return
 
+@group("thorough")
 class TestCoveringPrefix2(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -961,6 +963,7 @@ class TestCoveringPrefix2(pd_base_tests.ThriftInterfaceDataPlane):
         return
 
 
+@group("thorough")
 class TestCapacity(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -1035,6 +1038,7 @@ class TestCapacity(pd_base_tests.ThriftInterfaceDataPlane):
             print(('Seed used for the file %d' %(seed)))
         return
 
+@group("thorough")
 class TestRealData(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -1218,6 +1222,7 @@ class TestStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
             print(('Seed used for the file %d' %(seed)))
 
 
+@group("thorough")
 class TestStateRestoreLarge(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -1901,6 +1906,7 @@ class IdlePollHelper():
                 self.fns["set_property"](self.sess_hdl, self.dev_id, prop, prop_val, 0)
             print(('Seed used for the file %d' %(seed)))
 
+@group("thorough")
 class TestIdleTime(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])
@@ -2097,6 +2103,7 @@ class TestAlpmScopes(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 
+@group("thorough")
 class TestIdleScopes(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["alpm_test"])

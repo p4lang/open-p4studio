@@ -680,6 +680,7 @@ class IdlePollHelper():
                 self.del_match_entry(match_entries, ip_dst, delete=False)
             self.disable_poll_mode()
 
+@group("thorough")
 class TestIdle(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["smoke_large_tbls"])
@@ -1303,6 +1304,7 @@ class TestInterStageStats(pd_base_tests.ThriftInterfaceDataPlane):
             status = self.conn_mgr.client_cleanup(sess_hdl)
         return
 
+@group("thorough")
 class TestAtcam(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["smoke_large_tbls"])

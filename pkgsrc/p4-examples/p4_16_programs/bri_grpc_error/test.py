@@ -36,6 +36,7 @@ swports = get_sw_ports()
 if not len(logger.handlers):
     logger.addHandler(logging.StreamHandler())
 
+@testutils.group("thorough")
 class EntryGetErrorsTest(BfRuntimeTest):
 
     '''@brief This test is to verify handling of large number of errors in grpc requests

@@ -1359,6 +1359,7 @@ def flap_port(bfrt_info, port):
         time.sleep(3)
     set_port_state(bfrt_info, port, True)
 
+@testutils.group("thorough")
 class PortDownAppTF1(BfRuntimeTest):
     """
     Example usage of the Port Down Packet Generator Application on Tofino-1.
@@ -1634,6 +1635,7 @@ class PortDownAppTF1(BfRuntimeTest):
 
 
 
+@testutils.group("thorough")
 class PortDownAppTF2(BfRuntimeTest):
     """
     Example usage of the Port Down Packet Generator Application on Tofino-1.

@@ -1287,6 +1287,7 @@ class TestOneBit(pd_base_tests.ThriftInterfaceDataPlane):
             self.client.register_write_ob2(sess_hdl, dev_tgt, 2, 0)
             self.conn_mgr.client_cleanup(hex_to_i32(sess_hdl))
 
+@group("thorough")
 class TestDirectHashCounter(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -2728,6 +2729,7 @@ def fast_reconfig_verify(test, ip_addrs, test_ports_in, port_tbl, ifid_tbl, smpl
     egr_port_tbl.verify_cntrs()
 
 
+@group("thorough")
 class TestFastReconfig(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -3022,6 +3024,7 @@ def set_lag_map(indicies):
         bit_map[i//8] = (bit_map[i//8] | (1 << (i%8))) & 0xFF
     return bytes_to_string(bit_map)
 
+@group("thorough")
 class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -3062,6 +3065,7 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
         self.sync_flag = stful_register_flags_t(read_hw_sync = True)
         self.pass_1_hdls  = []
         self.lag_mbr_hdls = {}
+        self.eifid_hdls = set()
         self.port_to_lag_tbl_idx_list = {}
         for port in self.egr_ports:
             self.port_to_lag_tbl_idx_list[port] = []
@@ -3264,50 +3268,22 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
         self.client.register_hw_sync_lag_reg(self.shdl, self.dt)
         print(datetime.datetime.now(), "Verifying selection bit values...")
         sys.stdout.flush()
-        num_bits_set = 0
-        errored = False
-        down_mbrs = []
-        for port in down_ports:
-            down_mbrs = down_mbrs + list(self.lag_mbr_hdls[port])
-        up_mbrs = set(self.all_lag_mbr_hdls) - set(down_mbrs)
-        up_indicies = set()
-        for mbr in up_mbrs:
-            port = self.lag_mbr_hdl_to_port(mbr)
-            up_indicies = up_indicies | set(self.port_to_lag_tbl_idx_list[port])
-
-        for i in range(LAG_REG_SIZE):
-            # Ignore the top byte of each RAM line as it holds the member
-            # count.
-            if (i % 128) >= 120: continue
-            vals = self.client.register_read_lag_reg(self.shdl, self.dt, i, self.async_flag)
-            for pipe in range(self.pipe_list_len-1):
-                if vals[pipe] != vals[pipe+1]:
-                    errored = True
-                    if self.pipe_list_len < 4:
-                        print("Index %6d  %d %d (not equal across pipes)" % (i, vals[0], vals[1]))
-                    else:
-                        print("Index %6d  %d %d %d %d (not equal across pipes)" % (i, vals[0], vals[1], vals[2], vals[3]))
-                    sys.stdout.flush()
-                    break
-            if vals[0]:
-                if i not in up_indicies:
-                    errored = True
-                    if self.pipe_list_len < 4:
-                        print("Index %6d  %d %d, set but no entry handle!" % (i, vals[0], vals[1]))
-                    else:
-                        print("Index %6d  %d %d %d %d, set but no entry handle!" % (i, vals[0], vals[1], vals[2], vals[3]))
-                    sys.stdout.flush()
-                num_bits_set += 1
-            else:
-                if i in up_indicies:
-                    errored = True
-                    if self.pipe_list_len < 4:
-                        print("Index %6d  %d %d, not set but entry handle 0x%x" % (i, vals[0], vals[1], self.lag_index_to_hdl[i]))
-                    else:
-                        print("Index %6d  %d %d %d %d, not set but entry handle 0x%x" % (i, vals[0], vals[1], vals[2], vals[3], self.lag_index_to_hdl[i]))
-                    sys.stdout.flush()
-        self.assertEqual(num_bits_set, len(up_indicies))
-        self.assertFalse(errored)
+        up_indices = {i for port, indices in self.port_to_lag_tbl_idx_list.items()
+                      if port not in down_ports for i in indices}
+        chunk = 1024
+        for start in range(0, LAG_REG_SIZE, chunk):
+            count = min(chunk, LAG_REG_SIZE - start)
+            values = self.client.register_range_read_lag_reg(
+                self.shdl, self.dt, start, count, self.async_flag)
+            self.assertEqual(len(values), count * self.pipe_list_len)
+            for offset in range(count):
+                i = start + offset
+                if i % 128 >= 120:  # The top byte holds the member count.
+                    continue
+                first = offset * self.pipe_list_len
+                self.assertEqual(values[first:first + self.pipe_list_len],
+                                 [int(i in up_indices)] * self.pipe_list_len,
+                                 "LAG register index %d" % i)
         print(datetime.datetime.now(), "Done...")
         sys.stdout.flush()
 
@@ -3330,11 +3306,13 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
             print(datetime.datetime.now(), "Waiting for pkt-gen to make", self.port_down_app.pkt_count + 1, "copies")
             sys.stdout.flush()
             pkt_cnt_end = pkt_cnt_start + self.port_down_app.pkt_count + 1
-            all_done = False
-            while all_done != True:
-                time.sleep(2*1)
+            deadline = time.monotonic() + 30
+            while True:
                 now = self.conn_mgr.pktgen_get_pkt_counter(self.shdl, dt, self.port_down_app_id)
-                all_done = now == pkt_cnt_end
+                if now >= pkt_cnt_end or time.monotonic() >= deadline:
+                    self.assertEqual(now, pkt_cnt_end, "Packet generator count for port %d" % port)
+                    break
+                time.sleep(2)
             # Wait some extra time since the pkt-gen packets are recirculated and multicasted.
             print(datetime.datetime.now(), "Pkt-gen done, waiting extra time for model to recirc, multicast, and process copies")
             sys.stdout.flush()
@@ -3397,7 +3375,7 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
         for grp in self.lag_groups:
             print(datetime.datetime.now(), "  Group", hex(grp))
             sys.stdout.flush()
-            mbrs = random.sample(self.all_lag_mbr_hdls, self.num_mbrs_per_lag)
+            mbrs = random.sample(sorted(self.all_lag_mbr_hdls), self.num_mbrs_per_lag)
             self.lag_grp_to_mbrs[grp] = mbrs
             for m in mbrs:
                 self.client.lag_ap_add_member_to_group(self.shdl, dev_id, grp, m)
@@ -3415,7 +3393,6 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
         # different eifids.
         num_groups = len(self.lag_groups)
         self.pkts = []
-        self.eifid_hdls = set()
         for x,y in zip(list(range(1, num_groups+1)), self.lag_groups):
             ip = "100.100.100.%d" % x
             self.pkts.append( simple_tcp_packet(ip_dst=ip, pktlen=90+x-1) )
@@ -3451,7 +3428,7 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
                     self.handle_lag_update(u)
                 self.lag_grp_to_mbrs[grp].remove(mbr_hdl)
             could_add = set(self.all_lag_mbr_hdls) - set(self.lag_grp_to_mbrs[grp])
-            to_add = random.sample(could_add, random.randint(0, self.num_mbrs_per_lag-len(self.lag_grp_to_mbrs[grp])))
+            to_add = random.sample(sorted(could_add), random.randint(0, self.num_mbrs_per_lag-len(self.lag_grp_to_mbrs[grp])))
             self.lag_grp_to_mbrs[grp] = self.lag_grp_to_mbrs[grp] + to_add
             for m in to_add:
                 self.client.lag_ap_add_member_to_group(self.shdl, dev_id, grp, m)
@@ -3526,6 +3503,7 @@ class TestStfulSelTbl(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 
+@group("thorough")
 class TestStfulSelTbl2(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -3819,43 +3797,22 @@ class TestStfulSelTbl2(pd_base_tests.ThriftInterfaceDataPlane):
 
 
 def verify_packets_any_fast(test, pkts, ports, device_number=0, timeout=30):
-    rx_pkts = []
-    exp_pkts = []
-    rx_ports = [None]*len(pkts)
-    for p in pkts:
-        exp_pkts.append(str(p))
-
     test.assertEqual(len(pkts), len(ports))
-    while len(rx_pkts) != len(exp_pkts):
-        (rcv_device, rcv_port, rcv_pkt, pkt_time) = dp_poll(
+    expected = [bytes(pkt) for pkt in pkts]
+    rx_ports = [None] * len(pkts)
+    for _ in pkts:
+        _, rcv_port, rcv_pkt, _ = dp_poll(
             test, device_number=device_number, timeout=timeout
         )
         if rcv_pkt is None:
-            print("Packet Rx timeout, remaining (%d %d %d):" % (len(pkts), len(exp_pkts), len(rx_pkts)))
-            for pkt,pkt_ports in zip(pkts,ports):
-                if str(pkt) not in rx_pkts:
-                    print(format_packet(pkt))
-                    print("On ports", pkt_ports)
-            sys.stdout.flush()
-            test.assertNotEqual(rcv_pkt, None)
-        elif str(rcv_pkt) not in exp_pkts:
-            print("Received unexpected packet:")
-            print(format_pkt(rcv_pkt))
-            print("Expected packets are:")
-            for pkt in exp_pkts:
-                print(format_pkt(pkt))
-            sys.stdout.flush()
-            test.assertIn(str(rcv_pkt), exp_pkts)
-        elif rcv_port not in ports[exp_pkts.index(str(rcv_pkt))]:
-            print("Received pkt on unexpected port", rcv_port)
-            print("Expected", ports[exp_pkts.index(str(rcv_pkt))])
-            sys.stdout.flush()
-            test.assertIn(rcv_port, ports[exp_pkts.index(str(rcv_pkt))])
-        for i,p in enumerate(exp_pkts):
-            if str(rcv_pkt) == p and rx_ports[i] is None:
+            missing = [i for i, port in enumerate(rx_ports) if port is None]
+            test.fail("Timed out waiting for packets at indices %s" % missing)
+        for i, pkt in enumerate(expected):
+            if rx_ports[i] is None and rcv_pkt == pkt and rcv_port in ports[i]:
                 rx_ports[i] = rcv_port
-                #print("Rx packet at index %d of %d on port %d" % (i+1, len(exp_pkts), rcv_port))
-        rx_pkts.append(str(rcv_pkt))
+                break
+        else:
+            test.fail("Unexpected packet on port %d:\n%s" % (rcv_port, format_packet(rcv_pkt)))
     return rx_ports
 
 
@@ -4068,6 +4025,7 @@ class TestGetEntry(pd_base_tests.ThriftInterfaceDataPlane):
 
             self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class TestDirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -4276,6 +4234,7 @@ class TestDirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
             self.conn_mgr.complete_operations(sess_hdl)
             self.conn_mgr.client_cleanup( sess_hdl )
 
+@group("thorough")
 class TestIndirectStateRestore(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["stful"])
@@ -4703,7 +4662,7 @@ class TestSnapshot(pd_base_tests.ThriftInterfaceDataPlane):
             #egr_ifid <-- Must be a miss
             #egr_port
 
-            test_sips = random.sample(sips, 100)
+            test_sips = random.sample(sorted(sips), 100)
             test_routes = routes
             for sip, (dip, _, nh, eifid) in zip(test_sips, test_routes):
                 pkt = simple_tcp_packet(ip_src=sip, ip_dst=dip)

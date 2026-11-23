@@ -1617,7 +1617,7 @@ ${name}
 //::         if a_res[0] == "constant":
     res_spec->tbl_idx = ${a_res[1]};
 //::         else:
-    res_spec->tbl_idx = (uint16_t) action_spec->action_${a_res[2]};
+    res_spec->tbl_idx = action_spec->action_${a_res[2]};
 //::         #endif
     res_spec->tag = PIPE_RES_ACTION_TAG_ATTACHED;
   }
@@ -2833,7 +2833,7 @@ ${name}
 //::       if res_name in t_info["ap_bind_indirect_res_to_match"]:
         res_spec->tbl_idx = ${res_name}_index;
 //::       else:
-	res_spec->tbl_idx = (uint16_t) pd_res_spec[i].tbl_idx;
+	res_spec->tbl_idx = pd_res_spec[i].tbl_idx;
 //::       #endif
 	res_spec->tag = PIPE_RES_ACTION_TAG_ATTACHED;
 	break;
@@ -6709,4 +6709,3 @@ ${name}
 
 //::   #endfor
 //:: #endif
-

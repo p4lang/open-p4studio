@@ -3573,14 +3573,9 @@ bool isDeadlineExceeded(const timespec &deadline_tspec) {
   timespec curr_tspec;
   timespec_get(&curr_tspec, TIME_UTC);
 
-  if (curr_tspec.tv_sec > deadline_tspec.tv_sec) {
-    return true;
-  } else {
-    if (curr_tspec.tv_nsec > deadline_tspec.tv_nsec) {
-      return true;
-    }
-  }
-  return false;
+  return curr_tspec.tv_sec > deadline_tspec.tv_sec ||
+         (curr_tspec.tv_sec == deadline_tspec.tv_sec &&
+          curr_tspec.tv_nsec >= deadline_tspec.tv_nsec);
 }
 
 /*
@@ -3649,6 +3644,10 @@ void processClientMetadata(const ServerContext &context,
     timespec_get(deadline_tspec, TIME_UTC);
     deadline_tspec->tv_sec += (deadline_sec != INT_MIN ? deadline_sec : 0);
     deadline_tspec->tv_nsec += (deadline_nsec != INT_MIN ? deadline_nsec : 0);
+    if (deadline_tspec->tv_nsec >= 1000000000) {
+      ++deadline_tspec->tv_sec;
+      deadline_tspec->tv_nsec -= 1000000000;
+    }
     deadline_tspec_relative->tv_sec =
         (deadline_sec != INT_MIN ? deadline_sec : 0);
     deadline_tspec_relative->tv_nsec =

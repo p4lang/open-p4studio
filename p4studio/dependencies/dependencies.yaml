@@ -282,8 +282,7 @@ packages:
         type: pip
     tabulate:
         type: pip
-    xmlrunner:
-        systems: ['centos:9', 'debian:11', 'ubuntu:20.04', 'ubuntu:22.04',]
+    unittest-xml-reporting==3.2.0:
         type: pip
     coverage>=4.0,<6.0: {type: pip, tags: ['default', 'grpc']}
     cython>=0.29.8: {type: pip, tags: ['default', 'grpc']}

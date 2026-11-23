@@ -315,7 +315,7 @@ sudo env "PATH=$PATH" "PYTHONPATH=$PYTHONPATH" "GEN_XML_OUTPUT=$GEN_XML_OUTPUT" 
     --num-pipes $NUM_PIPES \
     --socket-recv-size $SOCKET_RECV_SIZE \
     $DRV_TEST_INFO $DRV_TEST_SEED \
-    $TEST_SUITE $SETUP $CLEANUP $TEST_PARAMS_STR $DB_PREFIX $@
+    $TEST_SUITE $SETUP $CLEANUP $TEST_PARAMS_STR $DB_PREFIX "$@"
 res=$?
 if [[ $res == 0 ]]; then
     exit $res

@@ -609,10 +609,15 @@ void bf_tm_complete_ops(bf_dev_id_t dev) {
 
     while (bf_tm_find_descriptor_state(dev, i, BF_TM_DESCR_UNDERDMA) &&
            mcmgr_tm_get_dr_state(dev)) {
-      lld_dr_service(dev,
-                     i,
-                     lld_dr_cmp_que_write_list,
-                     g_tm_dma_ctx[dev][i].max_buffer_count);
+      int serviced = lld_dr_service(dev,
+                                    i,
+                                    lld_dr_cmp_que_write_list,
+                                    g_tm_dma_ctx[dev][i].max_buffer_count);
+      if (serviced == 0 && g_tm_ctx[dev]->target == BF_TM_TARGET_MODEL) {
+        // The model needs CPU time to actually start.
+        // Don't busy poll to avoid starving it.
+        bf_sys_usleep(100);
+      }
     }
   }
 }

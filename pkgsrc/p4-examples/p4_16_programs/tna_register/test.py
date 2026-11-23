@@ -953,6 +953,7 @@ class IndirectRegisterAsymTest(BfRuntimeTest):
         if replay == False:
             self.verifyAllPipes()
 
+@testutils.group("thorough")
 class IndirectRegisterAsymTestWarmInit(BfRuntimeTest):
     """@brief Tests values and behavior of register table against hitless and
      fast reconfig warm init modes. Test uses IndirectRegisterAsymTest as a base.

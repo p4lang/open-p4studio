@@ -270,6 +270,8 @@ endforeach()
 # stful, only tofino
 if (TOFINO)
   set (t stful)
+  set (TOFINO_SINGLE_DEVICE ${t})
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tofino/tofino_single_device.conf.in ${CMAKE_INSTALL_PREFIX}/share/p4/targets/tofino/${t}.conf)
   p4_build_pd_target(${t} "v1model" "tofino" ${CMAKE_CURRENT_SOURCE_DIR}/programs/${t}/${t}.p4)
   add_custom_target(${t} DEPENDS $<$<BOOL:${TOFINO}>:${t}-tofino>)
 endif()

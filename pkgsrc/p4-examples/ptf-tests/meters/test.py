@@ -910,6 +910,7 @@ class TestExmMeterColorAwareIndirect(pd_base_tests.ThriftInterfaceDataPlane):
             advance_model_time_by_clocks(self, sess_hdl, 25000000)
             self.conn_mgr.client_cleanup(sess_hdl)
 
+@group("thorough")
 class TestMeterOmnet(pd_base_tests.ThriftInterfaceDataPlane):
     def __init__(self):
         pd_base_tests.ThriftInterfaceDataPlane.__init__(self, ["meters"])
