@@ -1,0 +1,16 @@
+name: Publish development image
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: [Version.txt]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    uses: ./.github/workflows/docker-image-sde.yml
+    with:
+      release: false

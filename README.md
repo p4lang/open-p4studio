@@ -46,6 +46,9 @@ Some things not included, that one must get from Intel:
 
 # Setup
 
+For prebuilt model binaries, versioned SDE images and an example of testing an
+external P4 compiler, see [Open P4Studio releases](docs/releases.md).
+
 Note: At least the bf-drivers component of this software depends upon
 a pre-compiled x86_64 binary for some functions, for which no source
 code is available.  Thus building fails unless your system has an

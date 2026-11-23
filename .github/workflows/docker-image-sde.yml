@@ -1,16 +1,15 @@
-name: Docker CI
+name: Publish SDE image
 
 on:
-  push:
-    branches: [ main ]
-
-permissions:
-  contents: read
-  packages: write
+  workflow_call:
+    inputs:
+      release:
+        type: boolean
+        required: true
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Remove unused software
@@ -33,9 +32,6 @@ jobs:
         submodules: recursive
         persist-credentials: false
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
       with:
@@ -43,12 +39,85 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push Docker image
+    - name: Reuse the published image when retrying a release
+      id: existing
+      if: inputs.release
+      run: |
+        image="ghcr.io/${GITHUB_REPOSITORY,,}:v$(cat Version.txt)"
+        if docker manifest inspect "$image" >/dev/null 2>manifest.err; then
+          docker pull "$image"
+          revision=$(docker inspect -f '{{index .Config.Labels "org.opencontainers.image.revision"}}' "$image")
+          test "$revision" = "$GITHUB_SHA"
+          docker tag "$image" sde:candidate
+          echo "found=true" >> "$GITHUB_OUTPUT"
+        elif ! grep -Ei 'manifest unknown|no such manifest|name unknown' manifest.err; then
+          cat manifest.err >&2
+          exit 1
+        fi
+        rm manifest.err
+
+    - uses: docker/setup-buildx-action@v3
+      if: steps.existing.outputs.found != 'true'
+
+    - name: Build candidate
+      if: steps.existing.outputs.found != 'true'
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: Dockerfile
-        push: true
-        tags: ghcr.io/${{ github.repository }}:latest
+        load: true
+        tags: sde:candidate
+        labels: |
+          org.opencontainers.image.revision=${{ github.sha }}
+          org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
         cache-from: type=gha
-        cache-to: type=gha,mode=max
+        cache-to: type=gha,mode=min,ignore-error=true
+
+    - name: Run all installed PTF example programs
+      run: |
+        jobs=$(nproc)
+        sudo sysctl -w "vm.nr_hugepages=$((196 * jobs))"
+        docker run --rm --init --cap-add NET_ADMIN --cap-add SYS_ADMIN \
+          --security-opt apparmor=unconfined \
+          --mount "type=bind,src=$GITHUB_STEP_SUMMARY,dst=/summary.md" \
+          sde:candidate ./ci/run-model-tests.py --all --jobs "$jobs" --summary /summary.md
+
+    - name: Extract and test the simulator archive
+      if: inputs.release
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y patchelf
+        mkdir -p staging/{bin,lib}
+        id=$(docker create sde:candidate)
+        trap 'docker rm "$id"' EXIT
+        docker cp "$id:/open-p4studio/install/bin/tofino-model" staging/bin/
+        docker cp -L "$id:/open-p4studio/install/lib/libcli.so.1.10" staging/lib/
+        ci/package-model.sh staging dist
+        (cd dist && sha256sum -c ./*.sha256 && tar -xzf ./*.tar.gz)
+        docker run --rm -v "$PWD/dist:/artifacts:ro" ubuntu:24.04 sh -ec \
+          'apt-get update && apt-get install -y libpcap0.8t64 && /artifacts/*/bin/tofino-model --help'
+
+    - name: Publish development image
+      if: ${{ !inputs.release }}
+      run: |
+        image="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
+        docker tag sde:candidate "$image"
+        docker push "$image"
+
+    - name: Publish release image and binary archive
+      if: inputs.release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        EXISTING: ${{ steps.existing.outputs.found }}
+      run: |
+        tag="v$(cat Version.txt)"
+        image="ghcr.io/${GITHUB_REPOSITORY,,}"
+        if [ "$EXISTING" != true ]; then
+          docker tag sde:candidate "$image:$tag"
+          docker push "$image:$tag"
+        fi
+        digest=$(docker inspect -f '{{index .RepoDigests 0}}' "$image:$tag")
+        if ! gh release view "$tag" >/dev/null 2>&1; then
+          gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" \
+            --generate-notes --notes "Model test image: \`$digest\`" \
+            dist/*.tar.gz dist/*.sha256
+        fi

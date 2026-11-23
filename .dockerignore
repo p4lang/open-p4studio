@@ -1,0 +1,7 @@
+/build
+/install
+**/__pycache__
+.vscode
+.mypy_cache
+p4studio/logs
+pkgsrc/p4-compilers/p4c/build
