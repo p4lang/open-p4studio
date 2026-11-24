@@ -41,10 +41,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1
+      - name: Restore compiler cache
+        id: ccache
+        uses: ./.github/actions/restore-ccache
         with:
-          key: test-${{ matrix.os }}
+          key: ${{ matrix.os }}-gcc-testing
           max-size: 2000M
 
       - name: Build
@@ -57,6 +58,12 @@ jobs:
           ccache -z
           ./p4studio/p4studio profile apply --jobs $(nproc) --dependencies-working-dir /tmp/p4studio-dependencies ./p4studio/profiles/testing.yaml
           ccache -s
+
+      - name: Save compiler cache
+        if: github.event_name != 'merge_group'
+        uses: ./.github/actions/save-ccache
+        with:
+          prefix: ${{ steps.ccache.outputs.prefix }}
 
       - name: Show build logs
         if: success() || failure()
